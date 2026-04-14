@@ -75,10 +75,25 @@ export default defineType({
       ],
     }),
     defineField({
+      name: "leadPastor",
+      title: "Lead Pastor",
+      type: "reference",
+      to: [{ type: "pastor" }],
+      description: "The primary pastor for this assembly — shown prominently on the assembly card and detail page.",
+    }),
+    defineField({
       name: "leaders",
-      title: "Leaders",
+      title: "Additional leaders",
       type: "array",
       of: [{ type: "reference", to: [{ type: "pastor" }] }],
+      description: "Other pastors / ministry leaders serving at this assembly.",
+    }),
+    defineField({
+      name: "about",
+      title: "About this assembly",
+      description: "Short description shown on the detail page under the hero.",
+      type: "array",
+      of: [{ type: "block" }],
     }),
     defineField({
       name: "order",

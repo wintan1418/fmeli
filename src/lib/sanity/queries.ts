@@ -167,7 +167,13 @@ export const ASSEMBLIES_FULL_QUERY = groq`
     phone,
     email,
     heroImage,
-    serviceTimes
+    serviceTimes,
+    "leadPastor": leadPastor->{
+      _id,
+      name,
+      role,
+      image
+    }
   }
 `;
 
@@ -186,6 +192,14 @@ export const ASSEMBLY_BY_SLUG_QUERY = groq`
     mapEmbed,
     heroImage,
     serviceTimes,
+    about,
+    "leadPastor": leadPastor->{
+      _id,
+      name,
+      role,
+      image,
+      bio
+    },
     "leaders": leaders[]->{ _id, name, role, image, department }
   }
 `;

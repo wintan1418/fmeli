@@ -2,6 +2,7 @@ import { HeroBanner } from "@/components/blocks/HeroBanner";
 import { TextBlock } from "@/components/blocks/TextBlock";
 import { CallToAction } from "@/components/blocks/CallToAction";
 import { QuoteBlock } from "@/components/blocks/QuoteBlock";
+import { ImageWithText } from "@/components/blocks/ImageWithText";
 
 /**
  * PageBuilder renders an array of Sanity section blocks by looking up each
@@ -29,6 +30,7 @@ const sectionMap: Record<string, SectionComponent> = {
   textBlock: TextBlock as SectionComponent,
   callToAction: CallToAction as SectionComponent,
   quoteBlock: QuoteBlock as SectionComponent,
+  imageWithText: ImageWithText as SectionComponent,
 };
 
 export function PageBuilder({ sections }: { sections?: SectionBlock[] | null }) {
