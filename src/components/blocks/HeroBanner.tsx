@@ -40,6 +40,7 @@ export function HeroBanner({
             alt=""
             fill
             sizes="100vw"
+            unoptimized
             className="absolute inset-0 -z-10 object-cover opacity-30"
             priority
           />

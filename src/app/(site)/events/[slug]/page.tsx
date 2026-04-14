@@ -117,6 +117,7 @@ export default async function EventPage(
               alt=""
               fill
               sizes="100vw"
+              unoptimized
               className="object-cover"
               priority
             />

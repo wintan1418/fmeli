@@ -41,6 +41,7 @@ export function PastorAvatar({ name, image, size = 72, className }: Props) {
           alt={name ?? ""}
           width={size * 2}
           height={size * 2}
+          unoptimized
           className="h-full w-full object-cover"
         />
       </div>

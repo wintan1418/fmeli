@@ -49,6 +49,7 @@ export function ImageWithText({
                 alt={heading ?? ""}
                 width={1600}
                 height={1200}
+                unoptimized
                 className="h-auto w-full object-cover"
               />
             </div>

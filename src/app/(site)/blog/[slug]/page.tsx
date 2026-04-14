@@ -117,6 +117,7 @@ export default async function PostPage(
               alt={post.title}
               width={1600}
               height={900}
+              unoptimized
               className="h-auto w-full object-cover"
             />
           </div>
