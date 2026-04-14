@@ -6,6 +6,8 @@ import event from "./documents/event";
 import registration from "./documents/registration";
 import pastor from "./documents/pastor";
 import assembly from "./documents/assembly";
+import assemblyReport from "./documents/assemblyReport";
+import member from "./documents/member";
 import meeting from "./documents/meeting";
 import announcement from "./documents/announcement";
 import post from "./documents/post";
@@ -31,6 +33,8 @@ export const schemaTypes = [
   event,
   registration,
   assembly,
+  assemblyReport,
+  member,
   pastor,
   announcement,
   // Objects

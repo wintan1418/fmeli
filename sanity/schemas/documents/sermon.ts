@@ -52,8 +52,34 @@ export default defineType({
     }),
     defineField({
       name: "audioUrl",
-      title: "Audio URL",
+      title: "Audio URL (external — Drive, Dropbox, WeTransfer, etc.)",
+      description: "Use this if the file lives outside Sanity. Paste the share link.",
       type: "url",
+    }),
+    defineField({
+      name: "audioFile",
+      title: "Audio file (uploaded to Sanity)",
+      description: "Drag-and-drop the MP3 here for direct hosting.",
+      type: "file",
+      options: {
+        accept: "audio/*",
+      },
+    }),
+    defineField({
+      name: "videoFile",
+      title: "Video file (uploaded to Sanity)",
+      description: "Drag-and-drop a sermon video file. Prefer YouTube ID for long videos.",
+      type: "file",
+      options: {
+        accept: "video/*",
+      },
+    }),
+    defineField({
+      name: "excerpt",
+      title: "Short excerpt (for cards / previews)",
+      type: "text",
+      rows: 3,
+      validation: (R) => R.max(280),
     }),
     defineField({
       name: "notes",

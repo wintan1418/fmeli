@@ -48,6 +48,9 @@ export default defineConfig({
             S.documentTypeListItem("registration").title("Event Registrations"),
             S.divider(),
             S.documentTypeListItem("assembly").title("Assemblies"),
+            S.documentTypeListItem("assemblyReport").title("Assembly Reports"),
+            S.divider(),
+            S.documentTypeListItem("member").title("Members"),
             S.divider(),
             S.listItem()
               .title("People")

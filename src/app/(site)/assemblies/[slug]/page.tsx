@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -6,6 +7,7 @@ import { ArrowLeft, MapPin, Phone, Mail, Clock, ExternalLink } from "lucide-reac
 import { Container } from "@/components/ui/Container";
 import { PastorAvatar } from "@/components/ui/PastorAvatar";
 import { sanityFetch } from "@/lib/sanity/client";
+import { urlFor } from "@/lib/sanity/image";
 import {
   ASSEMBLY_BY_SLUG_QUERY,
   ALL_ASSEMBLY_SLUGS_QUERY,
@@ -34,6 +36,7 @@ type AssemblyDoc = {
   mapUrl?: string;
   mapEmbed?: string;
   about?: PortableTextBlock[];
+  heroImage?: { asset?: { _ref?: string } };
   serviceTimes?: { label: string; day?: string; time?: string }[];
   leadPastor?: Pastor | null;
   leaders?: Pastor[];
@@ -74,19 +77,50 @@ export default async function AssemblyPage(
   });
   if (!a) notFound();
 
+  // Background image: assembly's own heroImage if uploaded, otherwise a
+  // generic FMELi cathedral fallback so the hero never looks naked.
+  const heroBgUrl = a.heroImage?.asset?._ref
+    ? urlFor(a.heroImage).width(2400).height(1400).url()
+    : "/images/church-cross.jpg";
+
   return (
     <>
       {/* Hero */}
       <section
-        className="relative overflow-hidden pt-32 pb-20 md:pt-44 md:pb-28"
+        className="relative isolate overflow-hidden pt-36 pb-24 md:pt-52 md:pb-32"
         style={{ background: "var(--color-brand-blue-ink)" }}
       >
+        <Image
+          src={heroBgUrl}
+          alt=""
+          fill
+          sizes="100vw"
+          unoptimized={heroBgUrl.startsWith("https://")}
+          priority
+          className="absolute inset-0 -z-10 object-cover object-center opacity-40"
+        />
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-20 right-1/4 h-[520px] w-[520px] rounded-full blur-[160px]"
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "linear-gradient(115deg, var(--color-brand-blue-ink) 5%, rgba(6,30,44,0.85) 45%, rgba(6,30,44,0.55) 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-20 right-1/4 -z-10 h-[520px] w-[520px] rounded-full blur-[160px]"
           style={{
             background:
               "color-mix(in srgb, var(--color-brand-gold) 22%, transparent)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-32 left-[-10%] -z-10 h-[420px] w-[420px] rounded-full blur-[160px]"
+          style={{
+            background:
+              "color-mix(in srgb, var(--color-brand-red) 35%, transparent)",
           }}
         />
         <Container className="relative">
