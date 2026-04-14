@@ -60,10 +60,10 @@ export function WelcomeNote() {
               <div className="absolute -inset-4 -z-10 rounded-[var(--radius-card)] bg-gradient-to-br from-(--color-brand-red-soft) via-transparent to-(--color-brand-gold-soft)" />
               <div className="relative overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-card-hover)]">
                 <Image
-                  src="/images/church-cross.jpg"
-                  alt="Cathedral interior with soaring arches"
-                  width={1200}
-                  height={1600}
+                  src="/images/fmeli/prayers-overlay.jpg"
+                  alt="A brother in prayer during the FMELi Life Campaign"
+                  width={944}
+                  height={1180}
                   className="h-auto w-full object-cover"
                 />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-(--color-brand-blue-ink)/90 to-transparent p-8">
