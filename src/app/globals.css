@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+/*
+ * FMELi brand theme — tuned to the real logo:
+ *   teal flame, wine heart, gold oil drops, white negative space.
+ * Every colour is a CSS variable so a future logo refresh is one edit.
+ */
+
+@theme {
+  --color-brand-blue: #2b6b85;
+  --color-brand-blue-deep: #12364a;
+  --color-brand-blue-ink: #061e2c;
+  --color-brand-blue-soft: #e1ebef;
+
+  --color-brand-red: #6b1b20;
+  --color-brand-red-deep: #4a1115;
+  --color-brand-red-soft: #f0dee0;
+
+  --color-brand-gold: #e8a02a;
+  --color-brand-gold-soft: #f7e6c2;
+
+  --color-brand-white: #ffffff;
+  --color-off-white: #faf7f1;
+  --color-cream: #f2ece0;
+
+  --color-ink: #0b141b;
+  --color-ink-soft: #3a4a55;
+  --color-muted: #7b8a94;
+
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --radius-card: 1rem;
+  --radius-pill: 9999px;
+
+  --shadow-card: 0 1px 2px 0 rgb(11 20 27 / 0.05), 0 8px 24px -8px rgb(11 20 27 / 0.12);
+  --shadow-card-hover: 0 2px 6px 0 rgb(11 20 27 / 0.08), 0 20px 48px -12px rgb(11 20 27 / 0.18);
+  --shadow-glow-gold: 0 0 0 1px rgb(232 160 42 / 0.25), 0 20px 60px -20px rgb(232 160 42 / 0.4);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-off-white);
+  color: var(--color-ink-soft);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  letter-spacing: -0.015em;
+}
+
+::selection {
+  background: var(--color-brand-gold);
+  color: var(--color-brand-blue-ink);
+}
+
+/* Scroll-reveal helper used by non-framer content */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-floaty { animation: floaty 4s ease-in-out infinite; }
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+/* Subtle grain for hero backgrounds */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
