@@ -131,18 +131,31 @@ export function PillarsSection() {
                   </span>
                 </div>
 
-                <div className="relative flex flex-1 flex-col gap-4 p-7 text-(--color-brand-white)">
+                <div
+                  className="relative flex flex-1 flex-col gap-4 p-7"
+                  style={{ color: "var(--color-brand-white)" }}
+                >
                   <div
                     aria-hidden
-                    className="absolute left-7 top-0 h-px w-12 -translate-y-[1px] bg-(--color-brand-gold) transition-all duration-500 group-hover:w-20"
+                    className="absolute left-7 top-0 h-px w-12 -translate-y-[1px] transition-all duration-500 group-hover:w-20"
+                    style={{ background: "var(--color-brand-gold)" }}
                   />
-                  <h3 className="font-[family-name:var(--font-display)] text-2xl font-semibold leading-tight md:text-[26px]">
+                  <h3
+                    className="font-[family-name:var(--font-display)] text-2xl font-semibold leading-tight md:text-[26px]"
+                    style={{ color: "var(--color-brand-white)" }}
+                  >
                     {p.title}
                   </h3>
-                  <p className="text-sm italic leading-6 text-(--color-brand-white)/75">
+                  <p
+                    className="text-sm italic leading-6"
+                    style={{ color: "rgb(255 255 255 / 0.75)" }}
+                  >
                     &ldquo;{p.quote}&rdquo;
                   </p>
-                  <p className="mt-auto text-[10px] font-semibold uppercase tracking-[0.24em] text-(--color-brand-gold)">
+                  <p
+                    className="mt-auto text-[10px] font-semibold uppercase tracking-[0.24em]"
+                    style={{ color: "var(--color-brand-gold)" }}
+                  >
                     {p.scripture}
                   </p>
                 </div>
