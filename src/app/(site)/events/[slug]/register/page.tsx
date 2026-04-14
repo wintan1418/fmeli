@@ -24,6 +24,13 @@ type EventDoc = {
   registrationDeadline?: string;
   registrationMode?: "internal" | "external";
   externalRegistrationUrl?: string;
+  payment?: {
+    enabled?: boolean;
+    amount?: number;
+    currency?: string;
+    allowPaystack?: boolean;
+    allowTransfer?: boolean;
+  };
   registrationFields?: Array<{
     label: string;
     name: string;
@@ -46,6 +53,13 @@ type EventDoc = {
 
 type Assembly = { _id: string; city: string; state?: string };
 
+type BankDetails = {
+  bankName?: string;
+  accountName?: string;
+  accountNumber?: string;
+  instructions?: string;
+} | null;
+
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> },
 ): Promise<Metadata> {
@@ -65,7 +79,7 @@ export default async function RegisterPage(
 ) {
   const { slug } = await params;
 
-  const [event, assemblies] = await Promise.all([
+  const [event, assemblies, bankDetails] = await Promise.all([
     sanityFetch<EventDoc | null>({
       query: EVENT_BY_SLUG_QUERY,
       params: { slug },
@@ -75,6 +89,11 @@ export default async function RegisterPage(
     sanityFetch<Assembly[]>({
       query: ASSEMBLIES_QUERY,
       tags: ["sanity:assembly:list"],
+      revalidate: 3600,
+    }),
+    sanityFetch<BankDetails>({
+      query: `*[_id == "siteSettings"][0].bankTransferDetails`,
+      tags: ["sanity:settings"],
       revalidate: 3600,
     }),
   ]);
@@ -241,6 +260,8 @@ export default async function RegisterPage(
               assemblies={assemblies ?? []}
               capacity={event.capacity ?? null}
               registeredCount={event.registeredCount}
+              payment={event.payment ?? null}
+              bankDetails={bankDetails ?? null}
             />
           </div>
         </div>

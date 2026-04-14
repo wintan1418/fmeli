@@ -115,6 +115,13 @@ export const EVENT_BY_SLUG_QUERY = groq`
     capacity,
     registrationMode,
     externalRegistrationUrl,
+    payment{
+      enabled,
+      amount,
+      currency,
+      allowPaystack,
+      allowTransfer
+    },
     registrationFields[]{
       label,
       name,

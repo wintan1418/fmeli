@@ -67,11 +67,41 @@ export default defineType({
       options: {
         list: [
           { title: "Confirmed", value: "confirmed" },
+          { title: "Awaiting payment", value: "awaiting_payment" },
+          { title: "Transfer pending verification", value: "transfer_pending" },
+          { title: "Payment failed", value: "payment_failed" },
           { title: "Waitlist", value: "waitlist" },
           { title: "Cancelled", value: "cancelled" },
         ],
       },
       initialValue: "confirmed",
+    }),
+    defineField({
+      name: "paymentMethod",
+      type: "string",
+      options: {
+        list: [
+          { title: "Free (no payment required)", value: "free" },
+          { title: "Paystack", value: "paystack" },
+          { title: "Bank transfer", value: "transfer" },
+        ],
+      },
+      initialValue: "free",
+    }),
+    defineField({
+      name: "paymentReference",
+      type: "string",
+      description:
+        "Paystack reference or transfer reference supplied by the registrant.",
+    }),
+    defineField({
+      name: "amount",
+      title: "Amount paid (NGN)",
+      type: "number",
+    }),
+    defineField({
+      name: "paidAt",
+      type: "datetime",
     }),
   ],
   orderings: [

@@ -76,6 +76,49 @@ export default defineType({
       of: [{ type: "block" }],
     }),
 
+    // Payment (optional — only applies if the event has a fee)
+    defineField({
+      name: "payment",
+      title: "Payment",
+      type: "object",
+      options: { collapsible: true, collapsed: false },
+      fields: [
+        defineField({
+          name: "enabled",
+          title: "This event requires payment",
+          type: "boolean",
+          initialValue: false,
+        }),
+        defineField({
+          name: "amount",
+          title: "Amount (NGN)",
+          type: "number",
+          hidden: ({ parent }) => !parent?.enabled,
+          validation: (R) => R.min(0),
+        }),
+        defineField({
+          name: "currency",
+          type: "string",
+          initialValue: "NGN",
+          hidden: ({ parent }) => !parent?.enabled,
+        }),
+        defineField({
+          name: "allowPaystack",
+          title: "Allow online payment via Paystack",
+          type: "boolean",
+          initialValue: true,
+          hidden: ({ parent }) => !parent?.enabled,
+        }),
+        defineField({
+          name: "allowTransfer",
+          title: "Allow bank transfer",
+          type: "boolean",
+          initialValue: true,
+          hidden: ({ parent }) => !parent?.enabled,
+        }),
+      ],
+    }),
+
     // Registration
     defineField({
       name: "registrationEnabled",

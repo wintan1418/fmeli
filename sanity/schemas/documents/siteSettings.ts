@@ -107,6 +107,25 @@ export default defineType({
       validation: (R) => R.max(5),
     }),
     defineField({
+      name: "bankTransferDetails",
+      title: "Bank transfer details",
+      description: "Shown to registrants who choose to pay by transfer.",
+      type: "object",
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        defineField({ name: "bankName", type: "string" }),
+        defineField({ name: "accountName", type: "string" }),
+        defineField({ name: "accountNumber", type: "string" }),
+        defineField({
+          name: "instructions",
+          type: "text",
+          rows: 3,
+          description:
+            "Extra guidance for the giver — e.g. 'use your name as reference'.",
+        }),
+      ],
+    }),
+    defineField({
       name: "homepageStats",
       title: "Homepage stats (counters)",
       type: "array",
