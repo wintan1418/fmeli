@@ -1,3 +1,8 @@
+import { HeroBanner } from "@/components/blocks/HeroBanner";
+import { TextBlock } from "@/components/blocks/TextBlock";
+import { CallToAction } from "@/components/blocks/CallToAction";
+import { QuoteBlock } from "@/components/blocks/QuoteBlock";
+
 /**
  * PageBuilder renders an array of Sanity section blocks by looking up each
  * block's _type in the sectionMap below.
@@ -20,8 +25,10 @@ type SectionBlock = {
 type SectionComponent = React.ComponentType<SectionBlock>;
 
 const sectionMap: Record<string, SectionComponent> = {
-  // Populated in Phase 2 — heroBanner, textBlock, imageWithText, callToAction,
-  // quoteBlock, teamGrid, sermonGrid, eventsList, faq, mediaEmbed, stats.
+  heroBanner: HeroBanner as SectionComponent,
+  textBlock: TextBlock as SectionComponent,
+  callToAction: CallToAction as SectionComponent,
+  quoteBlock: QuoteBlock as SectionComponent,
 };
 
 export function PageBuilder({ sections }: { sections?: SectionBlock[] | null }) {

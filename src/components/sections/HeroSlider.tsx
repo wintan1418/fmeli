@@ -62,11 +62,7 @@ export function HeroSlider() {
 
       <div className="relative mx-auto flex min-h-[100vh] w-full max-w-7xl flex-col gap-16 px-4 pt-32 pb-20 md:px-6 md:pt-36 md:pb-28 lg:grid lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-14 lg:pt-40 lg:pb-32">
         {/* Left — message */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease, delay: 0.1 }}
-        >
+        <div>
           <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-(--color-brand-gold)">
             <span className="inline-block h-px w-10 bg-(--color-brand-gold)" />
             Welcome to FMELi
@@ -136,15 +132,10 @@ export function HeroSlider() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
-        {/* Right — the set man */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96, y: 30 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1.1, ease, delay: 0.3 }}
-          className="relative mx-auto w-full max-w-md lg:max-w-none"
-        >
+        {/* Right — rotating imagery */}
+        <div className="relative mx-auto w-full max-w-md lg:max-w-none">
           {/* Gold frame glow */}
           <div
             aria-hidden
@@ -190,7 +181,7 @@ export function HeroSlider() {
               ))}
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll hint */}

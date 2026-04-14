@@ -232,6 +232,185 @@ const siteSettingsDoc = {
 };
 
 // ────────────────────────────────────────────────────────────────
+// CMS pages (About, Beliefs, Contact, Life Campaign)
+// ────────────────────────────────────────────────────────────────
+const ptBlock = (text) => ({
+  _type: "block",
+  _key: Math.random().toString(36).slice(2),
+  style: "normal",
+  children: [{ _type: "span", _key: Math.random().toString(36).slice(2), text, marks: [] }],
+  markDefs: [],
+});
+
+const pageDocs = [
+  {
+    _id: "page.about",
+    _type: "page",
+    title: "About Us",
+    slug: { _type: "slug", current: "about" },
+    sections: [
+      {
+        _key: "about-hero",
+        _type: "heroBanner",
+        eyebrow: "Our story",
+        heading: "Full Manifestation of Eternal Life",
+        subheading:
+          "A family of believers unveiling the mysteries of the kingdom across nine assemblies in Nigeria and everywhere online.",
+        tone: "blue-deep",
+      },
+      {
+        _key: "about-story",
+        _type: "textBlock",
+        eyebrow: "Who we are",
+        heading: "The entrance of His word gives light",
+        body: [
+          ptBlock(
+            "Full Manifestation of Eternal Life — also known as Eternal Life Embassy — exists to unveil the mysteries of the kingdom of God through the teaching and demonstration of the Word.",
+          ),
+          ptBlock(
+            "We are a family of believers who gather weekly for the breaking of bread, the teaching of the apostles' doctrine, prayer, and fellowship. From our beginnings, our conviction has been simple: where the Word is given full place, darkness flees and light breaks in.",
+          ),
+          ptBlock(
+            "Across nine assemblies — Lagos, Abeokuta, Ibadan, Akure, Osogbo, Ife, Ondo, Benin, and Ado — we carry the same message, the same Word, and the same testimony of Jesus.",
+          ),
+        ],
+        alignment: "left",
+        tone: "default",
+      },
+      {
+        _key: "about-quote",
+        _type: "quoteBlock",
+        quote:
+          "The entrance of Your word gives light; it gives understanding to the simple.",
+        attribution: "Psalm 119:130",
+        tone: "blue",
+      },
+      {
+        _key: "about-cta",
+        _type: "callToAction",
+        eyebrow: "Come and see",
+        heading: "You are welcome at the table",
+        body: "Whether you are seeking, curious, or long-established in the faith, there is a place for you at any of our assemblies. Come as you are — leave carrying light.",
+        tone: "blue",
+      },
+    ],
+  },
+  {
+    _id: "page.beliefs",
+    _type: "page",
+    title: "What We Believe",
+    slug: { _type: "slug", current: "beliefs" },
+    sections: [
+      {
+        _key: "beliefs-hero",
+        _type: "heroBanner",
+        eyebrow: "The foundation",
+        heading: "What we believe",
+        subheading:
+          "The core convictions that shape our teaching, worship, and life together.",
+        tone: "blue-deep",
+      },
+      {
+        _key: "beliefs-body",
+        _type: "textBlock",
+        eyebrow: "Statement of faith",
+        heading: "The unchanging Word",
+        body: [
+          ptBlock(
+            "We believe in the inspiration and authority of the Holy Scriptures — the Bible is the Word of God, complete, sufficient, and without error.",
+          ),
+          ptBlock(
+            "We believe in one God, eternally existing in three persons: Father, Son, and Holy Spirit. We believe in the deity, incarnation, sinless life, atoning death, bodily resurrection, and soon-coming return of Jesus Christ.",
+          ),
+          ptBlock(
+            "We believe that every person is born in sin and needs the new birth through faith in the finished work of Christ. We believe in the baptism and ongoing ministry of the Holy Spirit, the gifts of the Spirit, and the unity of the body of Christ.",
+          ),
+          ptBlock(
+            "The full statement of faith is available on request from the church office.",
+          ),
+        ],
+        alignment: "left",
+        tone: "default",
+      },
+    ],
+  },
+  {
+    _id: "page.contact",
+    _type: "page",
+    title: "Contact",
+    slug: { _type: "slug", current: "contact" },
+    sections: [
+      {
+        _key: "contact-hero",
+        _type: "heroBanner",
+        eyebrow: "Get in touch",
+        heading: "Contact us",
+        subheading:
+          "Reach out to the church office or visit any of our nine assemblies across Nigeria.",
+        tone: "blue-deep",
+      },
+      {
+        _key: "contact-body",
+        _type: "textBlock",
+        eyebrow: "The office",
+        heading: "We'd love to hear from you",
+        body: [
+          ptBlock(
+            "For general enquiries, prayer requests, or to plan a visit, email the church office or phone any of our assemblies directly — you'll find the numbers on each assembly page.",
+          ),
+          ptBlock(
+            "For event registration, use the Register button on the event's page. For giving, visit the Give page.",
+          ),
+        ],
+        alignment: "left",
+        tone: "default",
+      },
+      {
+        _key: "contact-cta",
+        _type: "callToAction",
+        eyebrow: "Find your nearest assembly",
+        heading: "Nine cities. One family.",
+        body: "Lagos, Abeokuta, Ibadan, Akure, Osogbo, Ife, Ondo, Benin, Ado. Find yours.",
+        tone: "blue",
+      },
+    ],
+  },
+  {
+    _id: "page.life-campaign",
+    _type: "page",
+    title: "Life Campaign",
+    slug: { _type: "slug", current: "life-campaign" },
+    sections: [
+      {
+        _key: "lc-hero",
+        _type: "heroBanner",
+        eyebrow: "Life Campaign",
+        heading: "Taking the message beyond the walls",
+        subheading:
+          "Our flagship outreach — healing, salvation, and the unveiled Word on the streets of our cities.",
+        tone: "blue-deep",
+      },
+      {
+        _key: "lc-body",
+        _type: "textBlock",
+        eyebrow: "What it is",
+        heading: "More than an event",
+        body: [
+          ptBlock(
+            "The Life Campaign is FMELi's outreach arm — a season of concentrated evangelism, healing, and teaching that takes the gospel out of our auditoriums and into our communities.",
+          ),
+          ptBlock(
+            "Each campaign runs over several days with nightly open-air services, daytime outreaches, and dedicated intercession. Thousands have met Christ through it.",
+          ),
+        ],
+        alignment: "left",
+        tone: "default",
+      },
+    ],
+  },
+];
+
+// ────────────────────────────────────────────────────────────────
 // Run the seed
 // ────────────────────────────────────────────────────────────────
 async function main() {
@@ -241,13 +420,14 @@ async function main() {
   for (const doc of assemblyDocs) tx = tx.createOrReplace(doc);
   for (const doc of meetingDocs) tx = tx.createOrReplace(doc);
   for (const doc of announcementDocs) tx = tx.createOrReplace(doc);
+  for (const doc of pageDocs) tx = tx.createOrReplace(doc);
   // siteSettings: only create if not exists so we don't nuke admin edits
   tx = tx.createIfNotExists(siteSettingsDoc);
 
   const result = await tx.commit();
   console.log(`✓ Committed ${result.results.length} operations.`);
   console.log(
-    `  Assemblies: ${assemblyDocs.length}, Meetings: ${meetingDocs.length}, Announcements: ${announcementDocs.length}, Site Settings: createIfNotExists.`,
+    `  Assemblies: ${assemblyDocs.length}, Meetings: ${meetingDocs.length}, Announcements: ${announcementDocs.length}, Pages: ${pageDocs.length}, Site Settings: createIfNotExists.`,
   );
 }
 

@@ -154,3 +154,121 @@ export const ASSEMBLIES_QUERY = groq`
     state
   }
 `;
+
+/** Full assembly listing for the /assemblies page. */
+export const ASSEMBLIES_FULL_QUERY = groq`
+  *[_type == "assembly"] | order(order asc, city asc){
+    _id,
+    "slug": slug.current,
+    city,
+    state,
+    tagline,
+    address,
+    phone,
+    email,
+    heroImage,
+    serviceTimes
+  }
+`;
+
+/** Single assembly by slug. */
+export const ASSEMBLY_BY_SLUG_QUERY = groq`
+  *[_type == "assembly" && slug.current == $slug][0]{
+    _id,
+    "slug": slug.current,
+    city,
+    state,
+    tagline,
+    address,
+    phone,
+    email,
+    mapUrl,
+    mapEmbed,
+    heroImage,
+    serviceTimes,
+    "leaders": leaders[]->{ _id, name, role, image, department }
+  }
+`;
+
+export const ALL_ASSEMBLY_SLUGS_QUERY = groq`
+  *[_type == "assembly" && defined(slug.current)]{ "slug": slug.current }
+`;
+
+/** All meetings. */
+export const MEETINGS_QUERY = groq`
+  *[_type == "meeting"] | order(order asc){
+    _id,
+    title,
+    "slug": slug.current,
+    kind,
+    cadenceLabel,
+    defaultDay,
+    defaultTime,
+    summary,
+    image,
+    featured
+  }
+`;
+
+/** Single meeting by slug. */
+export const MEETING_BY_SLUG_QUERY = groq`
+  *[_type == "meeting" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    kind,
+    cadenceLabel,
+    defaultDay,
+    defaultTime,
+    summary,
+    description,
+    image,
+    "assemblies": assemblies[]->{ "slug": slug.current, city }
+  }
+`;
+
+export const ALL_MEETING_SLUGS_QUERY = groq`
+  *[_type == "meeting" && defined(slug.current)]{ "slug": slug.current }
+`;
+
+/** Blog posts list. */
+export const POSTS_QUERY = groq`
+  *[_type == "post" && defined(publishedAt)] | order(publishedAt desc){
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    publishedAt,
+    coverImage,
+    tags,
+    "author": author->{ name, image }
+  }
+`;
+
+export const POST_BY_SLUG_QUERY = groq`
+  *[_type == "post" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    coverImage,
+    excerpt,
+    body,
+    tags,
+    "author": author->{ name, role, image, bio }
+  }
+`;
+
+export const ALL_POST_SLUGS_QUERY = groq`
+  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
+`;
+
+/** Site settings singleton — used in layouts. */
+export const SITE_SETTINGS_WITH_BANK_QUERY = groq`
+  *[_id == "siteSettings"][0]{
+    title,
+    tagline,
+    liveStreamUrl,
+    bankTransferDetails
+  }
+`;

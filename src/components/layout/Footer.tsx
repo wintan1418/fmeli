@@ -33,21 +33,20 @@ const COLUMNS = {
   Ministry: [
     { label: "About Us", href: "/about" },
     { label: "Life Campaign", href: "/life-campaign" },
-    { label: "Outreaches", href: "/outreaches" },
     { label: "What We Believe", href: "/beliefs" },
+    { label: "Contact", href: "/contact" },
   ],
   Media: [
     { label: "Sermons", href: "/sermons" },
     { label: "Watch Live", href: "/live" },
-    { label: "Audio Messages", href: "/audio" },
     { label: "Blog", href: "/blog" },
-    { label: "Books", href: "/books" },
+    { label: "Give", href: "/give" },
   ],
   Meetings: [
-    { label: "Sunday Service", href: "/meetings/sunday" },
-    { label: "Wednesday Teaching", href: "/meetings/wednesday" },
-    { label: "Monthly Vigil", href: "/meetings/vigil" },
-    { label: "Yearly Convocations", href: "/meetings#yearly" },
+    { label: "Sunday Service", href: "/meetings/sunday-service" },
+    { label: "Wednesday Teaching", href: "/meetings/wednesday-teaching" },
+    { label: "Monthly Vigil", href: "/meetings/monthly-vigil" },
+    { label: "All meetings", href: "/meetings" },
   ],
 } as const;
 
