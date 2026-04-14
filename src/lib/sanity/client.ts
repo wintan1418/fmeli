@@ -5,10 +5,6 @@ export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 export const apiVersion =
   process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2024-10-01";
 
-// Server-side token for Server Components. Safe because client.ts is only
-// imported from server code (page.tsx / route.tsx) — never from a client
-// component. Using the read token lets us query private datasets and
-// authenticated/drafts endpoints without exposing anything to the browser.
 const serverToken =
   process.env.SANITY_API_READ_TOKEN ?? process.env.SANITY_API_WRITE_TOKEN;
 
@@ -17,9 +13,6 @@ export const client = createClient({
   dataset,
   apiVersion,
   token: serverToken,
-  // CDN adds stale reads under ~60s. Next.js already caches on top via the
-  // `next: { revalidate, tags }` options below, so skipping the CDN gives us
-  // fresh-on-first-fetch behaviour. Revalidation via webhook still works.
   useCdn: false,
   perspective: "published",
   stega: false,
@@ -33,9 +26,14 @@ type FetchOptions = {
 };
 
 /**
- * Server-only wrapper around Sanity fetches that sets cache tags + revalidate
- * windows. Always use this from Server Components — never import `client`
- * directly in a page.
+ * Server-only wrapper around Sanity fetches.
+ *
+ * Why this exists:
+ *  - Sets Next.js cache tags + revalidate window per query (see docs/ARCHITECTURE.md §4.2).
+ *  - Retries on EAI_AGAIN / network hiccups — WSL DNS flakes in dev which
+ *    would otherwise turn every affected page into a 500 / notFound. We do
+ *    up to 3 attempts with a short backoff; production (Vercel) almost
+ *    never needs this, but it's cheap insurance.
  */
 export async function sanityFetch<T>({
   query,
@@ -43,10 +41,49 @@ export async function sanityFetch<T>({
   tags,
   revalidate = 300,
 }: FetchOptions): Promise<T> {
-  return client.fetch<T>(query, params, {
-    next: {
-      revalidate,
-      tags,
-    },
-  });
+  let attempt = 0;
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    try {
+      return await client.fetch<T>(query, params, {
+        next: { revalidate, tags },
+      });
+    } catch (err) {
+      attempt += 1;
+      const isRetryable = isTransientNetworkError(err);
+      if (attempt >= 3 || !isRetryable) {
+        // Swallow the underlying stack on the final rethrow so we never echo
+        // the Authorization header or request body into server logs.
+        const safe = new Error(
+          `Sanity fetch failed after ${attempt} attempt(s): ${
+            isRetryable ? "network error" : "query error"
+          }`,
+        );
+        (safe as Error & { cause?: unknown }).cause =
+          err instanceof Error ? err.name : "unknown";
+        throw safe;
+      }
+      await new Promise((r) => setTimeout(r, 150 * attempt));
+    }
+  }
+}
+
+function isTransientNetworkError(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false;
+  const candidates = [err, (err as { cause?: unknown }).cause];
+  for (const c of candidates) {
+    if (!c || typeof c !== "object") continue;
+    const code = (c as { code?: string }).code;
+    if (
+      code === "EAI_AGAIN" ||
+      code === "ENOTFOUND" ||
+      code === "ETIMEDOUT" ||
+      code === "ECONNRESET" ||
+      code === "UND_ERR_SOCKET" ||
+      code === "UND_ERR_CONNECT_TIMEOUT"
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
