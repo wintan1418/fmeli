@@ -48,7 +48,62 @@ export default defineConfig({
             S.documentTypeListItem("registration").title("Event Registrations"),
             S.divider(),
             S.documentTypeListItem("assembly").title("Assemblies"),
-            S.documentTypeListItem("pastor").title("Pastors & Team"),
+            S.divider(),
+            S.listItem()
+              .title("People")
+              .child(
+                S.list()
+                  .title("People")
+                  .items([
+                    S.listItem()
+                      .title("Pastors & Leaders")
+                      .schemaType("pastor")
+                      .child(
+                        S.documentTypeList("pastor")
+                          .title("Pastors & Leaders")
+                          .filter('_type == "pastor" && department == "pastoral"'),
+                      ),
+                    S.listItem()
+                      .title("Church Office")
+                      .schemaType("pastor")
+                      .child(
+                        S.documentTypeList("pastor")
+                          .title("Church Office")
+                          .filter('_type == "pastor" && department == "office"'),
+                      ),
+                    S.listItem()
+                      .title("Worship & Music")
+                      .schemaType("pastor")
+                      .child(
+                        S.documentTypeList("pastor")
+                          .title("Worship & Music")
+                          .filter('_type == "pastor" && department == "worship"'),
+                      ),
+                    S.listItem()
+                      .title("Media & Tech")
+                      .schemaType("pastor")
+                      .child(
+                        S.documentTypeList("pastor")
+                          .title("Media & Tech")
+                          .filter('_type == "pastor" && department == "media"'),
+                      ),
+                    S.listItem()
+                      .title("Ministries (Youth, Women, Men, Outreach)")
+                      .schemaType("pastor")
+                      .child(
+                        S.documentTypeList("pastor")
+                          .title("Ministries")
+                          .filter(
+                            '_type == "pastor" && department in ["youth","women","men","outreach"]',
+                          ),
+                      ),
+                    S.divider(),
+                    S.listItem()
+                      .title("All People")
+                      .schemaType("pastor")
+                      .child(S.documentTypeList("pastor").title("All People")),
+                  ]),
+              ),
           ]),
     }),
     visionTool(),
