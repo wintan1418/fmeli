@@ -91,16 +91,26 @@ const assemblyRows = [
 async function main() {
   console.log(`Seeding dataset '${dataset}' on project ${projectId}…`);
 
-  // Upload pastor placeholder image (the FMELi set-man photo).
-  const pastorAssetId = await uploadImageAsset(
-    "public/images/fmeli/set-man.jpg",
-    "fmeli-pastor-placeholder.jpg",
-  );
-  console.log(
-    pastorAssetId
-      ? `  ✓ pastor image: ${pastorAssetId}`
-      : "  ! pastor image upload skipped",
-  );
+  // Upload every FMELi photo as a Sanity asset so we can reference them
+  // from page sections by filename. Sanity dedupes uploads by content hash.
+  const FMELI_PHOTOS = [
+    "set-man.jpg",
+    "word-preaching.jpg",
+    "worship-hands-up.jpg",
+    "pray-woman.jpg",
+    "prayers-overlay.jpg",
+    "fellowship-women.jpg",
+    "brothers-embrace.jpg",
+    "joy-laughter.jpg",
+    "overcomer-youth.jpg",
+  ];
+  const assetByName = {};
+  for (const file of FMELI_PHOTOS) {
+    const id = await uploadImageAsset(`public/images/fmeli/${file}`, file);
+    if (id) assetByName[file] = id;
+  }
+  console.log(`  ✓ uploaded ${Object.keys(assetByName).length} fmeli photos`);
+  const pastorAssetId = assetByName["set-man.jpg"];
 
   // ── Pastors ──────────────────────────────────────────────────
   const setManDoc = {
@@ -353,51 +363,61 @@ async function main() {
             "Full Manifestation of Eternal Life is a family of believers carrying one burden — that the entrance of His word would give light to every soul that enters our doors.",
           tone: "blue-deep",
         },
+        // Image right — origin story
         {
           _key: "about-origin",
-          _type: "textBlock",
+          _type: "imageWithText",
           eyebrow: "Who we are",
           heading: "We are a people of the Word",
+          imagePosition: "right",
+          image: imageRef(assetByName["word-preaching.jpg"]),
           body: [
             ptBlock(
-              "Full Manifestation of Eternal Life — also known as Eternal Life Embassy — is a fellowship of believers united around the teaching of the mysteries of the kingdom of God. From a single gathering years ago, the ministry has grown into a family that now meets across nine assemblies in Nigeria and reaches tens of thousands online every week.",
+              "Full Manifestation of Eternal Life — also known as Eternal Life Embassy — is a fellowship of believers united around the teaching of the mysteries of the kingdom of God.",
             ),
             ptBlock(
-              "Our conviction has never changed: where the Word is given full place, darkness flees and light breaks in. Every sermon, every song, every service is in pursuit of that single thing.",
+              "From a single gathering years ago, the ministry has grown into a family that meets across nine assemblies in Nigeria and reaches tens of thousands online every week.",
+            ),
+            ptBlock(
+              "Our conviction has never changed: where the Word is given full place, darkness flees and light breaks in.",
             ),
           ],
-          alignment: "left",
-          tone: "default",
         },
+        // Image left — for the Word pillar
         {
-          _key: "about-pillars",
-          _type: "textBlock",
-          eyebrow: "How we live it",
-          heading: "For the Word. The testimony of Jesus. We pray. We worship.",
+          _key: "about-pillar-word",
+          _type: "imageWithText",
+          eyebrow: "Pillar 01",
+          heading: "For the Word",
+          imagePosition: "left",
+          image: imageRef(assetByName["set-man.jpg"]),
           body: [
             ptBlock(
-              "Four pillars shape the rhythm of our life together:",
+              "The Bible is the foundation of everything we teach, sing, and do. Verse by verse, line upon line — we believe the entrance of His word gives light.",
             ),
-            ptH3("1. For the Word"),
             ptBlock(
-              "The Bible is the foundation of everything we teach, sing, and do. Verse by verse, line upon line — we believe the entrance of His word gives light (Psalm 119:130).",
-            ),
-            ptH3("2. The Testimony of Jesus"),
-            ptBlock(
-              "The Spirit of prophecy is the testimony of Jesus (Revelation 19:10). Christ is at the centre of every gathering — His person, His work, His appearing.",
-            ),
-            ptH3("3. We Pray"),
-            ptBlock(
-              "Prayer is our first language. Weekly prayer meetings, monthly vigils, and a culture of intercession across every assembly.",
-            ),
-            ptH3("4. We Worship"),
-            ptBlock(
-              "We are given to Him — in spirit, in truth, in every song we raise. Worship at FMELi is not a warm-up act; it is the main event.",
+              "Every Sunday and every Wednesday, the centre of the gathering is the unveiled Word. Not slogans. Not programmes. The Word.",
             ),
           ],
-          alignment: "left",
-          tone: "default",
         },
+        // Image right — testimony of Jesus
+        {
+          _key: "about-pillar-testimony",
+          _type: "imageWithText",
+          eyebrow: "Pillar 02",
+          heading: "The testimony of Jesus",
+          imagePosition: "right",
+          image: imageRef(assetByName["fellowship-women.jpg"]),
+          body: [
+            ptBlock(
+              "The Spirit of prophecy is the testimony of Jesus. Christ is at the centre of every gathering — His person, His finished work, His soon appearing.",
+            ),
+            ptBlock(
+              "We don't preach a religion or a personality. We preach Him.",
+            ),
+          ],
+        },
+        // Pullquote breaking the rhythm
         {
           _key: "about-scripture",
           _type: "quoteBlock",
@@ -406,22 +426,61 @@ async function main() {
           attribution: "Psalm 119:130",
           tone: "blue",
         },
+        // Image left — we pray
         {
-          _key: "about-assemblies",
-          _type: "textBlock",
-          eyebrow: "Across Nigeria",
-          heading: "Nine assemblies. One family.",
+          _key: "about-pillar-pray",
+          _type: "imageWithText",
+          eyebrow: "Pillar 03",
+          heading: "We pray",
+          imagePosition: "left",
+          image: imageRef(assetByName["pray-woman.jpg"]),
           body: [
             ptBlock(
-              "From Lagos to Ado, Abeokuta to Benin, our assemblies share the same Word, the same rhythm, and the same mission. Each campus is led by pastors who carry the vision of the house and serve their local community.",
+              "Prayer is our first language. Weekly prayer meetings, the Monthly Vigil that runs from 10pm through the night, and a culture of intercession across every assembly.",
+            ),
+            ptBlock(
+              "Many testimonies in this house began on a knee, in a chair, in the small hours of the morning.",
+            ),
+          ],
+        },
+        // Image right — we worship
+        {
+          _key: "about-pillar-worship",
+          _type: "imageWithText",
+          eyebrow: "Pillar 04",
+          heading: "We worship",
+          imagePosition: "right",
+          image: imageRef(assetByName["worship-hands-up.jpg"]),
+          body: [
+            ptBlock(
+              "We are given to Him — in spirit, in truth, in every song we raise. Worship at FMELi is not a warm-up act before the message; it is the main event.",
+            ),
+            ptBlock(
+              "We are made for this. We were created to give Him glory.",
+            ),
+          ],
+        },
+        // Image left — assemblies
+        {
+          _key: "about-assemblies",
+          _type: "imageWithText",
+          eyebrow: "Across Nigeria",
+          heading: "Nine assemblies. One family.",
+          imagePosition: "left",
+          image: imageRef(assetByName["brothers-embrace.jpg"]),
+          body: [
+            ptBlock(
+              "From Lagos to Ado, Abeokuta to Benin, our assemblies share the same Word, the same rhythm, and the same mission. Each campus is led by pastors who carry the vision of the house.",
             ),
             ptBlock(
               "Wherever you find an FMELi assembly, you'll find open doors, open Bibles, and a family that wants to welcome you.",
             ),
           ],
-          alignment: "left",
-          tone: "default",
+          cta: {
+            link: { label: "Find your nearest assembly", external: "/assemblies" },
+          },
         },
+        // CTA finale
         {
           _key: "about-cta",
           _type: "callToAction",
