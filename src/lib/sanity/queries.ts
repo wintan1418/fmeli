@@ -64,15 +64,86 @@ export const EVENTS_UPCOMING_QUERY = groq`
     _id,
     title,
     "slug": slug.current,
+    tagline,
     startsAt,
     endsAt,
     location,
     heroImage,
-    description
+    isSpecial,
+    registrationEnabled,
+    "assembly": assembly->{ "slug": slug.current, city }
   }
 `;
 
-/** Single event by slug. */
+/** All events (past + upcoming). */
+export const EVENTS_ALL_QUERY = groq`
+  *[_type == "event"] | order(startsAt desc){
+    _id,
+    title,
+    "slug": slug.current,
+    tagline,
+    startsAt,
+    endsAt,
+    location,
+    heroImage,
+    isSpecial,
+    registrationEnabled,
+    "assembly": assembly->{ "slug": slug.current, city }
+  }
+`;
+
+/** Every published event slug — for generateStaticParams. */
+export const ALL_EVENT_SLUGS_QUERY = groq`
+  *[_type == "event" && defined(slug.current)]{ "slug": slug.current }
+`;
+
+/** Single event by slug (full detail). */
 export const EVENT_BY_SLUG_QUERY = groq`
-  *[_type == "event" && slug.current == $slug][0]{ ... }
+  *[_type == "event" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    tagline,
+    isSpecial,
+    startsAt,
+    endsAt,
+    location,
+    heroImage,
+    description,
+    registrationEnabled,
+    registrationDeadline,
+    capacity,
+    registrationMode,
+    externalRegistrationUrl,
+    registrationFields[]{
+      label,
+      name,
+      kind,
+      required,
+      options,
+      placeholder
+    },
+    "assembly": assembly->{
+      _id,
+      "slug": slug.current,
+      city,
+      state,
+      address
+    },
+    "parentMeeting": parentMeeting->{
+      "slug": slug.current,
+      title
+    },
+    "registeredCount": count(*[_type == "registration" && event._ref == ^._id && status == "confirmed"])
+  }
+`;
+
+/** Assemblies for dropdowns. */
+export const ASSEMBLIES_QUERY = groq`
+  *[_type == "assembly"] | order(order asc, city asc){
+    _id,
+    "slug": slug.current,
+    city,
+    state
+  }
 `;
