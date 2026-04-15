@@ -30,21 +30,13 @@ export default async function SermonsPage() {
         title={
           <>
             Messages from{" "}
-            <span
-              className="italic"
-              style={{ color: "var(--color-brand-gold-soft)" }}
-            >
-              the pulpit
-            </span>
+            <span className="italic text-brand-gold-soft">the pulpit</span>
           </>
         }
         subtitle="Browse recent teachings and special meeting messages. Notes, audio and video where available."
       />
 
-      <section
-        className="py-20 md:py-28"
-        style={{ background: "var(--color-off-white)" }}
-      >
+      <section className="bg-off-white py-20 md:py-28">
         <Container>
           {sermons && sermons.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -59,10 +51,7 @@ export default async function SermonsPage() {
                     key={s._id}
                     className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[var(--shadow-card-hover)]"
                   >
-                    <div
-                      className="relative aspect-[16/10] overflow-hidden"
-                      style={{ background: "var(--color-brand-blue-ink)" }}
-                    >
+                    <div className="relative aspect-[16/10] overflow-hidden bg-brand-blue-ink">
                       {thumb && (
                         <Image
                           src={thumb}
@@ -73,34 +62,16 @@ export default async function SermonsPage() {
                           className="object-cover transition-transform duration-700 group-hover:scale-[1.06]"
                         />
                       )}
-                      <div
-                        className="absolute inset-0"
-                        style={{
-                          background:
-                            "linear-gradient(to top, rgba(6,30,44,0.8), transparent)",
-                        }}
-                      />
-                      <div
-                        className="absolute bottom-5 right-5 inline-flex h-14 w-14 items-center justify-center rounded-full"
-                        style={{
-                          background: "var(--color-brand-gold)",
-                          color: "var(--color-brand-blue-ink)",
-                        }}
-                      >
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-blue-ink/80 to-transparent" />
+                      <div className="absolute bottom-5 right-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-gold text-brand-blue-ink">
                         <Play size={20} className="fill-current" />
                       </div>
                     </div>
                     <div className="flex flex-1 flex-col gap-3 p-6">
-                      <div
-                        className="text-xs uppercase tracking-[0.18em]"
-                        style={{ color: "var(--color-muted)" }}
-                      >
+                      <div className="text-xs uppercase tracking-[0.18em] text-muted">
                         {s.date} {s.scripture && `· ${s.scripture}`}
                       </div>
-                      <h3
-                        className="font-[family-name:var(--font-display)] text-xl font-semibold leading-tight"
-                        style={{ color: "var(--color-ink)" }}
-                      >
+                      <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold leading-tight text-ink">
                         <Link
                           href={`/sermons/${s.slug}`}
                           className="before:absolute before:inset-0 before:content-['']"
@@ -109,18 +80,12 @@ export default async function SermonsPage() {
                         </Link>
                       </h3>
                       {s.excerpt && (
-                        <p
-                          className="line-clamp-3 text-sm leading-relaxed"
-                          style={{ color: "var(--color-ink-soft)" }}
-                        >
+                        <p className="line-clamp-3 text-sm leading-relaxed text-ink-soft">
                           {s.excerpt}
                         </p>
                       )}
                       <div className="mt-auto space-y-3 pt-2">
-                        <p
-                          className="text-sm font-medium"
-                          style={{ color: "var(--color-ink-soft)" }}
-                        >
+                        <p className="text-sm font-medium text-ink-soft">
                           {s.preacher?.name}
                         </p>
                         {(audioHref || excerptHref) && (
@@ -132,14 +97,7 @@ export default async function SermonsPage() {
                                 rel="noopener noreferrer"
                                 download
                                 aria-label={`Download audio · ${s.title}`}
-                                className="relative z-10 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition hover:scale-105"
-                                style={{
-                                  background:
-                                    "color-mix(in srgb, var(--color-brand-red) 10%, white)",
-                                  color: "var(--color-brand-red)",
-                                  border:
-                                    "1px solid color-mix(in srgb, var(--color-brand-red) 25%, white)",
-                                }}
+                                className="relative z-10 inline-flex items-center gap-1.5 rounded-full border border-brand-red/25 bg-brand-red/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-red transition hover:scale-105"
                               >
                                 <Download size={12} />
                                 Audio
@@ -152,14 +110,7 @@ export default async function SermonsPage() {
                                 rel="noopener noreferrer"
                                 download
                                 aria-label={`Download excerpt · ${s.title}`}
-                                className="relative z-10 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition hover:scale-105"
-                                style={{
-                                  background:
-                                    "color-mix(in srgb, var(--color-brand-blue-ink) 8%, white)",
-                                  color: "var(--color-brand-blue-ink)",
-                                  border:
-                                    "1px solid color-mix(in srgb, var(--color-brand-blue-ink) 22%, white)",
-                                }}
+                                className="relative z-10 inline-flex items-center gap-1.5 rounded-full border border-brand-blue-ink/22 bg-brand-blue-ink/8 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-blue-ink transition hover:scale-105"
                               >
                                 <FileText size={12} />
                                 Excerpt
@@ -174,18 +125,8 @@ export default async function SermonsPage() {
               })}
             </div>
           ) : (
-            <div
-              className="rounded-[var(--radius-card)] border border-dashed p-12 text-center"
-              style={{
-                borderColor: "rgb(11 20 27 / 0.15)",
-                color: "var(--color-ink-soft)",
-              }}
-            >
-              <Clock
-                size={32}
-                className="mx-auto"
-                style={{ color: "var(--color-brand-gold)" }}
-              />
+            <div className="rounded-[var(--radius-card)] border border-dashed border-ink/15 p-12 text-center text-ink-soft">
+              <Clock size={32} className="mx-auto text-brand-gold" />
               <p className="mt-4 font-[family-name:var(--font-display)] text-2xl">
                 Sermon archive coming soon.
               </p>

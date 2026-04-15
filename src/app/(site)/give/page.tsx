@@ -35,47 +35,24 @@ export default async function GivePage() {
         title={
           <>
             Give to{" "}
-            <span
-              className="italic"
-              style={{ color: "var(--color-brand-gold-soft)" }}
-            >
-              the work
-            </span>
+            <span className="italic text-brand-gold-soft">the work</span>
           </>
         }
         subtitle="Your giving fuels the spread of the unveiled Word across our assemblies, our outreach, and everything the ministry is called to do. Thank you for partnering with us."
       />
 
-      <section
-        className="py-20 md:py-28"
-        style={{ background: "var(--color-off-white)" }}
-      >
+      <section className="bg-off-white py-20 md:py-28">
         <Container>
           <div className="grid gap-6 md:grid-cols-2">
             {/* Paystack card */}
-            <div
-              className="relative overflow-hidden rounded-[var(--radius-card)] border bg-white p-10 shadow-[var(--shadow-card)]"
-              style={{ borderColor: "rgb(11 20 27 / 0.08)" }}
-            >
-              <div
-                className="inline-flex h-14 w-14 items-center justify-center rounded-full"
-                style={{
-                  background: "var(--color-brand-red-soft)",
-                  color: "var(--color-brand-red)",
-                }}
-              >
+            <div className="relative overflow-hidden rounded-[var(--radius-card)] border border-ink/8 bg-white p-10 shadow-[var(--shadow-card)]">
+              <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-red-soft text-brand-red">
                 <CreditCard size={20} />
               </div>
-              <h2
-                className="mt-8 font-[family-name:var(--font-display)] text-3xl font-semibold"
-                style={{ color: "var(--color-ink)" }}
-              >
+              <h2 className="mt-8 font-[family-name:var(--font-display)] text-3xl font-semibold text-ink">
                 Online
               </h2>
-              <p
-                className="mt-4 text-sm leading-6"
-                style={{ color: "var(--color-ink-soft)" }}
-              >
+              <p className="mt-4 text-sm leading-6 text-ink-soft">
                 Give instantly with your card, bank account, or USSD via
                 Paystack. Secure, instant confirmation.
               </p>
@@ -83,38 +60,19 @@ export default async function GivePage() {
                 href="https://paystack.com/pay/fmeli"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-8 inline-flex h-12 items-center gap-2 rounded-full px-7 text-sm font-semibold transition"
-                style={{
-                  background: "var(--color-brand-red)",
-                  color: "white",
-                }}
+                className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-brand-red px-7 text-sm font-semibold text-white transition"
               >
                 Give online
                 <ArrowRight size={16} />
               </a>
-              <p
-                className="mt-4 text-xs"
-                style={{ color: "var(--color-muted)" }}
-              >
+              <p className="mt-4 text-xs text-muted">
                 (Placeholder link — replace with your real Paystack page URL.)
               </p>
             </div>
 
             {/* Bank transfer card */}
-            <div
-              className="relative overflow-hidden rounded-[var(--radius-card)] p-10 shadow-[var(--shadow-card)]"
-              style={{
-                background: "var(--color-brand-blue-ink)",
-                color: "white",
-              }}
-            >
-              <div
-                className="inline-flex h-14 w-14 items-center justify-center rounded-full"
-                style={{
-                  background: "rgb(255 255 255 / 0.1)",
-                  color: "var(--color-brand-gold)",
-                }}
-              >
+            <div className="relative overflow-hidden rounded-[var(--radius-card)] bg-brand-blue-ink p-10 text-white shadow-[var(--shadow-card)]">
+              <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-brand-gold">
                 <Building2 size={20} />
               </div>
               <h2 className="mt-8 font-[family-name:var(--font-display)] text-3xl font-semibold">
@@ -169,21 +127,11 @@ export default async function GivePage() {
 
           {/* Thank you */}
           <div className="mt-16 text-center">
-            <Heart
-              size={28}
-              className="mx-auto"
-              style={{ color: "var(--color-brand-red)" }}
-            />
-            <p
-              className="mt-4 font-[family-name:var(--font-display)] text-2xl italic"
-              style={{ color: "var(--color-ink)" }}
-            >
+            <Heart size={28} className="mx-auto text-brand-red" />
+            <p className="mt-4 font-[family-name:var(--font-display)] text-2xl italic text-ink">
               &ldquo;God loves a cheerful giver.&rdquo;
             </p>
-            <p
-              className="mt-2 text-xs uppercase tracking-[0.24em]"
-              style={{ color: "var(--color-muted)" }}
-            >
+            <p className="mt-2 text-xs uppercase tracking-[0.24em] text-muted">
               2 Corinthians 9:7
             </p>
           </div>

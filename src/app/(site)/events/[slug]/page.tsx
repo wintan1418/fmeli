@@ -86,10 +86,7 @@ export default async function EventPage(
   return (
     <>
       {/* Hero */}
-      <section
-        className="relative pt-32 pb-24 md:pt-44 md:pb-32"
-        style={{ background: "var(--color-brand-blue-ink)" }}
-      >
+      <section className="relative bg-brand-blue-ink pt-32 pb-24 md:pt-44 md:pb-32">
         {heroUrl && (
           <div className="absolute inset-0 -z-10 opacity-30">
             <Image
@@ -101,99 +98,61 @@ export default async function EventPage(
               className="object-cover"
               priority
             />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to right, var(--color-brand-blue-ink) 10%, rgba(6,30,44,0.7) 60%, rgba(6,30,44,0.4) 100%)",
-              }}
-            />
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-blue-ink from-10% via-brand-blue-ink/70 to-brand-blue-ink/40" />
           </div>
         )}
         <Container className="relative">
           <Link
             href="/events"
-            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] transition"
-            style={{ color: "rgb(255 255 255 / 0.6)" }}
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60 transition"
           >
             <ArrowLeft size={14} />
             All events
           </Link>
 
           {event.isSpecial && (
-            <p
-              className="mt-8 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em]"
-              style={{
-                background: "var(--color-brand-gold)",
-                color: "var(--color-brand-blue-ink)",
-              }}
-            >
+            <p className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand-gold px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-blue-ink">
               ★ Special meeting
             </p>
           )}
 
-          <h1
-            className="mt-6 max-w-4xl font-[family-name:var(--font-display)] text-5xl font-semibold leading-[1.02] md:text-7xl lg:text-[88px]"
-            style={{ color: "white" }}
-          >
+          <h1 className="mt-6 max-w-4xl font-[family-name:var(--font-display)] text-5xl font-semibold leading-[1.02] text-white md:text-7xl lg:text-[88px]">
             {event.title}
           </h1>
 
           {event.tagline && (
-            <p
-              className="mt-8 max-w-2xl text-lg leading-8 md:text-xl"
-              style={{ color: "rgb(255 255 255 / 0.8)" }}
-            >
+            <p className="mt-8 max-w-2xl text-lg leading-8 text-white/80 md:text-xl">
               {event.tagline}
             </p>
           )}
 
           {/* Meta */}
-          <dl className="mt-12 grid max-w-3xl grid-cols-1 gap-6 border-t pt-8 sm:grid-cols-3"
-              style={{ borderColor: "rgb(255 255 255 / 0.15)" }}>
+          <dl className="mt-12 grid max-w-3xl grid-cols-1 gap-6 border-t border-white/15 pt-8 sm:grid-cols-3">
             <div>
-              <dt
-                className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em]"
-                style={{ color: "var(--color-brand-gold)" }}
-              >
+              <dt className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-gold">
                 <Calendar size={12} />
                 Date
               </dt>
-              <dd
-                className="mt-2 font-[family-name:var(--font-display)] text-lg"
-                style={{ color: "white" }}
-              >
+              <dd className="mt-2 font-[family-name:var(--font-display)] text-lg text-white">
                 {dateLabel}
               </dd>
             </div>
             <div>
-              <dt
-                className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em]"
-                style={{ color: "var(--color-brand-gold)" }}
-              >
+              <dt className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-gold">
                 <Clock size={12} />
                 Time
               </dt>
-              <dd
-                className="mt-2 font-[family-name:var(--font-display)] text-lg"
-                style={{ color: "white" }}
-              >
+              <dd className="mt-2 font-[family-name:var(--font-display)] text-lg text-white">
                 {timeLabel}
               </dd>
             </div>
             {(event.location || event.assembly?.city) && (
               <div>
-                <dt
-                  className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em]"
-                  style={{ color: "var(--color-brand-gold)" }}
-                >
+                <dt className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-gold">
                   <MapPin size={12} />
                   Location
                 </dt>
-                <dd
-                  className="mt-2 font-[family-name:var(--font-display)] text-lg"
-                  style={{ color: "white" }}
-                >
+                <dd className="mt-2 font-[family-name:var(--font-display)] text-lg text-white">
                   {event.location ?? event.assembly?.city}
                 </dd>
               </div>
@@ -212,11 +171,7 @@ export default async function EventPage(
                     ? "noopener noreferrer"
                     : undefined
                 }
-                className="group inline-flex h-14 items-center gap-3 rounded-full px-8 text-base font-semibold transition-all duration-300"
-                style={{
-                  background: "var(--color-brand-gold)",
-                  color: "var(--color-brand-blue-ink)",
-                }}
+                className="group inline-flex h-14 items-center gap-3 rounded-full bg-brand-gold px-8 text-base font-semibold text-brand-blue-ink transition-all duration-300"
               >
                 Register now
                 <ArrowRight
@@ -225,10 +180,7 @@ export default async function EventPage(
                 />
               </Link>
               {spotsLeft !== null && (
-                <span
-                  className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em]"
-                  style={{ color: "rgb(255 255 255 / 0.7)" }}
-                >
+                <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
                   <Users size={12} />
                   {spotsLeft > 0
                     ? `${spotsLeft} spots remaining`
@@ -242,15 +194,9 @@ export default async function EventPage(
 
       {/* Body */}
       {event.description && event.description.length > 0 && (
-        <section
-          className="py-20 md:py-28"
-          style={{ background: "var(--color-off-white)" }}
-        >
+        <section className="bg-off-white py-20 md:py-28">
           <Container>
-            <article
-              className="prose prose-lg mx-auto max-w-3xl"
-              style={{ color: "var(--color-ink-soft)" }}
-            >
+            <article className="prose prose-lg mx-auto max-w-3xl text-ink-soft">
               <PortableText value={event.description} />
             </article>
           </Container>

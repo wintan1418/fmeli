@@ -56,30 +56,15 @@ export default async function LivePage() {
         title={
           <>
             Watch{" "}
-            <span
-              className="italic"
-              style={{ color: "var(--color-brand-gold-soft)" }}
-            >
-              live
-            </span>
+            <span className="italic text-brand-gold-soft">live</span>
           </>
         }
         subtitle="Join us every Sunday at 8:00 AM WAT and for special meetings throughout the year. If the stream isn't live right now, the player below will show the latest recording."
       />
 
-      <section
-        className="py-20 md:py-28"
-        style={{ background: "var(--color-off-white)" }}
-      >
+      <section className="bg-off-white py-20 md:py-28">
         <Container>
-          <div
-            className="overflow-hidden rounded-[var(--radius-card)] border shadow-[var(--shadow-card-hover)]"
-            style={{
-              borderColor: "rgb(11 20 27 / 0.08)",
-              aspectRatio: "16 / 9",
-              background: "var(--color-brand-blue-ink)",
-            }}
-          >
+          <div className="aspect-video overflow-hidden rounded-[var(--radius-card)] border border-ink/8 bg-brand-blue-ink shadow-[var(--shadow-card-hover)]">
             {embed ? (
               <iframe
                 src={embed}
@@ -89,14 +74,8 @@ export default async function LivePage() {
                 className="h-full w-full"
               />
             ) : (
-              <div
-                className="flex h-full w-full flex-col items-center justify-center gap-4 p-8 text-center"
-                style={{ color: "rgb(255 255 255 / 0.75)" }}
-              >
-                <Radio
-                  size={36}
-                  style={{ color: "var(--color-brand-gold)" }}
-                />
+              <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-8 text-center text-white/75">
+                <Radio size={36} className="text-brand-gold" />
                 <p className="font-[family-name:var(--font-display)] text-2xl">
                   Live stream not configured yet.
                 </p>

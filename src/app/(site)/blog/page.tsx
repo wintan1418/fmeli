@@ -39,21 +39,13 @@ export default async function BlogPage() {
         title={
           <>
             The FMELi{" "}
-            <span
-              className="italic"
-              style={{ color: "var(--color-brand-gold-soft)" }}
-            >
-              blog
-            </span>
+            <span className="italic text-brand-gold-soft">blog</span>
           </>
         }
         subtitle="Reflections, teachings, announcements and stories from across our assemblies."
       />
 
-      <section
-        className="py-20 md:py-28"
-        style={{ background: "var(--color-off-white)" }}
-      >
+      <section className="bg-off-white py-20 md:py-28">
         <Container>
           {posts && posts.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -68,10 +60,7 @@ export default async function BlogPage() {
                     className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
                   >
                     {cover && (
-                      <div
-                        className="relative aspect-[16/10] overflow-hidden"
-                        style={{ background: "var(--color-brand-blue-soft)" }}
-                      >
+                      <div className="relative aspect-[16/10] overflow-hidden bg-brand-blue-soft">
                         <Image
                           src={cover}
                           alt={p.title}
@@ -83,35 +72,23 @@ export default async function BlogPage() {
                       </div>
                     )}
                     <div className="flex flex-1 flex-col gap-3 p-7">
-                      <div
-                        className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-                        style={{ color: "var(--color-brand-red)" }}
-                      >
+                      <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-red">
                         {new Date(p.publishedAt).toLocaleDateString("en-GB", {
                           day: "numeric",
                           month: "long",
                           year: "numeric",
                         })}
                       </div>
-                      <h3
-                        className="font-[family-name:var(--font-display)] text-xl font-semibold leading-tight"
-                        style={{ color: "var(--color-ink)" }}
-                      >
+                      <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold leading-tight text-ink">
                         {p.title}
                       </h3>
                       {p.excerpt && (
-                        <p
-                          className="text-sm leading-6"
-                          style={{ color: "var(--color-ink-soft)" }}
-                        >
+                        <p className="text-sm leading-6 text-ink-soft">
                           {p.excerpt}
                         </p>
                       )}
                       {p.author?.name && (
-                        <p
-                          className="mt-auto text-xs"
-                          style={{ color: "var(--color-muted)" }}
-                        >
+                        <p className="mt-auto text-xs text-muted">
                           {p.author.name}
                         </p>
                       )}
@@ -121,18 +98,8 @@ export default async function BlogPage() {
               })}
             </div>
           ) : (
-            <div
-              className="rounded-[var(--radius-card)] border border-dashed p-12 text-center"
-              style={{
-                borderColor: "rgb(11 20 27 / 0.15)",
-                color: "var(--color-ink-soft)",
-              }}
-            >
-              <BookOpen
-                size={32}
-                className="mx-auto"
-                style={{ color: "var(--color-brand-gold)" }}
-              />
+            <div className="rounded-[var(--radius-card)] border border-dashed border-ink/15 p-12 text-center text-ink-soft">
+              <BookOpen size={32} className="mx-auto text-brand-gold" />
               <p className="mt-4 font-[family-name:var(--font-display)] text-2xl">
                 First posts on the way.
               </p>

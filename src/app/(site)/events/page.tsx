@@ -52,42 +52,23 @@ export default async function EventsPage() {
   return (
     <>
       {/* Hero */}
-      <section
-        className="relative pt-36 pb-16 md:pt-44 md:pb-24"
-        style={{ background: "var(--color-brand-blue-ink)" }}
-      >
+      <section className="relative bg-brand-blue-ink pt-36 pb-16 md:pt-44 md:pb-24">
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-20 right-1/4 h-[480px] w-[480px] rounded-full blur-[160px]"
-          style={{ background: "color-mix(in srgb, var(--color-brand-gold) 25%, transparent)" }}
+          className="pointer-events-none absolute -top-20 right-1/4 h-[480px] w-[480px] rounded-full bg-brand-gold/25 blur-[160px]"
         />
         <Container className="relative">
-          <p
-            className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em]"
-            style={{ color: "var(--color-brand-gold)" }}
-          >
-            <span
-              className="inline-block h-px w-10"
-              style={{ background: "var(--color-brand-gold)" }}
-            />
+          <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-brand-gold">
+            <span className="inline-block h-px w-10 bg-brand-gold" />
             The FMELi calendar
           </p>
-          <h1
-            className="mt-6 max-w-4xl font-[family-name:var(--font-display)] text-5xl font-semibold leading-[1.05] md:text-7xl"
-            style={{ color: "white" }}
-          >
+          <h1 className="mt-6 max-w-4xl font-[family-name:var(--font-display)] text-5xl font-semibold leading-[1.05] text-white md:text-7xl">
             Events &{" "}
-            <span
-              className="italic"
-              style={{ color: "var(--color-brand-gold-soft)" }}
-            >
+            <span className="italic text-brand-gold-soft">
               special meetings
             </span>
           </h1>
-          <p
-            className="mt-6 max-w-2xl text-base leading-8 md:text-lg"
-            style={{ color: "rgb(255 255 255 / 0.8)" }}
-          >
+          <p className="mt-6 max-w-2xl text-base leading-8 text-white/80 md:text-lg">
             Conferences, convocations, campaigns and rendezvous —
             everything happening across our assemblies. Click any event for
             details and to register.
@@ -96,10 +77,7 @@ export default async function EventsPage() {
       </section>
 
       {/* Grid */}
-      <section
-        className="py-20 md:py-28"
-        style={{ background: "var(--color-off-white)" }}
-      >
+      <section className="bg-off-white py-20 md:py-28">
         <Container>
           {events && events.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -114,10 +92,7 @@ export default async function EventsPage() {
                     href={`/events/${e.slug}`}
                     className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[var(--shadow-card-hover)]"
                   >
-                    <div
-                      className="relative aspect-[5/3] overflow-hidden"
-                      style={{ background: "var(--color-brand-blue-ink)" }}
-                    >
+                    <div className="relative aspect-[5/3] overflow-hidden bg-brand-blue-ink">
                       {thumb && (
                         <Image
                           src={thumb}
@@ -128,58 +103,31 @@ export default async function EventsPage() {
                           className="object-cover transition-transform duration-700 group-hover:scale-[1.06]"
                         />
                       )}
-                      <div
-                        className="absolute inset-0"
-                        style={{
-                          background:
-                            "linear-gradient(to top, rgba(6,30,44,0.8), rgba(6,30,44,0.15), transparent)",
-                        }}
-                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-blue-ink/80 via-brand-blue-ink/15 to-transparent" />
                       {e.isSpecial && (
-                        <span
-                          className="absolute left-5 top-5 inline-flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em]"
-                          style={{
-                            background: "var(--color-brand-gold)",
-                            color: "var(--color-brand-blue-ink)",
-                          }}
-                        >
+                        <span className="absolute left-5 top-5 inline-flex items-center gap-1 rounded-full bg-brand-gold px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-blue-ink">
                           ★ Special meeting
                         </span>
                       )}
                       <div className="absolute bottom-5 left-5 rounded-[var(--radius-card)] bg-white px-4 py-3 text-center shadow-[var(--shadow-card-hover)]">
-                        <p
-                          className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-none"
-                          style={{ color: "var(--color-brand-red)" }}
-                        >
+                        <p className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-none text-brand-red">
                           {date.day}
                         </p>
-                        <p
-                          className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em]"
-                          style={{ color: "var(--color-ink)" }}
-                        >
+                        <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-ink">
                           {date.month} {date.year}
                         </p>
                       </div>
                     </div>
                     <div className="flex flex-1 flex-col gap-3 p-6">
-                      <h3
-                        className="font-[family-name:var(--font-display)] text-xl font-semibold leading-tight transition-colors group-hover:text-[color:var(--color-brand-red)]"
-                        style={{ color: "var(--color-ink)" }}
-                      >
+                      <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold leading-tight text-ink transition-colors group-hover:text-brand-red">
                         {e.title}
                       </h3>
                       {e.tagline && (
-                        <p
-                          className="text-sm leading-6"
-                          style={{ color: "var(--color-ink-soft)" }}
-                        >
+                        <p className="text-sm leading-6 text-ink-soft">
                           {e.tagline}
                         </p>
                       )}
-                      <dl
-                        className="mt-auto flex flex-col gap-1.5 pt-3 text-xs"
-                        style={{ color: "var(--color-muted)" }}
-                      >
+                      <dl className="mt-auto flex flex-col gap-1.5 pt-3 text-xs text-muted">
                         <div className="inline-flex items-center gap-2">
                           <Calendar size={12} />
                           <span>{date.time}</span>
@@ -197,23 +145,13 @@ export default async function EventsPage() {
               })}
             </div>
           ) : (
-            <div
-              className="rounded-[var(--radius-card)] border border-dashed p-12 text-center"
-              style={{
-                borderColor: "rgb(11 20 27 / 0.12)",
-                color: "var(--color-ink-soft)",
-              }}
-            >
+            <div className="rounded-[var(--radius-card)] border border-dashed border-ink/12 p-12 text-center text-ink-soft">
               <p className="font-[family-name:var(--font-display)] text-2xl">
                 No events published yet.
               </p>
               <p className="mt-3 text-sm">
                 Visit{" "}
-                <Link
-                  href="/studio"
-                  className="underline"
-                  style={{ color: "var(--color-brand-red)" }}
-                >
+                <Link href="/studio" className="text-brand-red underline">
                   /studio
                 </Link>{" "}
                 to create your first event.

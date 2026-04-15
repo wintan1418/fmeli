@@ -60,10 +60,7 @@ export default async function AssemblyPage(
   return (
     <>
       {/* Hero */}
-      <section
-        className="relative isolate overflow-hidden pt-36 pb-24 md:pt-52 md:pb-32"
-        style={{ background: "var(--color-brand-blue-ink)" }}
-      >
+      <section className="relative isolate overflow-hidden bg-brand-blue-ink pt-36 pb-24 md:pt-52 md:pb-32">
         <Image
           src={heroBgUrl}
           alt=""
@@ -75,54 +72,32 @@ export default async function AssemblyPage(
         />
         <div
           aria-hidden
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "linear-gradient(115deg, var(--color-brand-blue-ink) 5%, rgba(6,30,44,0.85) 45%, rgba(6,30,44,0.55) 100%)",
-          }}
+          className="absolute inset-0 -z-10 bg-[linear-gradient(115deg,var(--color-brand-blue-ink)_5%,rgba(6,30,44,0.85)_45%,rgba(6,30,44,0.55)_100%)]"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-20 right-1/4 -z-10 h-[520px] w-[520px] rounded-full blur-[160px]"
-          style={{
-            background:
-              "color-mix(in srgb, var(--color-brand-gold) 22%, transparent)",
-          }}
+          className="pointer-events-none absolute -top-20 right-1/4 -z-10 h-[520px] w-[520px] rounded-full bg-brand-gold/22 blur-[160px]"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-32 left-[-10%] -z-10 h-[420px] w-[420px] rounded-full blur-[160px]"
-          style={{
-            background:
-              "color-mix(in srgb, var(--color-brand-red) 35%, transparent)",
-          }}
+          className="pointer-events-none absolute -bottom-32 left-[-10%] -z-10 h-[420px] w-[420px] rounded-full bg-brand-red/35 blur-[160px]"
         />
         <Container className="relative">
           <Link
             href="/assemblies"
-            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em]"
-            style={{ color: "rgb(255 255 255 / 0.6)" }}
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60"
           >
             <ArrowLeft size={14} />
             All assemblies
           </Link>
-          <p
-            className="mt-10 text-xs font-semibold uppercase tracking-[0.32em]"
-            style={{ color: "var(--color-brand-gold)" }}
-          >
+          <p className="mt-10 text-xs font-semibold uppercase tracking-[0.32em] text-brand-gold">
             FMELi {a.state ?? "Nigeria"}
           </p>
-          <h1
-            className="mt-4 font-[family-name:var(--font-display)] text-6xl font-semibold leading-[0.98] md:text-8xl lg:text-[120px]"
-            style={{ color: "white" }}
-          >
+          <h1 className="mt-4 font-[family-name:var(--font-display)] text-6xl font-semibold leading-[0.98] text-white md:text-8xl lg:text-[120px]">
             {a.city}
           </h1>
           {a.tagline && (
-            <p
-              className="mt-6 max-w-2xl text-lg italic"
-              style={{ color: "rgb(255 255 255 / 0.75)" }}
-            >
+            <p className="mt-6 max-w-2xl text-lg italic text-white/75">
               {a.tagline}
             </p>
           )}
@@ -130,22 +105,13 @@ export default async function AssemblyPage(
       </section>
 
       {/* Lead pastor feature + service times */}
-      <section
-        className="py-20 md:py-28"
-        style={{ background: "var(--color-off-white)" }}
-      >
+      <section className="bg-off-white py-20 md:py-28">
         <Container>
           <div className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:items-start">
             {/* Lead pastor */}
             <div>
-              <p
-                className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em]"
-                style={{ color: "var(--color-brand-red)" }}
-              >
-                <span
-                  className="inline-block h-px w-10"
-                  style={{ background: "var(--color-brand-red)" }}
-                />
+              <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-brand-red">
+                <span className="inline-block h-px w-10 bg-brand-red" />
                 Lead pastor
               </p>
 
@@ -156,17 +122,11 @@ export default async function AssemblyPage(
                   size={112}
                 />
                 <div>
-                  <h2
-                    className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight md:text-4xl"
-                    style={{ color: "var(--color-ink)" }}
-                  >
+                  <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight text-ink md:text-4xl">
                     {a.leadPastor?.name ?? "To be announced"}
                   </h2>
                   {a.leadPastor?.role && (
-                    <p
-                      className="mt-2 text-sm"
-                      style={{ color: "var(--color-ink-soft)" }}
-                    >
+                    <p className="mt-2 text-sm text-ink-soft">
                       {a.leadPastor.role}
                     </p>
                   )}
@@ -174,27 +134,18 @@ export default async function AssemblyPage(
               </div>
 
               {a.leadPastor?.bio && a.leadPastor.bio.length > 0 && (
-                <div
-                  className="prose prose-lg mt-10 max-w-none"
-                  style={{ color: "var(--color-ink-soft)" }}
-                >
+                <div className="prose prose-lg mt-10 max-w-none text-ink-soft">
                   <PortableText value={a.leadPastor.bio} />
                 </div>
               )}
 
               {/* About this assembly */}
               {a.about && a.about.length > 0 && (
-                <div className="mt-12 border-t pt-12" style={{ borderColor: "rgb(11 20 27 / 0.08)" }}>
-                  <p
-                    className="text-xs font-semibold uppercase tracking-[0.32em]"
-                    style={{ color: "var(--color-brand-red)" }}
-                  >
+                <div className="mt-12 border-t border-ink/8 pt-12">
+                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-red">
                     About this assembly
                   </p>
-                  <div
-                    className="prose prose-lg mt-6 max-w-none"
-                    style={{ color: "var(--color-ink-soft)" }}
-                  >
+                  <div className="prose prose-lg mt-6 max-w-none text-ink-soft">
                     <PortableText value={a.about} />
                   </div>
                 </div>
@@ -202,11 +153,8 @@ export default async function AssemblyPage(
 
               {/* Other leaders */}
               {a.leaders && a.leaders.length > 0 && (
-                <div className="mt-12 border-t pt-12" style={{ borderColor: "rgb(11 20 27 / 0.08)" }}>
-                  <p
-                    className="text-xs font-semibold uppercase tracking-[0.32em]"
-                    style={{ color: "var(--color-brand-red)" }}
-                  >
+                <div className="mt-12 border-t border-ink/8 pt-12">
+                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-red">
                     Ministry team
                   </p>
                   <ul className="mt-6 grid gap-5 sm:grid-cols-2">
@@ -218,19 +166,11 @@ export default async function AssemblyPage(
                           size={56}
                         />
                         <div>
-                          <p
-                            className="font-[family-name:var(--font-display)] text-base font-semibold leading-tight"
-                            style={{ color: "var(--color-ink)" }}
-                          >
+                          <p className="font-[family-name:var(--font-display)] text-base font-semibold leading-tight text-ink">
                             {l.name}
                           </p>
                           {l.role && (
-                            <p
-                              className="text-xs"
-                              style={{ color: "var(--color-muted)" }}
-                            >
-                              {l.role}
-                            </p>
+                            <p className="text-xs text-muted">{l.role}</p>
                           )}
                         </div>
                       </li>
@@ -242,17 +182,8 @@ export default async function AssemblyPage(
 
             {/* Sidebar: contact + service times */}
             <aside className="space-y-8 lg:sticky lg:top-28">
-              <div
-                className="rounded-[var(--radius-card)] border p-8"
-                style={{
-                  background: "white",
-                  borderColor: "rgb(11 20 27 / 0.08)",
-                }}
-              >
-                <p
-                  className="text-xs font-semibold uppercase tracking-[0.22em]"
-                  style={{ color: "var(--color-brand-red)" }}
-                >
+              <div className="rounded-[var(--radius-card)] border border-ink/8 bg-white p-8">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-red">
                   Visit us
                 </p>
                 <dl className="mt-6 space-y-5">
@@ -260,19 +191,13 @@ export default async function AssemblyPage(
                     <div className="flex items-start gap-3">
                       <MapPin
                         size={16}
-                        className="mt-0.5 flex-shrink-0"
-                        style={{ color: "var(--color-brand-gold)" }}
+                        className="mt-0.5 flex-shrink-0 text-brand-gold"
                       />
                       <div>
-                        <dt
-                          className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-                          style={{ color: "var(--color-muted)" }}
-                        >
+                        <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
                           Address
                         </dt>
-                        <dd style={{ color: "var(--color-ink)" }}>
-                          {a.address}
-                        </dd>
+                        <dd className="text-ink">{a.address}</dd>
                       </div>
                     </div>
                   )}
@@ -280,17 +205,13 @@ export default async function AssemblyPage(
                     <div className="flex items-start gap-3">
                       <Phone
                         size={16}
-                        className="mt-0.5 flex-shrink-0"
-                        style={{ color: "var(--color-brand-gold)" }}
+                        className="mt-0.5 flex-shrink-0 text-brand-gold"
                       />
                       <div>
-                        <dt
-                          className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-                          style={{ color: "var(--color-muted)" }}
-                        >
+                        <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
                           Phone
                         </dt>
-                        <dd style={{ color: "var(--color-ink)" }}>{a.phone}</dd>
+                        <dd className="text-ink">{a.phone}</dd>
                       </div>
                     </div>
                   )}
@@ -298,17 +219,13 @@ export default async function AssemblyPage(
                     <div className="flex items-start gap-3">
                       <Mail
                         size={16}
-                        className="mt-0.5 flex-shrink-0"
-                        style={{ color: "var(--color-brand-gold)" }}
+                        className="mt-0.5 flex-shrink-0 text-brand-gold"
                       />
                       <div>
-                        <dt
-                          className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-                          style={{ color: "var(--color-muted)" }}
-                        >
+                        <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
                           Email
                         </dt>
-                        <dd style={{ color: "var(--color-ink)" }}>{a.email}</dd>
+                        <dd className="text-ink">{a.email}</dd>
                       </div>
                     </div>
                   )}
@@ -317,8 +234,7 @@ export default async function AssemblyPage(
                       href={a.mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-semibold"
-                      style={{ color: "var(--color-brand-red)" }}
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-brand-red"
                     >
                       Open in Maps
                       <ExternalLink size={14} />
@@ -327,17 +243,8 @@ export default async function AssemblyPage(
                 </dl>
               </div>
 
-              <div
-                className="rounded-[var(--radius-card)] p-8"
-                style={{
-                  background: "var(--color-brand-blue-ink)",
-                  color: "white",
-                }}
-              >
-                <p
-                  className="text-xs font-semibold uppercase tracking-[0.22em]"
-                  style={{ color: "var(--color-brand-gold)" }}
-                >
+              <div className="rounded-[var(--radius-card)] bg-brand-blue-ink p-8 text-white">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-gold">
                   Service times
                 </p>
                 {a.serviceTimes && a.serviceTimes.length > 0 ? (
@@ -345,30 +252,18 @@ export default async function AssemblyPage(
                     {a.serviceTimes.map((st, i) => (
                       <li
                         key={i}
-                        className="flex items-center justify-between gap-4 border-b pb-5 last:border-0 last:pb-0"
-                        style={{ borderColor: "rgb(255 255 255 / 0.1)" }}
+                        className="flex items-center justify-between gap-4 border-b border-white/10 pb-5 last:border-0 last:pb-0"
                       >
                         <div className="flex items-center gap-3">
-                          <Clock
-                            size={16}
-                            style={{ color: "var(--color-brand-gold)" }}
-                          />
+                          <Clock size={16} className="text-brand-gold" />
                           <div>
                             <p className="font-[family-name:var(--font-display)] font-semibold">
                               {st.label}
                             </p>
-                            <p
-                              className="text-xs"
-                              style={{ color: "rgb(255 255 255 / 0.55)" }}
-                            >
-                              {st.day}
-                            </p>
+                            <p className="text-xs text-white/55">{st.day}</p>
                           </div>
                         </div>
-                        <span
-                          className="font-[family-name:var(--font-display)] text-xl font-semibold"
-                          style={{ color: "var(--color-brand-gold-soft)" }}
-                        >
+                        <span className="font-[family-name:var(--font-display)] text-xl font-semibold text-brand-gold-soft">
                           {st.time}
                         </span>
                       </li>

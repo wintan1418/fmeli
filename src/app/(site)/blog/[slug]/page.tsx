@@ -65,40 +65,27 @@ export default async function PostPage(
 
   return (
     <article>
-      <section
-        className="relative pt-32 pb-16 md:pt-44"
-        style={{ background: "var(--color-brand-blue-ink)" }}
-      >
+      <section className="relative bg-brand-blue-ink pt-32 pb-16 md:pt-44">
         <Container className="relative">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em]"
-            style={{ color: "rgb(255 255 255 / 0.6)" }}
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60"
           >
             <ArrowLeft size={14} />
             Back to blog
           </Link>
-          <p
-            className="mt-8 text-xs font-semibold uppercase tracking-[0.22em]"
-            style={{ color: "var(--color-brand-gold)" }}
-          >
+          <p className="mt-8 text-xs font-semibold uppercase tracking-[0.22em] text-brand-gold">
             {new Date(post.publishedAt).toLocaleDateString("en-GB", {
               day: "numeric",
               month: "long",
               year: "numeric",
             })}
           </p>
-          <h1
-            className="mt-4 max-w-4xl font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] md:text-6xl"
-            style={{ color: "white" }}
-          >
+          <h1 className="mt-4 max-w-4xl font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] text-white md:text-6xl">
             {post.title}
           </h1>
           {post.author?.name && (
-            <p
-              className="mt-4 text-base"
-              style={{ color: "rgb(255 255 255 / 0.75)" }}
-            >
+            <p className="mt-4 text-base text-white/75">
               {post.author.name}
               {post.author.role && ` · ${post.author.role}`}
             </p>
@@ -107,10 +94,7 @@ export default async function PostPage(
       </section>
 
       {cover && (
-        <div
-          className="mx-auto -mt-10 max-w-5xl px-4 md:px-6"
-          style={{ position: "relative", zIndex: 1 }}
-        >
+        <div className="relative z-10 mx-auto -mt-10 max-w-5xl px-4 md:px-6">
           <div className="overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-card-hover)]">
             <Image
               src={cover}
@@ -124,15 +108,9 @@ export default async function PostPage(
         </div>
       )}
 
-      <section
-        className="py-20 md:py-28"
-        style={{ background: "var(--color-off-white)" }}
-      >
+      <section className="bg-off-white py-20 md:py-28">
         <Container>
-          <div
-            className="prose prose-lg mx-auto max-w-3xl"
-            style={{ color: "var(--color-ink-soft)" }}
-          >
+          <div className="prose prose-lg mx-auto max-w-3xl text-ink-soft">
             {post.body && <PortableText value={post.body} />}
           </div>
         </Container>

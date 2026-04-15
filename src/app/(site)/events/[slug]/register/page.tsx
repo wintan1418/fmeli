@@ -92,16 +92,10 @@ export default async function RegisterPage(
   });
 
   return (
-    <section
-      className="relative pt-32 pb-24 md:pt-40 md:pb-32"
-      style={{ background: "var(--color-off-white)" }}
-    >
+    <section className="relative bg-off-white pt-32 pb-24 md:pt-40 md:pb-32">
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-20 right-1/3 h-[420px] w-[420px] rounded-full blur-[160px]"
-        style={{
-          background: "color-mix(in srgb, var(--color-brand-gold) 15%, transparent)",
-        }}
+        className="pointer-events-none absolute -top-20 right-1/3 h-[420px] w-[420px] rounded-full bg-brand-gold/15 blur-[160px]"
       />
       <Container className="relative">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr]">
@@ -109,34 +103,21 @@ export default async function RegisterPage(
           <aside>
             <Link
               href={`/events/${slug}`}
-              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em]"
-              style={{ color: "var(--color-brand-red)" }}
+              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-red"
             >
               <ArrowLeft size={14} />
               Back to event
             </Link>
 
-            <p
-              className="mt-8 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em]"
-              style={{ color: "var(--color-brand-red)" }}
-            >
-              <span
-                className="inline-block h-px w-10"
-                style={{ background: "var(--color-brand-red)" }}
-              />
+            <p className="mt-8 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] text-brand-red">
+              <span className="inline-block h-px w-10 bg-brand-red" />
               Registration
             </p>
-            <h1
-              className="mt-6 font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] md:text-5xl"
-              style={{ color: "var(--color-ink)" }}
-            >
+            <h1 className="mt-6 font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] text-ink md:text-5xl">
               {event.title}
             </h1>
             {event.tagline && (
-              <p
-                className="mt-6 text-base leading-7"
-                style={{ color: "var(--color-ink-soft)" }}
-              >
+              <p className="mt-6 text-base leading-7 text-ink-soft">
                 {event.tagline}
               </p>
             )}
@@ -145,22 +126,15 @@ export default async function RegisterPage(
               <div className="flex items-start gap-3">
                 <Calendar
                   size={16}
-                  className="mt-0.5 flex-shrink-0"
-                  style={{ color: "var(--color-brand-gold)" }}
+                  className="mt-0.5 flex-shrink-0 text-brand-gold"
                 />
                 <div>
-                  <dt
-                    className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-                    style={{ color: "var(--color-muted)" }}
-                  >
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
                     When
                   </dt>
-                  <dd
-                    className="font-[family-name:var(--font-display)] text-lg"
-                    style={{ color: "var(--color-ink)" }}
-                  >
+                  <dd className="font-[family-name:var(--font-display)] text-lg text-ink">
                     {dateLabel}
-                    <span style={{ color: "var(--color-ink-soft)" }}>
+                    <span className="text-ink-soft">
                       {" · "}
                       {timeLabel}
                     </span>
@@ -171,33 +145,20 @@ export default async function RegisterPage(
                 <div className="flex items-start gap-3">
                   <MapPin
                     size={16}
-                    className="mt-0.5 flex-shrink-0"
-                    style={{ color: "var(--color-brand-gold)" }}
+                    className="mt-0.5 flex-shrink-0 text-brand-gold"
                   />
                   <div>
-                    <dt
-                      className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-                      style={{ color: "var(--color-muted)" }}
-                    >
+                    <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
                       Where
                     </dt>
-                    <dd
-                      className="font-[family-name:var(--font-display)] text-lg"
-                      style={{ color: "var(--color-ink)" }}
-                    >
+                    <dd className="font-[family-name:var(--font-display)] text-lg text-ink">
                       {event.location ?? event.assembly?.city}
                     </dd>
                   </div>
                 </div>
               )}
               {event.registrationDeadline && (
-                <div
-                  className="rounded-lg px-4 py-3 text-xs"
-                  style={{
-                    background: "var(--color-brand-red-soft)",
-                    color: "var(--color-brand-red-deep)",
-                  }}
-                >
+                <div className="rounded-lg bg-brand-red-soft px-4 py-3 text-xs text-brand-red-deep">
                   Registration closes{" "}
                   <strong>
                     {new Date(event.registrationDeadline).toLocaleDateString(
