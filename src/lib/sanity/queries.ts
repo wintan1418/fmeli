@@ -95,7 +95,7 @@ export const MESSAGE_YEARS_QUERY = groq`
     *[_type == "message" && defined(date)] {
       "year": string::split(date, "-")[0]
     }.year
-  ) | order(@ desc)
+  )[@ >= "1980" && @ <= "2035"] | order(@ desc)
 `;
 
 /**
