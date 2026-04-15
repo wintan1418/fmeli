@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PortableText, type PortableTextBlock } from "next-sanity";
-import { ArrowLeft, ExternalLink, Headphones, Download } from "lucide-react";
+import { ArrowLeft, ExternalLink, Headphones, Download, FileText } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { sanityFetch } from "@/lib/sanity/client";
 import { SERMON_BY_SLUG_QUERY } from "@/lib/sanity/queries";
@@ -20,6 +20,8 @@ type SermonDoc = {
   audioFileUrl?: string;
   videoFileUrl?: string;
   excerpt?: string;
+  excerptUrl?: string;
+  excerptFileUrl?: string;
   durationMinutes?: number;
   notes?: PortableTextBlock[];
   transcript?: PortableTextBlock[];
@@ -56,7 +58,9 @@ export default async function SermonPage(
 
   const audioSrc = sermon.audioFileUrl ?? null;
   const audioExternal = !audioSrc && sermon.audioUrl ? sermon.audioUrl : null;
-  const downloadHref = sermon.audioFileUrl ?? sermon.audioUrl ?? null;
+  const audioDownloadHref = sermon.audioFileUrl ?? sermon.audioUrl ?? null;
+  const excerptDownloadHref =
+    sermon.excerptFileUrl ?? sermon.excerptUrl ?? null;
   const hasVideo = Boolean(sermon.youtubeId || sermon.videoFileUrl);
 
   return (
@@ -98,22 +102,40 @@ export default async function SermonPage(
             </p>
           )}
 
-          {downloadHref && (
-            <div className="mt-6">
-              <a
-                href={downloadHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                download
-                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition hover:scale-[1.02]"
-                style={{
-                  background: "var(--color-brand-gold)",
-                  color: "var(--color-brand-blue-ink)",
-                }}
-              >
-                <Download size={14} />
-                Download message
-              </a>
+          {(audioDownloadHref || excerptDownloadHref) && (
+            <div className="mt-6 flex flex-wrap gap-3">
+              {audioDownloadHref && (
+                <a
+                  href={audioDownloadHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition hover:scale-[1.02]"
+                  style={{
+                    background: "var(--color-brand-gold)",
+                    color: "var(--color-brand-blue-ink)",
+                  }}
+                >
+                  <Download size={14} />
+                  Download audio
+                </a>
+              )}
+              {excerptDownloadHref && (
+                <a
+                  href={excerptDownloadHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition hover:scale-[1.02]"
+                  style={{
+                    borderColor: "rgb(255 255 255 / 0.25)",
+                    color: "white",
+                  }}
+                >
+                  <FileText size={14} />
+                  Download excerpt
+                </a>
+              )}
             </div>
           )}
 

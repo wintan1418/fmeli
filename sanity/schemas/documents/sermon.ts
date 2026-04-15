@@ -83,6 +83,23 @@ export default defineType({
       validation: (R) => R.max(280),
     }),
     defineField({
+      name: "excerptFile",
+      title: "Excerpt document (uploaded — PDF / DOCX)",
+      description:
+        "Drag-and-drop the written excerpt of the message here. Visitors can download it directly from the sermon card.",
+      type: "file",
+      options: {
+        accept: ".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      },
+    }),
+    defineField({
+      name: "excerptUrl",
+      title: "Excerpt download link (pCloud / external)",
+      description:
+        "If the excerpt PDF lives on pCloud (or any external host), paste the public share link here instead of uploading. The site shows a Download Excerpt pill that opens this link.",
+      type: "url",
+    }),
+    defineField({
       name: "notes",
       title: "Sermon notes",
       type: "array",

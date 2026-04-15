@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Play, Clock, Download } from "lucide-react";
+import { Play, Clock, Download, FileText } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHero } from "@/components/ui/PageHero";
 import { sanityFetch } from "@/lib/sanity/client";
@@ -22,6 +22,8 @@ type Sermon = {
   date?: string;
   scripture?: string;
   excerpt?: string;
+  excerptUrl?: string;
+  excerptFileUrl?: string;
   durationMinutes?: number;
   youtubeId?: string;
   audioUrl?: string;
@@ -66,7 +68,8 @@ export default async function SermonsPage() {
                 const thumb = s.thumbnail
                   ? urlFor(s.thumbnail).width(900).height(600).url()
                   : null;
-                const downloadHref = s.audioFileUrl ?? s.audioUrl ?? null;
+                const audioHref = s.audioFileUrl ?? s.audioUrl ?? null;
+                const excerptHref = s.excerptFileUrl ?? s.excerptUrl ?? null;
                 return (
                   <article
                     key={s._id}
@@ -129,32 +132,56 @@ export default async function SermonsPage() {
                           {s.excerpt}
                         </p>
                       )}
-                      <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+                      <div className="mt-auto space-y-3 pt-2">
                         <p
                           className="text-sm font-medium"
                           style={{ color: "var(--color-ink-soft)" }}
                         >
                           {s.preacher?.name}
                         </p>
-                        {downloadHref && (
-                          <a
-                            href={downloadHref}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download
-                            aria-label={`Download ${s.title}`}
-                            className="relative z-10 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition hover:scale-105"
-                            style={{
-                              background:
-                                "color-mix(in srgb, var(--color-brand-red) 10%, white)",
-                              color: "var(--color-brand-red)",
-                              border:
-                                "1px solid color-mix(in srgb, var(--color-brand-red) 25%, white)",
-                            }}
-                          >
-                            <Download size={12} />
-                            Download
-                          </a>
+                        {(audioHref || excerptHref) && (
+                          <div className="flex flex-wrap items-center gap-2">
+                            {audioHref && (
+                              <a
+                                href={audioHref}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download
+                                aria-label={`Download audio · ${s.title}`}
+                                className="relative z-10 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition hover:scale-105"
+                                style={{
+                                  background:
+                                    "color-mix(in srgb, var(--color-brand-red) 10%, white)",
+                                  color: "var(--color-brand-red)",
+                                  border:
+                                    "1px solid color-mix(in srgb, var(--color-brand-red) 25%, white)",
+                                }}
+                              >
+                                <Download size={12} />
+                                Audio
+                              </a>
+                            )}
+                            {excerptHref && (
+                              <a
+                                href={excerptHref}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download
+                                aria-label={`Download excerpt · ${s.title}`}
+                                className="relative z-10 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition hover:scale-105"
+                                style={{
+                                  background:
+                                    "color-mix(in srgb, var(--color-brand-blue-ink) 8%, white)",
+                                  color: "var(--color-brand-blue-ink)",
+                                  border:
+                                    "1px solid color-mix(in srgb, var(--color-brand-blue-ink) 22%, white)",
+                                }}
+                              >
+                                <FileText size={12} />
+                                Excerpt
+                              </a>
+                            )}
+                          </div>
                         )}
                       </div>
                     </div>

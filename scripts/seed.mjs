@@ -444,9 +444,11 @@ async function main() {
     durationMinutes: s.duration,
     featured: s.featured ?? false,
     thumbnail: imageRef(assetByName[s.thumb]),
-    // Placeholder pCloud share link — replace per-sermon in Studio with the
-    // real public link from the FMELi pCloud account.
-    audioUrl: `https://u.pcloud.link/publink/show?code=placeholder-${s.slug}`,
+    // Placeholder pCloud share links — replace per-sermon in Studio with the
+    // real public links from the FMELi pCloud account. Audio = the message
+    // file, excerpt = the written excerpt PDF.
+    audioUrl: `https://u.pcloud.link/publink/show?code=placeholder-audio-${s.slug}`,
+    excerptUrl: `https://u.pcloud.link/publink/show?code=placeholder-excerpt-${s.slug}`,
     preacher: { _type: "reference", _ref: s.preacher },
     ...(s.series ? { series: { _type: "reference", _ref: s.series } } : {}),
     notes: [
