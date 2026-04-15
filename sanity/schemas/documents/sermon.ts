@@ -52,8 +52,9 @@ export default defineType({
     }),
     defineField({
       name: "audioUrl",
-      title: "Audio URL (external — Drive, Dropbox, WeTransfer, etc.)",
-      description: "Use this if the file lives outside Sanity. Paste the share link.",
+      title: "Audio download link (pCloud / external)",
+      description:
+        "Paste the public share link to the message file. FMELi hosts messages on pCloud — paste the pCloud public link here and the site will surface a Download pill on the sermon card.",
       type: "url",
     }),
     defineField({

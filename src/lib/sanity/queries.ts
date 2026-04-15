@@ -42,7 +42,11 @@ export const SERMONS_LIST_QUERY = groq`
     "slug": slug.current,
     date,
     scripture,
+    excerpt,
+    durationMinutes,
     youtubeId,
+    audioUrl,
+    "audioFileUrl": audioFile.asset->url,
     thumbnail,
     "preacher": preacher->{ name, "image": image.asset->url },
     "series": series->{ title, "slug": slug.current }

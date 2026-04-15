@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Play, Clock } from "lucide-react";
+import { Play, Clock, Download } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHero } from "@/components/ui/PageHero";
 import { sanityFetch } from "@/lib/sanity/client";
@@ -21,7 +21,11 @@ type Sermon = {
   slug: string;
   date?: string;
   scripture?: string;
+  excerpt?: string;
+  durationMinutes?: number;
   youtubeId?: string;
+  audioUrl?: string;
+  audioFileUrl?: string;
   thumbnail?: { asset?: { _ref?: string } };
   preacher?: { name?: string };
 };
@@ -62,11 +66,11 @@ export default async function SermonsPage() {
                 const thumb = s.thumbnail
                   ? urlFor(s.thumbnail).width(900).height(600).url()
                   : null;
+                const downloadHref = s.audioFileUrl ?? s.audioUrl ?? null;
                 return (
-                  <Link
+                  <article
                     key={s._id}
-                    href={`/sermons/${s.slug}`}
-                    className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[var(--shadow-card-hover)]"
+                    className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[var(--shadow-card-hover)]"
                   >
                     <div
                       className="relative aspect-[16/10] overflow-hidden"
@@ -110,16 +114,52 @@ export default async function SermonsPage() {
                         className="font-[family-name:var(--font-display)] text-xl font-semibold leading-tight"
                         style={{ color: "var(--color-ink)" }}
                       >
-                        {s.title}
+                        <Link
+                          href={`/sermons/${s.slug}`}
+                          className="before:absolute before:inset-0 before:content-['']"
+                        >
+                          {s.title}
+                        </Link>
                       </h3>
-                      <p
-                        className="mt-auto text-sm"
-                        style={{ color: "var(--color-ink-soft)" }}
-                      >
-                        {s.preacher?.name}
-                      </p>
+                      {s.excerpt && (
+                        <p
+                          className="line-clamp-3 text-sm leading-relaxed"
+                          style={{ color: "var(--color-ink-soft)" }}
+                        >
+                          {s.excerpt}
+                        </p>
+                      )}
+                      <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+                        <p
+                          className="text-sm font-medium"
+                          style={{ color: "var(--color-ink-soft)" }}
+                        >
+                          {s.preacher?.name}
+                        </p>
+                        {downloadHref && (
+                          <a
+                            href={downloadHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download
+                            onClick={(e) => e.stopPropagation()}
+                            aria-label={`Download ${s.title}`}
+                            className="relative z-10 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition hover:scale-105"
+                            style={{
+                              background:
+                                "color-mix(in srgb, var(--color-brand-red) 10%, white)",
+                              color: "var(--color-brand-red)",
+                              border:
+                                "1px solid color-mix(in srgb, var(--color-brand-red) 25%, white)",
+                            }}
+                          >
+                            <Download size={12} />
+                            Download
+                          </a>
+                        )}
+                      </div>
                     </div>
-                  </Link>
+                  </article>
                 );
               })}
             </div>
