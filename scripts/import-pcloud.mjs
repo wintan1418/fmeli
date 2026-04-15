@@ -133,10 +133,17 @@ const SKIP_FOLDER_NAMES = new Set([
 const args = parseArgs(process.argv.slice(2));
 
 function parseArgs(argv) {
-  const out = { dryRun: false, since: 2024, only: null, replace: false };
+  const out = {
+    dryRun: false,
+    since: 2024,
+    only: null,
+    replace: false,
+    patchDates: false,
+  };
   for (const a of argv) {
     if (a === "--dry-run") out.dryRun = true;
     else if (a === "--replace") out.replace = true;
+    else if (a === "--patch-dates") out.patchDates = true;
     else if (a.startsWith("--since=")) out.since = parseInt(a.split("=")[1], 10);
     else if (a.startsWith("--only=")) out.only = a.split("=")[1];
   }
@@ -243,9 +250,33 @@ function parseFilename(name) {
  * Extract a year from a folder name like "2024", "LC-22", "2024-2025".
  * Used to filter sub-folders when applying --since.
  */
+/**
+ * Extract a year from a folder name. Handles three shapes the church
+ * actually uses:
+ *
+ *   1. 4-digit, anywhere   "April 2023", "Sunday-Service/2024"
+ *   2. 2-digit after `-`   "LC-22"  → 2022   (Life Campaign)
+ *   3. 2-digit after `'`   "SR'24", "ZC'22" (Singles Rendezvous, Zoe)
+ *   4. 2-digit after space "MWS 18", "STS 25" (Special Mid-Week)
+ *
+ * For 2-digit years we only accept 09–35 to avoid mistaking a track
+ * number ("01", "02") for a year. Returns 4-digit number or null.
+ */
 function yearFromFolderName(name) {
-  const m = name.match(/(?:^|\D)(20\d{2})/);
-  return m ? parseInt(m[1], 10) : null;
+  // 4-digit year: anchor on a non-digit (or start) so we don't grab
+  // the "2018" out of "20181203".
+  const four = name.match(/(?:^|\D)(19\d{2}|20\d{2})(?:\D|$)/);
+  if (four) return parseInt(four[1], 10);
+
+  // 2-digit year: must follow a delimiter that suggests "year" not
+  // "track number". Apostrophes ('), hyphens (-) and spaces, BUT
+  // only after a letter (so "LC-22" matches, "01-02" doesn't).
+  const two = name.match(/[A-Za-z][A-Za-z\s]*[-' ](\d{2})(?:\D|$)/);
+  if (two) {
+    const yy = parseInt(two[1], 10);
+    if (yy >= 9 && yy <= 35) return 2000 + yy;
+  }
+  return null;
 }
 
 /**
@@ -344,7 +375,7 @@ function slugify(input) {
 
 async function main() {
   console.log(
-    `pCloud importer · dry-run=${args.dryRun} since=${args.since} only=${args.only ?? "(all)"}`,
+    `pCloud importer · dry-run=${args.dryRun} since=${args.since} only=${args.only ?? "(all)"} patch-dates=${args.patchDates}`,
   );
 
   // 1. Find the FMELi Library folder
@@ -358,6 +389,10 @@ async function main() {
       `Could not find "${LIBRARY_FOLDER_NAME}" at the pCloud root. ` +
         `Make sure the church library has been copied out of "Public Folder".`,
     );
+  }
+
+  if (args.patchDates) {
+    return await patchDatesOnly(libraryFolder.folderid);
   }
 
   // 2. Walk each top-level category
@@ -464,6 +499,75 @@ async function main() {
   } else {
     console.log(`Created or kept (idempotent): ${totalCreated}`);
   }
+  console.log("Done.");
+}
+
+/**
+ * Date-backfill mode (--patch-dates).
+ *
+ * Walks pCloud once, computes a date for every audio file (using the
+ * same parseFilename + fallbackDateFromTrail logic as the import),
+ * then for every Sanity message that currently has NO date AND is
+ * known to map to a pCloud fileid we've seen, patches just the date
+ * field via setIfMissing. This is non-destructive: thumbnails,
+ * preachers, and any manual Studio edits stay untouched.
+ *
+ * Run with --since=2000 (or lower) so you don't accidentally skip
+ * older folders the regular import filtered out.
+ */
+async function patchDatesOnly(libraryFolderId) {
+  console.log("→ walking pCloud to derive dates…");
+  const categoryFolders = await listFolder(libraryFolderId);
+
+  // fileid → "YYYY-01-01" (or real date if filename had one)
+  const fileDates = new Map();
+  for (const cat of categoryFolders) {
+    if (!cat.isfolder) continue;
+    if (SKIP_FOLDER_NAMES.has(cat.name)) continue;
+    if (args.only && cat.name !== args.only) continue;
+    const files = await walkAudio(cat.folderid, [cat.name]);
+    for (const file of files) {
+      const parsed = parseFilename(file.name);
+      const date = parsed.date ?? fallbackDateFromTrail(file.trail);
+      if (date) fileDates.set(String(file.fileid), date);
+    }
+  }
+  console.log(`  derived dates for ${fileDates.size} pCloud files`);
+
+  console.log("→ pulling undated messages from Sanity…");
+  const client = getSanityClient();
+  const undated = await client.fetch(
+    `*[_type == "message" && !defined(date) && _id match "message.pcloud-*"]{ _id }`,
+  );
+  console.log(`  ${undated.length} undated messages`);
+
+  // Rebuild the same deterministic id from each pCloud fileid so we
+  // can reverse-look-up which doc corresponds to which file.
+  const idToDate = new Map();
+  for (const [fileid, date] of fileDates) {
+    idToDate.set(deterministicId(fileid), date);
+  }
+
+  let patched = 0;
+  let skipped = 0;
+  for (const msg of undated) {
+    const date = idToDate.get(msg._id);
+    if (!date) {
+      skipped += 1;
+      continue;
+    }
+    if (args.dryRun) {
+      patched += 1;
+      continue;
+    }
+    await client.patch(msg._id).setIfMissing({ date }).commit();
+    patched += 1;
+    if (patched % 50 === 0) console.log(`  ${patched} patched…`);
+  }
+
+  console.log("\n────────────────────────────────");
+  console.log(`Patched: ${patched}`);
+  console.log(`Skipped (no folder year found): ${skipped}`);
   console.log("Done.");
 }
 
