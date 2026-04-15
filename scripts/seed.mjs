@@ -119,6 +119,8 @@ async function main() {
     name: "Set Man of the Ministry",
     role: "Senior Pastor · Full Manifestation of Eternal Life",
     department: "pastoral",
+    email: "setman@fmeli.org",
+    dashboardRole: "super_admin",
     image: imageRef(pastorAssetId),
     bio: [
       ptBlock(
@@ -137,6 +139,9 @@ async function main() {
     name: `${a.city} Lead Pastor`,
     role: `Lead Pastor · FMELi ${a.city}`,
     department: "pastoral",
+    email: `${a.slug}.lead@fmeli.org`,
+    dashboardRole: "assembly_lead",
+    assembly: { _type: "reference", _ref: `assembly.${a.slug}` },
     image: imageRef(pastorAssetId),
     bio: [
       ptBlock(

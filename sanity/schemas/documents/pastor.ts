@@ -47,6 +47,33 @@ export default defineType({
       description: "Leave empty for ministry-wide leaders.",
     }),
     defineField({
+      name: "email",
+      title: "Login email",
+      description:
+        "Used for the pastor dashboard sign-in. Must be unique across all people.",
+      type: "string",
+      validation: (R) =>
+        R.regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, {
+          name: "email",
+          invert: false,
+        }).warning("Use a real email address."),
+    }),
+    defineField({
+      name: "dashboardRole",
+      title: "Dashboard role",
+      description:
+        "Controls what this person can see in the /dashboard area. Leave blank to disable login entirely.",
+      type: "string",
+      options: {
+        list: [
+          { title: "Assembly Lead — sees only their assembly", value: "assembly_lead" },
+          { title: "Office Admin — sees all assemblies", value: "office_admin" },
+          { title: "Super Admin — full access", value: "super_admin" },
+        ],
+        layout: "radio",
+      },
+    }),
+    defineField({
       name: "image",
       type: "image",
       options: { hotspot: true },
