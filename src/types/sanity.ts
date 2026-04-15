@@ -106,6 +106,28 @@ export type Message = {
   assembly?: { slug?: string; city?: string };
 };
 
+export type WorshipSong = {
+  _key?: string;
+  title?: string;
+  writer?: string;
+};
+
+export type WorshipSession = {
+  _id: string;
+  title: string;
+  slug?: string;
+  date?: string;
+  leader?: string;
+  summary?: string;
+  durationMinutes?: number;
+  youtubeId?: string;
+  audioUrl?: string;
+  audioFileUrl?: string;
+  thumbnail?: SanityImage;
+  songList?: WorshipSong[];
+  assembly?: { slug?: string; city?: string };
+};
+
 export type Member = {
   _id: string;
   firstName?: string;

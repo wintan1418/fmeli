@@ -42,7 +42,7 @@ const RESOURCES: ResourceCard[] = [
     title: "Worship sessions",
     body: "Full worship recordings from Sunday gatherings, conventions and special meetings.",
     icon: Headphones,
-    available: false,
+    available: true,
   },
   {
     href: "/resources/music",

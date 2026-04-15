@@ -42,17 +42,21 @@ export default defineConfig({
             S.documentTypeListItem("post").title("Blog"),
             S.divider(),
             S.listItem()
-              .title("Resources · Messages")
+              .title("Resources")
               .child(
                 S.list()
-                  .title("Messages")
+                  .title("Resources")
                   .items([
                     S.documentTypeListItem("message").title("Messages"),
                     S.documentTypeListItem("messageSeries").title(
                       "Message Series",
                     ),
                     S.documentTypeListItem("messageCategory").title(
-                      "Categories",
+                      "Message Categories",
+                    ),
+                    S.divider(),
+                    S.documentTypeListItem("worshipSession").title(
+                      "Worship Sessions",
                     ),
                   ]),
               ),

@@ -104,6 +104,49 @@ export const ALL_MESSAGE_SLUGS_QUERY = groq`
   *[_type == "message" && defined(slug.current)]{ "slug": slug.current }
 `;
 
+// ────────────────────────────────────────────────────────────
+// Worship sessions
+// ────────────────────────────────────────────────────────────
+
+export const WORSHIP_SESSIONS_LIST_QUERY = groq`
+  *[_type == "worshipSession"] | order(date desc)[0...60]{
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    leader,
+    summary,
+    durationMinutes,
+    youtubeId,
+    audioUrl,
+    "audioFileUrl": audioFile.asset->url,
+    thumbnail,
+    "assembly": assembly->{ "slug": slug.current, city }
+  }
+`;
+
+export const WORSHIP_SESSION_BY_SLUG_QUERY = groq`
+  *[_type == "worshipSession" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    leader,
+    summary,
+    durationMinutes,
+    youtubeId,
+    audioUrl,
+    "audioFileUrl": audioFile.asset->url,
+    thumbnail,
+    songList,
+    "assembly": assembly->{ "slug": slug.current, city }
+  }
+`;
+
+export const ALL_WORSHIP_SESSION_SLUGS_QUERY = groq`
+  *[_type == "worshipSession" && defined(slug.current)]{ "slug": slug.current }
+`;
+
 /** Upcoming events (future only). */
 export const EVENTS_UPCOMING_QUERY = groq`
   *[_type == "event" && startsAt >= now()] | order(startsAt asc){

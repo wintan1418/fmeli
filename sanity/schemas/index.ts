@@ -3,6 +3,7 @@ import page from "./documents/page";
 import message from "./documents/message";
 import messageSeries from "./documents/messageSeries";
 import messageCategory from "./documents/messageCategory";
+import worshipSession from "./documents/worshipSession";
 import event from "./documents/event";
 import registration from "./documents/registration";
 import pastor from "./documents/pastor";
@@ -31,6 +32,7 @@ export const schemaTypes = [
   message,
   messageSeries,
   messageCategory,
+  worshipSession,
   meeting,
   event,
   registration,
