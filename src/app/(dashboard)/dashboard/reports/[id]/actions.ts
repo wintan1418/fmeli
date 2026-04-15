@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireDashboardSession } from "@/lib/dashboard/session";
-import { getWriteClient } from "@/lib/sanity/write-client";
+import { sanityWrite } from "@/lib/sanity/write-client";
 import { client as readClient } from "@/lib/sanity/client";
 
 export type CommentActionState = {
@@ -63,11 +63,13 @@ export async function addReportComment(
   };
 
   try {
-    await getWriteClient()
-      .patch(reportId)
-      .setIfMissing({ comments: [] })
-      .insert("after", "comments[-1]", [comment])
-      .commit();
+    await sanityWrite("append report comment", (c) =>
+      c
+        .patch(reportId)
+        .setIfMissing({ comments: [] })
+        .insert("after", "comments[-1]", [comment])
+        .commit(),
+    );
   } catch (err) {
     console.error("[dashboard/reports/comment] write failed", err);
     return {

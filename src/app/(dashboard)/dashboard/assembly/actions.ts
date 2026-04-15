@@ -5,7 +5,7 @@ import {
   requireDashboardSession,
   resolveAssemblyScope,
 } from "@/lib/dashboard/session";
-import { getWriteClient } from "@/lib/sanity/write-client";
+import { sanityWrite } from "@/lib/sanity/write-client";
 
 export type AssemblyActionState = {
   status: "idle" | "error" | "success";
@@ -72,7 +72,9 @@ export async function saveAssemblyProfile(
   );
 
   try {
-    await getWriteClient().patch(assemblyId).set(cleanedPatch).commit();
+    await sanityWrite("patch assembly", (c) =>
+      c.patch(assemblyId).set(cleanedPatch).commit(),
+    );
   } catch (err) {
     console.error("[dashboard/assembly] patch failed", err);
     return {
@@ -86,9 +88,11 @@ export async function saveAssemblyProfile(
   // re-fetch the doc to know the slug for the detail page bust.
   let slug: string | null = null;
   try {
-    const fresh = await getWriteClient().fetch<{ slug?: string }>(
-      `*[_id == $id][0]{ "slug": slug.current }`,
-      { id: assemblyId },
+    const fresh = await sanityWrite("fetch assembly slug", (c) =>
+      c.fetch<{ slug?: string }>(
+        `*[_id == $id][0]{ "slug": slug.current }`,
+        { id: assemblyId },
+      ),
     );
     slug = fresh?.slug ?? null;
   } catch {

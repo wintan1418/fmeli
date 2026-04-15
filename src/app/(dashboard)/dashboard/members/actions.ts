@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireDashboardSession } from "@/lib/dashboard/session";
-import { getWriteClient } from "@/lib/sanity/write-client";
+import { sanityWrite } from "@/lib/sanity/write-client";
 
 export type MemberActionState = {
   status: "idle" | "error" | "success";
@@ -66,20 +66,22 @@ export async function addMember(
     .filter(Boolean);
 
   try {
-    await getWriteClient().create({
-      _type: "member",
-      firstName,
-      lastName,
-      email: txt(formData, "email"),
-      phone: txt(formData, "phone"),
-      assembly: { _type: "reference", _ref: assemblyId },
-      lifeStage,
-      ministryInterests:
-        interests && interests.length > 0 ? interests : undefined,
-      status: "active",
-      joinedAt: new Date().toISOString().slice(0, 10),
-      submittedAt: new Date().toISOString(),
-    });
+    await sanityWrite("create member", (c) =>
+      c.create({
+        _type: "member",
+        firstName,
+        lastName,
+        email: txt(formData, "email"),
+        phone: txt(formData, "phone"),
+        assembly: { _type: "reference", _ref: assemblyId },
+        lifeStage,
+        ministryInterests:
+          interests && interests.length > 0 ? interests : undefined,
+        status: "active",
+        joinedAt: new Date().toISOString().slice(0, 10),
+        submittedAt: new Date().toISOString(),
+      }),
+    );
   } catch (err) {
     console.error("[dashboard/members/add] Sanity write failed", err);
     return {

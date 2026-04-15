@@ -1,4 +1,5 @@
 import { createClient, type SanityClient } from "next-sanity";
+import { withSanityRetry } from "./retry";
 
 /**
  * Server-only Sanity client for mutations.
@@ -23,4 +24,20 @@ export function getWriteClient(): SanityClient {
     token,
     useCdn: false,
   });
+}
+
+/**
+ * Convenience wrapper that routes a mutation through withSanityRetry,
+ * so dashboard writes survive the same WSL DNS hiccups that the read
+ * client already absorbs.
+ *
+ * Usage:
+ *   await sanityWrite("create member", (c) => c.create(doc));
+ */
+export async function sanityWrite<T>(
+  label: string,
+  fn: (client: SanityClient) => Promise<T>,
+): Promise<T> {
+  const client = getWriteClient();
+  return withSanityRetry(label, () => fn(client));
 }

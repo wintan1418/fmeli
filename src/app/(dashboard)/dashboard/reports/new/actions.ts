@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireDashboardSession } from "@/lib/dashboard/session";
-import { getWriteClient } from "@/lib/sanity/write-client";
+import { sanityWrite } from "@/lib/sanity/write-client";
 
 export type ReportActionState = {
   status: "idle" | "error" | "success";
@@ -123,7 +123,7 @@ export async function submitWeeklyReport(
   };
 
   try {
-    await getWriteClient().create(doc);
+    await sanityWrite("create assemblyReport", (c) => c.create(doc));
   } catch (err) {
     console.error("[dashboard/reports/new] Sanity write failed", err);
     return {
