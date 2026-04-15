@@ -58,7 +58,7 @@ const RESOURCES: ResourceCard[] = [
     title: "Tips",
     body: "Short reads on health, family, finances and walking with God — pastoral wisdom in bite-size form.",
     icon: Sparkles,
-    available: false,
+    available: true,
   },
 ];
 

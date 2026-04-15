@@ -143,6 +143,30 @@ export type Track = {
   writers?: string[];
 };
 
+export type TipCategory = {
+  _id: string;
+  title: string;
+  slug?: string;
+  description?: string;
+};
+
+export type Tip = {
+  _id: string;
+  title: string;
+  slug?: string;
+  summary?: string;
+  publishedAt?: string;
+  coverImage?: SanityImage;
+  body?: PortableTextBlock[];
+  category?: { title?: string; slug?: string };
+  author?: {
+    name?: string;
+    role?: string;
+    image?: SanityImage;
+    bio?: PortableTextBlock[];
+  };
+};
+
 export type Member = {
   _id: string;
   firstName?: string;

@@ -187,6 +187,52 @@ export const ALL_TRACK_SLUGS_QUERY = groq`
   *[_type == "track" && defined(slug.current)]{ "slug": slug.current }
 `;
 
+// ────────────────────────────────────────────────────────────
+// Tips
+// ────────────────────────────────────────────────────────────
+
+export const TIPS_LIST_QUERY = groq`
+  *[_type == "tip"
+      && ($category == null || category->slug.current == $category)
+    ] | order(publishedAt desc)[0...60]{
+      _id,
+      title,
+      "slug": slug.current,
+      summary,
+      publishedAt,
+      coverImage,
+      "category": category->{ title, "slug": slug.current },
+      "author": author->{ name, "image": image.asset->url }
+    }
+`;
+
+export const TIP_CATEGORIES_QUERY = groq`
+  *[_type == "tipCategory"] | order(order asc, title asc){
+    _id,
+    title,
+    "slug": slug.current,
+    description
+  }
+`;
+
+export const TIP_BY_SLUG_QUERY = groq`
+  *[_type == "tip" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    summary,
+    publishedAt,
+    coverImage,
+    body,
+    "category": category->{ title, "slug": slug.current },
+    "author": author->{ name, role, image, bio }
+  }
+`;
+
+export const ALL_TIP_SLUGS_QUERY = groq`
+  *[_type == "tip" && defined(slug.current)]{ "slug": slug.current }
+`;
+
 /** Upcoming events (future only). */
 export const EVENTS_UPCOMING_QUERY = groq`
   *[_type == "event" && startsAt >= now()] | order(startsAt asc){
