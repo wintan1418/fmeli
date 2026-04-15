@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Menu, X, Play } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { SearchDialog } from "@/components/layout/SearchDialog";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -75,7 +76,8 @@ export function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center gap-3 lg:flex">
+          <SearchDialog />
           <Link
             href="/live"
             className="group inline-flex h-11 items-center gap-2 rounded-full bg-(--color-brand-gold) px-6 text-sm font-semibold text-(--color-brand-blue-ink) transition-all hover:bg-(--color-brand-gold-soft) hover:shadow-[var(--shadow-glow-gold)]"
