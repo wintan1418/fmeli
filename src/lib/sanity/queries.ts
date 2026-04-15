@@ -73,7 +73,12 @@ export const MESSAGES_LIST_QUERY = groq`
       "category": category->{
         title,
         "slug": slug.current,
-        "parent": parent->{ title, "slug": slug.current }
+        defaultThumbnail,
+        "parent": parent->{
+          title,
+          "slug": slug.current,
+          defaultThumbnail
+        }
       },
       "preacher": preacher->{ name, "image": image.asset->url },
       "series": series->{ title, "slug": slug.current }
@@ -104,7 +109,8 @@ export const MESSAGE_CATEGORIES_QUERY = groq`
     title,
     "slug": slug.current,
     description,
-    "parent": parent->{ "slug": slug.current, title }
+    defaultThumbnail,
+    "parent": parent->{ "slug": slug.current, title, defaultThumbnail }
   }
 `;
 

@@ -81,7 +81,12 @@ export type MessageCategory = {
   title: string;
   slug?: string;
   description?: string;
-  parent?: { title?: string; slug?: string } | null;
+  defaultThumbnail?: SanityImage;
+  parent?: {
+    title?: string;
+    slug?: string;
+    defaultThumbnail?: SanityImage;
+  } | null;
 };
 
 export type Message = {
@@ -105,7 +110,12 @@ export type Message = {
   category?: {
     title?: string;
     slug?: string;
-    parent?: { title?: string; slug?: string } | null;
+    defaultThumbnail?: SanityImage;
+    parent?: {
+      title?: string;
+      slug?: string;
+      defaultThumbnail?: SanityImage;
+    } | null;
   };
   preacher?: { name?: string; role?: string; image?: SanityImage };
   series?: { title?: string; slug?: string; artwork?: SanityImage };

@@ -201,8 +201,16 @@ export default async function MessagesPage({
           {messages && messages.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {messages.map((m) => {
-                const thumb = m.thumbnail
-                  ? urlFor(m.thumbnail).width(900).height(600).url()
+                // Fall back: message thumbnail → its category's
+                // default thumbnail → its parent category's default →
+                // null (card stays the deep blue ink colour).
+                const thumbSource =
+                  m.thumbnail ??
+                  m.category?.defaultThumbnail ??
+                  m.category?.parent?.defaultThumbnail ??
+                  null;
+                const thumb = thumbSource
+                  ? urlFor(thumbSource).width(900).height(600).url()
                   : null;
                 const audioHref = m.audioFileUrl ?? m.audioUrl ?? null;
                 const excerptHref = m.excerptFileUrl ?? m.excerptUrl ?? null;

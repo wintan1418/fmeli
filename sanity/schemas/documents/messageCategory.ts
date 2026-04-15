@@ -54,6 +54,14 @@ export default defineType({
       rows: 2,
     }),
     defineField({
+      name: "defaultThumbnail",
+      title: "Default thumbnail",
+      description:
+        "Used as the card image for any message in this category that has no thumbnail of its own. A child category falls back to its parent's default if its own is empty.",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
       name: "order",
       type: "number",
       description: "Lower = appears first in filters.",
