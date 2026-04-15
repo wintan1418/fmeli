@@ -79,11 +79,7 @@ export default async function ReportDetailPage({
       actions={
         <Link
           href="/dashboard/reports"
-          className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition hover:scale-[1.02]"
-          style={{
-            borderColor: "rgb(11 20 27 / 0.12)",
-            color: "var(--color-ink)",
-          }}
+          className="inline-flex items-center gap-2 rounded-full border border-ink/12 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-ink transition hover:scale-[1.02]"
         >
           <ArrowLeft size={12} />
           Back to reports
@@ -118,31 +114,16 @@ export default async function ReportDetailPage({
               <Money label="Missions" value={report.finances?.missions} />
               <Money label="Other" value={report.finances?.other} />
             </div>
-            <div
-              className="mt-5 flex items-center justify-between rounded-lg p-4"
-              style={{
-                background:
-                  "color-mix(in srgb, var(--color-brand-blue-ink) 6%, white)",
-              }}
-            >
-              <span
-                className="text-[11px] font-semibold uppercase tracking-[0.18em]"
-                style={{ color: "var(--color-ink-soft)" }}
-              >
+            <div className="mt-5 flex items-center justify-between rounded-lg bg-brand-blue-ink/6 p-4">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-soft">
                 Total giving
               </span>
-              <span
-                className="font-[family-name:var(--font-display)] text-2xl font-semibold"
-                style={{ color: "var(--color-brand-blue-ink)" }}
-              >
+              <span className="font-[family-name:var(--font-display)] text-2xl font-semibold text-brand-blue-ink">
                 {totalGiving > 0 ? currency.format(totalGiving) : "—"}
               </span>
             </div>
             {report.finances?.notes && (
-              <p
-                className="mt-4 text-sm italic"
-                style={{ color: "var(--color-ink-soft)" }}
-              >
+              <p className="mt-4 text-sm italic text-ink-soft">
                 {report.finances.notes}
               </p>
             )}
@@ -158,16 +139,10 @@ export default async function ReportDetailPage({
             </div>
             {report.nextWeekFocus && (
               <div className="mt-6">
-                <p
-                  className="text-[11px] font-semibold uppercase tracking-[0.18em]"
-                  style={{ color: "var(--color-ink-soft)" }}
-                >
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-soft">
                   Focus for next week
                 </p>
-                <p
-                  className="mt-2 text-sm leading-relaxed"
-                  style={{ color: "var(--color-ink)" }}
-                >
+                <p className="mt-2 text-sm leading-relaxed text-ink">
                   {report.nextWeekFocus}
                 </p>
               </div>
@@ -177,26 +152,14 @@ export default async function ReportDetailPage({
 
         {/* Sidebar: meta + comments */}
         <aside className="space-y-6">
-          <div
-            className="rounded-[var(--radius-card)] border bg-white p-6"
-            style={{ borderColor: "rgb(11 20 27 / 0.08)" }}
-          >
-            <p
-              className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-              style={{ color: "var(--color-muted)" }}
-            >
+          <div className="rounded-[var(--radius-card)] border border-ink/8 bg-white p-6">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
               Report
             </p>
-            <p
-              className="mt-2 font-[family-name:var(--font-display)] text-xl font-semibold"
-              style={{ color: "var(--color-ink)" }}
-            >
+            <p className="mt-2 font-[family-name:var(--font-display)] text-xl font-semibold text-ink">
               {report.weekOf ?? "—"}
             </p>
-            <dl
-              className="mt-5 space-y-3 text-xs"
-              style={{ color: "var(--color-ink-soft)" }}
-            >
+            <dl className="mt-5 space-y-3 text-xs text-ink-soft">
               <Row icon={<CalendarDays size={12} />} label="Period">
                 {PERIOD_LABEL[report.period ?? "weekly"] ?? report.period}
               </Row>
@@ -214,16 +177,10 @@ export default async function ReportDetailPage({
 
           {/* Comments thread */}
           <div className="space-y-4">
-            <h3
-              className="font-[family-name:var(--font-display)] text-lg font-semibold"
-              style={{ color: "var(--color-ink)" }}
-            >
+            <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-ink">
               Conversation
               {report.comments && report.comments.length > 0 && (
-                <span
-                  className="ml-2 text-sm font-normal"
-                  style={{ color: "var(--color-muted)" }}
-                >
+                <span className="ml-2 text-sm font-normal text-muted">
                   ({report.comments.length})
                 </span>
               )}
@@ -234,53 +191,30 @@ export default async function ReportDetailPage({
                 {report.comments.map((c) => (
                   <li
                     key={c._key}
-                    className="rounded-[var(--radius-card)] border bg-white p-5"
-                    style={{ borderColor: "rgb(11 20 27 / 0.08)" }}
+                    className="rounded-[var(--radius-card)] border border-ink/8 bg-white p-5"
                   >
                     <div className="flex items-center justify-between gap-3">
-                      <p
-                        className="text-sm font-semibold"
-                        style={{ color: "var(--color-ink)" }}
-                      >
+                      <p className="text-sm font-semibold text-ink">
                         {c.authorName ?? "Pastor"}
                       </p>
-                      <span
-                        className="rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em]"
-                        style={{
-                          background:
-                            "color-mix(in srgb, var(--color-brand-blue-ink) 8%, white)",
-                          color: "var(--color-brand-blue-ink)",
-                        }}
-                      >
+                      <span className="rounded-full bg-brand-blue-ink/8 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-brand-blue-ink">
                         {ROLE_LABEL[c.authorRole ?? "assembly_lead"] ??
                           c.authorRole}
                       </span>
                     </div>
                     {c.createdAt && (
-                      <p
-                        className="mt-1 text-[11px]"
-                        style={{ color: "var(--color-muted)" }}
-                      >
+                      <p className="mt-1 text-[11px] text-muted">
                         {new Date(c.createdAt).toLocaleString()}
                       </p>
                     )}
-                    <p
-                      className="mt-3 whitespace-pre-line text-sm leading-relaxed"
-                      style={{ color: "var(--color-ink-soft)" }}
-                    >
+                    <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-ink-soft">
                       {c.body}
                     </p>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p
-                className="rounded-lg border border-dashed p-5 text-center text-xs"
-                style={{
-                  borderColor: "rgb(11 20 27 / 0.15)",
-                  color: "var(--color-muted)",
-                }}
-              >
+              <p className="rounded-lg border border-dashed border-ink/15 p-5 text-center text-xs text-muted">
                 No comments yet. Start the conversation below.
               </p>
             )}
@@ -303,25 +237,12 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section
-      className="rounded-[var(--radius-card)] border bg-white p-7"
-      style={{ borderColor: "rgb(11 20 27 / 0.08)" }}
-    >
+    <section className="rounded-[var(--radius-card)] border border-ink/8 bg-white p-7">
       <div className="mb-5 flex items-center gap-3">
-        <span
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full"
-          style={{
-            background:
-              "color-mix(in srgb, var(--color-brand-blue-ink) 8%, white)",
-            color: "var(--color-brand-blue-ink)",
-          }}
-        >
+        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-blue-ink/8 text-brand-blue-ink">
           {icon}
         </span>
-        <h2
-          className="font-[family-name:var(--font-display)] text-xl font-semibold"
-          style={{ color: "var(--color-ink)" }}
-        >
+        <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-ink">
           {title}
         </h2>
       </div>
@@ -340,19 +261,12 @@ function Stat({
   large?: boolean;
 }) {
   return (
-    <div
-      className="rounded-lg p-4"
-      style={{ background: "rgb(11 20 27 / 0.025)" }}
-    >
-      <p
-        className="text-[10px] font-semibold uppercase tracking-[0.18em]"
-        style={{ color: "var(--color-muted)" }}
-      >
+    <div className="rounded-lg bg-ink/2 p-4">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
         {label}
       </p>
       <p
-        className={`mt-2 font-[family-name:var(--font-display)] font-semibold ${large ? "text-3xl" : "text-2xl"}`}
-        style={{ color: "var(--color-ink)" }}
+        className={`mt-2 font-[family-name:var(--font-display)] font-semibold text-ink ${large ? "text-3xl" : "text-2xl"}`}
       >
         {typeof value === "number" ? value : "—"}
       </p>
@@ -362,20 +276,11 @@ function Stat({
 
 function Money({ label, value }: { label: string; value?: number }) {
   return (
-    <div
-      className="rounded-lg p-4"
-      style={{ background: "rgb(11 20 27 / 0.025)" }}
-    >
-      <p
-        className="text-[10px] font-semibold uppercase tracking-[0.18em]"
-        style={{ color: "var(--color-muted)" }}
-      >
+    <div className="rounded-lg bg-ink/2 p-4">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
         {label}
       </p>
-      <p
-        className="mt-2 text-base font-semibold"
-        style={{ color: "var(--color-ink)" }}
-      >
+      <p className="mt-2 text-base font-semibold text-ink">
         {typeof value === "number" && value > 0
           ? currency.format(value)
           : "—"}
@@ -393,20 +298,14 @@ function Narrative({
 }) {
   return (
     <div>
-      <p
-        className="text-[11px] font-semibold uppercase tracking-[0.18em]"
-        style={{ color: "var(--color-ink-soft)" }}
-      >
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-soft">
         {label}
       </p>
-      <div
-        className="prose prose-sm mt-2 max-w-none"
-        style={{ color: "var(--color-ink-soft)" }}
-      >
+      <div className="prose prose-sm mt-2 max-w-none text-ink-soft">
         {value && value.length > 0 ? (
           <PortableText value={value} />
         ) : (
-          <p style={{ color: "var(--color-muted)" }}>—</p>
+          <p className="text-muted">—</p>
         )}
       </div>
     </div>
@@ -424,25 +323,12 @@ function Row({
 }) {
   return (
     <div className="flex items-start gap-2.5">
-      <span
-        className="mt-0.5 flex-shrink-0"
-        style={{ color: "var(--color-muted)" }}
-      >
-        {icon}
-      </span>
+      <span className="mt-0.5 flex-shrink-0 text-muted">{icon}</span>
       <div>
-        <dt
-          className="text-[10px] font-semibold uppercase tracking-[0.18em]"
-          style={{ color: "var(--color-muted)" }}
-        >
+        <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
           {label}
         </dt>
-        <dd
-          className="mt-0.5 capitalize"
-          style={{ color: "var(--color-ink)" }}
-        >
-          {children}
-        </dd>
+        <dd className="mt-0.5 capitalize text-ink">{children}</dd>
       </div>
     </div>
   );

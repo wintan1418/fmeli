@@ -52,37 +52,21 @@ export default async function MembersPage() {
       <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr]">
         {/* List */}
         <div>
-          <div
-            className="overflow-hidden rounded-[var(--radius-card)] border bg-white"
-            style={{ borderColor: "rgb(11 20 27 / 0.08)" }}
-          >
+          <div className="overflow-hidden rounded-[var(--radius-card)] border border-ink/8 bg-white">
             {members.length === 0 ? (
               <div className="p-12 text-center">
-                <UsersRound
-                  size={28}
-                  className="mx-auto"
-                  style={{ color: "var(--color-brand-gold)" }}
-                />
-                <p
-                  className="mt-4 font-[family-name:var(--font-display)] text-2xl"
-                  style={{ color: "var(--color-ink)" }}
-                >
+                <UsersRound size={28} className="mx-auto text-brand-gold" />
+                <p className="mt-4 font-[family-name:var(--font-display)] text-2xl text-ink">
                   No members yet
                 </p>
-                <p
-                  className="mt-2 text-sm"
-                  style={{ color: "var(--color-ink-soft)" }}
-                >
-                  Add the first member with the form on the right — they&rsquo;ll
-                  show up here straight away.
+                <p className="mt-2 text-sm text-ink-soft">
+                  Add the first member with the form on the right —
+                  they&rsquo;ll show up here straight away.
                 </p>
               </div>
             ) : (
-              <table
-                className="min-w-full divide-y"
-                style={{ borderColor: "rgb(11 20 27 / 0.06)" }}
-              >
-                <thead style={{ background: "rgb(11 20 27 / 0.02)" }}>
+              <table className="min-w-full divide-y divide-ink/6">
+                <thead className="bg-ink/2">
                   <tr>
                     <Th>Name</Th>
                     <Th>Contact</Th>
@@ -91,37 +75,22 @@ export default async function MembersPage() {
                     <Th>Joined</Th>
                   </tr>
                 </thead>
-                <tbody
-                  className="divide-y"
-                  style={{ borderColor: "rgb(11 20 27 / 0.06)" }}
-                >
+                <tbody className="divide-y divide-ink/6">
                   {members.map((m) => (
-                    <tr
-                      key={m._id}
-                      className="hover:bg-[color:rgb(11_20_27/0.02)]"
-                    >
+                    <tr key={m._id} className="hover:bg-ink/2">
                       <Td bold>
                         {[m.firstName, m.lastName].filter(Boolean).join(" ")}
                       </Td>
                       <Td>
                         <span className="block">{m.email ?? "—"}</span>
-                        <span
-                          className="block text-xs"
-                          style={{ color: "var(--color-muted)" }}
-                        >
+                        <span className="block text-xs text-muted">
                           {m.phone ?? ""}
                         </span>
                       </Td>
                       <Td>
-                        <span
-                          className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em]"
-                          style={{
-                            background:
-                              "color-mix(in srgb, var(--color-brand-blue-ink) 8%, white)",
-                            color: "var(--color-brand-blue-ink)",
-                          }}
-                        >
-                          {STAGE_LABEL[m.lifeStage ?? "visitor"] ?? m.lifeStage}
+                        <span className="inline-flex items-center rounded-full bg-brand-blue-ink/8 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-blue-ink">
+                          {STAGE_LABEL[m.lifeStage ?? "visitor"] ??
+                            m.lifeStage}
                         </span>
                       </Td>
                       {seeAll && <Td>{m.assemblyCity ?? "—"}</Td>}
@@ -132,10 +101,7 @@ export default async function MembersPage() {
               </table>
             )}
           </div>
-          <p
-            className="mt-4 text-xs"
-            style={{ color: "var(--color-muted)" }}
-          >
+          <p className="mt-4 text-xs text-muted">
             Showing the most recent {Math.min(members.length, 250)} members.
             For the full registry, open Studio.
           </p>
@@ -153,10 +119,7 @@ export default async function MembersPage() {
 
 function Th({ children }: { children: React.ReactNode }) {
   return (
-    <th
-      className="px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-[0.18em]"
-      style={{ color: "var(--color-muted)" }}
-    >
+    <th className="px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
       {children}
     </th>
   );
@@ -171,11 +134,7 @@ function Td({
 }) {
   return (
     <td
-      className="px-5 py-4 text-sm"
-      style={{
-        color: bold ? "var(--color-ink)" : "var(--color-ink-soft)",
-        fontWeight: bold ? 600 : 400,
-      }}
+      className={`px-5 py-4 text-sm ${bold ? "font-semibold text-ink" : "text-ink-soft"}`}
     >
       {children}
     </td>

@@ -20,11 +20,12 @@ const PERIOD_LABEL: Record<string, string> = {
   special: "Special meeting",
 };
 
-const STATUS_TONE: Record<string, string> = {
-  draft: "var(--color-muted)",
-  submitted: "var(--color-brand-blue-ink)",
-  reviewed: "var(--color-brand-gold)",
-  filed: "var(--color-brand-red)",
+/** Status badge classes — keyed by the report status enum. */
+const STATUS_CLASSES: Record<string, string> = {
+  draft: "bg-muted/12 text-muted",
+  submitted: "bg-brand-blue-ink/12 text-brand-blue-ink",
+  reviewed: "bg-brand-gold/15 text-brand-gold",
+  filed: "bg-brand-red/12 text-brand-red",
 };
 
 const currency = new Intl.NumberFormat("en-NG", {
@@ -60,23 +61,13 @@ export default async function ReportsListPage() {
         session.role === "assembly_lead" ? (
           <Link
             href="/dashboard/reports/new"
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition hover:scale-[1.02]"
-            style={{
-              background: "var(--color-brand-red)",
-              color: "white",
-            }}
+            className="inline-flex items-center gap-2 rounded-full bg-brand-red px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:scale-[1.02]"
           >
             <Plus size={14} />
             New report
           </Link>
         ) : (
-          <span
-            className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em]"
-            style={{
-              borderColor: "rgb(11 20 27 / 0.12)",
-              color: "var(--color-muted)",
-            }}
-          >
+          <span className="inline-flex items-center gap-2 rounded-full border border-ink/12 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
             Read-only review access
           </span>
         )
@@ -85,9 +76,9 @@ export default async function ReportsListPage() {
       {reports.length === 0 ? (
         <EmptyState />
       ) : (
-        <div className="overflow-hidden rounded-[var(--radius-card)] border bg-white" style={{ borderColor: "rgb(11 20 27 / 0.08)" }}>
-          <table className="min-w-full divide-y" style={{ borderColor: "rgb(11 20 27 / 0.06)" }}>
-            <thead style={{ background: "rgb(11 20 27 / 0.02)" }}>
+        <div className="overflow-hidden rounded-[var(--radius-card)] border border-ink/8 bg-white">
+          <table className="min-w-full divide-y divide-ink/6">
+            <thead className="bg-ink/2">
               <tr>
                 <Th>Week of</Th>
                 <Th>Period</Th>
@@ -99,17 +90,13 @@ export default async function ReportsListPage() {
                 <Th>Comments</Th>
               </tr>
             </thead>
-            <tbody className="divide-y" style={{ borderColor: "rgb(11 20 27 / 0.06)" }}>
+            <tbody className="divide-y divide-ink/6">
               {reports.map((r) => (
-                <tr
-                  key={r._id}
-                  className="transition hover:bg-[color:rgb(11_20_27/0.02)]"
-                >
+                <tr key={r._id} className="transition hover:bg-ink/2">
                   <Td bold>
                     <Link
                       href={`/dashboard/reports/${r._id}`}
-                      className="underline-offset-2 hover:underline"
-                      style={{ color: "var(--color-brand-blue-ink)" }}
+                      className="text-brand-blue-ink underline-offset-2 hover:underline"
                     >
                       {r.weekOf ?? "—"}
                     </Link>
@@ -124,11 +111,7 @@ export default async function ReportsListPage() {
                   </Td>
                   <Td>
                     <span
-                      className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em]"
-                      style={{
-                        background: `color-mix(in srgb, ${STATUS_TONE[r.status ?? "draft"]} 12%, white)`,
-                        color: STATUS_TONE[r.status ?? "draft"],
-                      }}
+                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] ${STATUS_CLASSES[r.status ?? "draft"]}`}
                     >
                       {r.status ?? "draft"}
                     </span>
@@ -136,15 +119,12 @@ export default async function ReportsListPage() {
                   <Td>{r.submittedByName ?? "—"}</Td>
                   <Td>
                     {r.commentCount && r.commentCount > 0 ? (
-                      <span
-                        className="inline-flex items-center gap-1.5 text-xs"
-                        style={{ color: "var(--color-brand-blue-ink)" }}
-                      >
+                      <span className="inline-flex items-center gap-1.5 text-xs text-brand-blue-ink">
                         <MessageSquare size={12} />
                         {r.commentCount}
                       </span>
                     ) : (
-                      <span style={{ color: "var(--color-muted)" }}>—</span>
+                      <span className="text-muted">—</span>
                     )}
                   </Td>
                 </tr>
@@ -159,23 +139,22 @@ export default async function ReportsListPage() {
 
 function Th({ children }: { children: React.ReactNode }) {
   return (
-    <th
-      className="px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-[0.18em]"
-      style={{ color: "var(--color-muted)" }}
-    >
+    <th className="px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
       {children}
     </th>
   );
 }
 
-function Td({ children, bold = false }: { children: React.ReactNode; bold?: boolean }) {
+function Td({
+  children,
+  bold = false,
+}: {
+  children: React.ReactNode;
+  bold?: boolean;
+}) {
   return (
     <td
-      className="px-5 py-4 text-sm"
-      style={{
-        color: bold ? "var(--color-ink)" : "var(--color-ink-soft)",
-        fontWeight: bold ? 600 : 400,
-      }}
+      className={`px-5 py-4 text-sm ${bold ? "font-semibold text-ink" : "text-ink-soft"}`}
     >
       {children}
     </td>
@@ -184,22 +163,9 @@ function Td({ children, bold = false }: { children: React.ReactNode; bold?: bool
 
 function EmptyState() {
   return (
-    <div
-      className="rounded-[var(--radius-card)] border border-dashed p-12 text-center"
-      style={{
-        borderColor: "rgb(11 20 27 / 0.15)",
-        color: "var(--color-ink-soft)",
-      }}
-    >
-      <FileText
-        size={28}
-        className="mx-auto"
-        style={{ color: "var(--color-brand-gold)" }}
-      />
-      <p
-        className="mt-4 font-[family-name:var(--font-display)] text-2xl"
-        style={{ color: "var(--color-ink)" }}
-      >
+    <div className="rounded-[var(--radius-card)] border border-dashed border-ink/15 p-12 text-center text-ink-soft">
+      <FileText size={28} className="mx-auto text-brand-gold" />
+      <p className="mt-4 font-[family-name:var(--font-display)] text-2xl text-ink">
         No reports yet
       </p>
       <p className="mt-2 text-sm">

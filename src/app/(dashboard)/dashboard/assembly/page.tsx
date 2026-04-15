@@ -45,7 +45,7 @@ export default async function AssemblyProfilePage({
         title="Assembly profile"
         description="No assembly is associated with your account."
       >
-        <p className="text-sm" style={{ color: "var(--color-ink-soft)" }}>
+        <p className="text-sm text-ink-soft">
           Ask the church office to attach you to an assembly so you can edit
           its profile.
         </p>
@@ -61,7 +61,7 @@ export default async function AssemblyProfilePage({
   if (!doc) {
     return (
       <DashboardShell session={session} title="Assembly profile">
-        <p className="text-sm" style={{ color: "var(--color-ink-soft)" }}>
+        <p className="text-sm text-ink-soft">
           That assembly couldn&rsquo;t be loaded.
         </p>
       </DashboardShell>
@@ -78,11 +78,7 @@ export default async function AssemblyProfilePage({
           href={`/assemblies/${doc.slug}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition hover:scale-[1.02]"
-          style={{
-            borderColor: "rgb(11 20 27 / 0.12)",
-            color: "var(--color-ink)",
-          }}
+          className="inline-flex items-center gap-2 rounded-full border border-ink/12 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-ink transition hover:scale-[1.02]"
         >
           View public page
           <ExternalLink size={12} />

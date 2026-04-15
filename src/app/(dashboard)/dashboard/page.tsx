@@ -60,32 +60,16 @@ function DashboardCard({
   return (
     <Link
       href={href}
-      className="group flex h-full flex-col gap-3 rounded-[var(--radius-card)] border bg-white p-7 transition hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
-      style={{ borderColor: "rgb(11 20 27 / 0.08)" }}
+      className="group flex h-full flex-col gap-3 rounded-[var(--radius-card)] border border-ink/8 bg-white p-7 transition hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
     >
-      <span
-        className="inline-flex h-10 w-10 items-center justify-center rounded-full"
-        style={{
-          background:
-            "color-mix(in srgb, var(--color-brand-blue-ink) 8%, white)",
-          color: "var(--color-brand-blue-ink)",
-        }}
-      >
+      <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-brand-blue-ink/8 text-brand-blue-ink">
         {icon}
       </span>
-      <h3
-        className="font-[family-name:var(--font-display)] text-xl font-semibold"
-        style={{ color: "var(--color-ink)" }}
-      >
+      <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold text-ink">
         {title}
       </h3>
-      <p className="text-sm" style={{ color: "var(--color-ink-soft)" }}>
-        {body}
-      </p>
-      <span
-        className="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em]"
-        style={{ color: "var(--color-brand-red)" }}
-      >
+      <p className="text-sm text-ink-soft">{body}</p>
+      <span className="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-red">
         Open
         <ArrowRight
           size={12}

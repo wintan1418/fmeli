@@ -38,24 +38,12 @@ export function DashboardShell({
   return (
     <div className="grid min-h-screen md:grid-cols-[260px_1fr]">
       {/* Sidebar */}
-      <aside
-        className="hidden border-r p-6 md:flex md:flex-col md:gap-8"
-        style={{
-          background: "white",
-          borderColor: "rgb(11 20 27 / 0.08)",
-        }}
-      >
+      <aside className="hidden border-r border-ink/8 bg-white p-6 md:flex md:flex-col md:gap-8">
         <Link href="/" className="block">
-          <p
-            className="text-xs font-semibold uppercase tracking-[0.28em]"
-            style={{ color: "var(--color-brand-red)" }}
-          >
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-red">
             FMELi
           </p>
-          <p
-            className="mt-1 font-[family-name:var(--font-display)] text-xl font-semibold"
-            style={{ color: "var(--color-ink)" }}
-          >
+          <p className="mt-1 font-[family-name:var(--font-display)] text-xl font-semibold text-ink">
             Pastor Dashboard
           </p>
         </Link>
@@ -63,29 +51,14 @@ export function DashboardShell({
         <SidebarNav />
 
         <div className="mt-auto space-y-3">
-          <div
-            className="rounded-lg p-4"
-            style={{
-              background:
-                "color-mix(in srgb, var(--color-brand-blue-ink) 5%, white)",
-            }}
-          >
-            <p
-              className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-              style={{ color: "var(--color-muted)" }}
-            >
+          <div className="rounded-lg bg-brand-blue-ink/5 p-4">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
               Signed in as
             </p>
-            <p
-              className="mt-1.5 truncate text-sm font-semibold"
-              style={{ color: "var(--color-ink)" }}
-            >
+            <p className="mt-1.5 truncate text-sm font-semibold text-ink">
               {session.name}
             </p>
-            <p
-              className="mt-0.5 truncate text-xs"
-              style={{ color: "var(--color-ink-soft)" }}
-            >
+            <p className="mt-0.5 truncate text-xs text-ink-soft">
               {ROLE_LABEL[session.role]} · {scopeLabel}
             </p>
           </div>
@@ -98,11 +71,7 @@ export function DashboardShell({
           >
             <button
               type="submit"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition hover:scale-[1.01]"
-              style={{
-                borderColor: "rgb(11 20 27 / 0.12)",
-                color: "var(--color-ink)",
-              }}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-ink/12 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink transition hover:scale-[1.01]"
             >
               <LogOut size={12} />
               Sign out
@@ -113,26 +82,14 @@ export function DashboardShell({
 
       {/* Main */}
       <main className="flex flex-col">
-        <header
-          className="border-b px-6 py-8 md:px-10 md:py-10"
-          style={{
-            background: "white",
-            borderColor: "rgb(11 20 27 / 0.08)",
-          }}
-        >
+        <header className="border-b border-ink/8 bg-white px-6 py-8 md:px-10 md:py-10">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <h1
-                className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight md:text-4xl"
-                style={{ color: "var(--color-ink)" }}
-              >
+              <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight text-ink md:text-4xl">
                 {title}
               </h1>
               {description && (
-                <p
-                  className="mt-2 max-w-2xl text-sm md:text-base"
-                  style={{ color: "var(--color-ink-soft)" }}
-                >
+                <p className="mt-2 max-w-2xl text-sm text-ink-soft md:text-base">
                   {description}
                 </p>
               )}

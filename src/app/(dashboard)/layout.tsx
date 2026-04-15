@@ -20,14 +20,6 @@ export default function DashboardRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      className="min-h-screen"
-      style={{
-        background: "var(--color-off-white)",
-        color: "var(--color-ink)",
-      }}
-    >
-      {children}
-    </div>
+    <div className="min-h-screen bg-off-white text-ink">{children}</div>
   );
 }
