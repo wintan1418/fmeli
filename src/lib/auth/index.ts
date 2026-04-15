@@ -1,11 +1,8 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { authConfig } from "@/auth.config";
-import { verifyMagicLinkToken } from "@/lib/auth/magic-link";
-import {
-  lookupPastorByEmail,
-  type PastorIdentity,
-} from "@/lib/auth/lookup-pastor";
+import { authConfig } from "./config";
+import { verifyMagicLinkToken } from "./magic-link";
+import { lookupPastorByEmail, type PastorIdentity } from "./lookup-pastor";
 
 /**
  * Auth.js v5 — pastor dashboard.

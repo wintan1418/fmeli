@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LogOut } from "lucide-react";
-import { signOut } from "@/auth";
+import { signOut } from "@/lib/auth";
 import {
   type DashboardSession,
   canSeeAllAssemblies,

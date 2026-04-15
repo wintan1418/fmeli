@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 
 export type DashboardRole = "assembly_lead" | "office_admin" | "super_admin";
 

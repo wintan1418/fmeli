@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { signIn } from "@/auth";
+import { signIn } from "@/lib/auth";
 import { verifyMagicLinkToken } from "@/lib/auth/magic-link";
 
 /**
