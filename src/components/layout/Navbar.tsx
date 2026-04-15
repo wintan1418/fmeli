@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Menu, X, Play } from "lucide-react";
+import { Menu, X, Play, Search } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SearchDialog } from "@/components/layout/SearchDialog";
 import { cn } from "@/lib/utils";
@@ -21,12 +21,29 @@ const NAV_LINKS = [
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  // Search state lifted to the navbar so the desktop icon and the
+  // mobile drawer item can share one SearchDialog instance.
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Global ⌘K / Ctrl-K shortcut. Lives in the navbar (instead of
+  // inside SearchDialog) because the dialog now runs in controlled
+  // mode and shouldn't double-register the listener.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((o) => !o);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   return (
@@ -77,7 +94,15 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <SearchDialog />
+          {/* Desktop search trigger */}
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Open search"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-(--color-brand-white)/20 text-(--color-brand-white) transition hover:border-(--color-brand-gold) hover:text-(--color-brand-gold)"
+          >
+            <Search size={16} />
+          </button>
           <Link
             href="/live"
             className="group inline-flex h-11 items-center gap-2 rounded-full bg-(--color-brand-gold) px-6 text-sm font-semibold text-(--color-brand-blue-ink) transition-all hover:bg-(--color-brand-gold-soft) hover:shadow-[var(--shadow-glow-gold)]"
@@ -105,6 +130,18 @@ export function Navbar() {
         )}
       >
         <Container className="flex flex-col gap-1 pb-6 pt-4">
+          {/* Mobile search trigger — lives at the top of the drawer */}
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              setSearchOpen(true);
+            }}
+            className="mb-2 flex items-center gap-3 rounded-lg border border-(--color-brand-white)/15 px-3 py-3 text-base font-medium text-(--color-brand-white)/90 transition-colors hover:bg-(--color-brand-white)/5 hover:text-(--color-brand-gold)"
+          >
+            <Search size={16} className="text-(--color-brand-gold)" />
+            Search FMELi
+          </button>
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -125,6 +162,10 @@ export function Navbar() {
           </Link>
         </Container>
       </div>
+
+      {/* Single controlled SearchDialog instance, opened by either
+       * the desktop icon or the mobile drawer item. */}
+      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
     </header>
   );
 }

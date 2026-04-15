@@ -41,7 +41,12 @@ const GROUPS: Group[] = [
 ];
 
 /**
- * Site-wide search dialog. Triggered from the navbar Search icon.
+ * Site-wide search dialog.
+ *
+ * Controlled component — the parent (Navbar) owns `open` so we can
+ * have multiple triggers (a desktop icon + a mobile drawer item)
+ * sharing one dialog instance. If you need to use it standalone,
+ * pass nothing and a default trigger button is rendered.
  *
  * - Debounces the input by 250ms so we don't hammer the API on
  *   every keystroke.
@@ -51,8 +56,25 @@ const GROUPS: Group[] = [
  * - Closes when the user picks a result (Link click, then a
  *   Dialog.Close wrapper handles the unmount).
  */
-export function SearchDialog() {
-  const [open, setOpen] = useState(false);
+type SearchDialogProps = {
+  /** Controlled open state. When omitted, the dialog manages its
+   * own state and renders the default trigger button. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+};
+
+export function SearchDialog({
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+}: SearchDialogProps = {}) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = (next: boolean) => {
+    if (!isControlled) setInternalOpen(next);
+    controlledOnOpenChange?.(next);
+  };
+
   const [query, setQuery] = useState("");
   const [debounced, setDebounced] = useState("");
   const [results, setResults] = useState<ResultRow[]>([]);
@@ -125,17 +147,20 @@ export function SearchDialog() {
     }
   }, [debounced, results.length, loading]);
 
-  // Keyboard shortcut: ⌘K / Ctrl-K opens the dialog
+  // Keyboard shortcut: ⌘K / Ctrl-K opens the dialog. Only registered
+  // by the uncontrolled instance — when controlled, the parent owns
+  // the listener so we don't double-fire.
   useEffect(() => {
+    if (isControlled) return;
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setOpen((o) => !o);
+        setInternalOpen((o) => !o);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [isControlled]);
 
   const grouped: Record<ResultRow["kind"], ResultRow[]> = {
     message: [],
@@ -148,15 +173,20 @@ export function SearchDialog() {
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger asChild>
-        <button
-          type="button"
-          aria-label="Open search"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-(--color-brand-white)/20 text-(--color-brand-white) transition hover:border-(--color-brand-gold) hover:text-(--color-brand-gold)"
-        >
-          <Search size={16} />
-        </button>
-      </Dialog.Trigger>
+      {/* Default trigger only renders when no parent is controlling
+       * the dialog — the controlled-mode caller (Navbar) supplies
+       * its own desktop + mobile triggers. */}
+      {!isControlled && (
+        <Dialog.Trigger asChild>
+          <button
+            type="button"
+            aria-label="Open search"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-(--color-brand-white)/20 text-(--color-brand-white) transition hover:border-(--color-brand-gold) hover:text-(--color-brand-gold)"
+          >
+            <Search size={16} />
+          </button>
+        </Dialog.Trigger>
+      )}
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-[60] bg-brand-blue-ink/70 backdrop-blur-sm" />
         <Dialog.Content className="fixed left-1/2 top-[10vh] z-[61] w-[92vw] max-w-2xl -translate-x-1/2 overflow-hidden rounded-[var(--radius-card)] border border-ink/8 bg-white shadow-[0_30px_80px_-30px_rgba(0,0,0,0.5)]">
