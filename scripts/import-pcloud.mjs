@@ -43,7 +43,15 @@ import { createClient } from "@sanity/client";
 // ────────────────────────────────────────────────────────────
 
 const PCLOUD_API = "https://api.pcloud.com";
-const PUBLIC_FOLDER_NAME = "Public Folder";
+
+// Source folder: the church's library lives in "FMELi Library" (a
+// regular folder), NOT in pCloud's legacy "Public Folder" feature.
+// Public Folder has a hard restriction that blocks per-file public
+// links from being generated via the API ("Permissions denied. Public
+// folder can't contain download link"), so we copied everything into
+// a normal folder where /getfilepublink works.
+const LIBRARY_FOLDER_NAME = "FMELi Library";
+
 const AUDIO_EXTENSIONS = new Set([".mp3", ".m4a", ".wav", ".aac", ".ogg", ".flac"]);
 
 /**
@@ -240,6 +248,24 @@ function yearFromFolderName(name) {
   return m ? parseInt(m[1], 10) : null;
 }
 
+/**
+ * When the filename has no embedded date, try to derive one from the
+ * folder trail. We walk the trail from deepest to shallowest, taking
+ * the first year we find. "Morning Teaching/2024/3. April" → 2024.
+ * "LC-22" inside "Life-Campaign" → 2022.
+ *
+ * Returns "YYYY-01-01" so the message has a stable, sortable date.
+ * Better than null even though the day is fake — sorting by date
+ * works, the year filter works, and the office can refine in Studio.
+ */
+function fallbackDateFromTrail(trail) {
+  for (let i = trail.length - 1; i >= 0; i--) {
+    const yr = yearFromFolderName(trail[i]);
+    if (yr !== null) return `${yr}-01-01`;
+  }
+  return null;
+}
+
 // ────────────────────────────────────────────────────────────
 // Walker
 // ────────────────────────────────────────────────────────────
@@ -321,19 +347,21 @@ async function main() {
     `pCloud importer · dry-run=${args.dryRun} since=${args.since} only=${args.only ?? "(all)"}`,
   );
 
-  // 1. Find the Public Folder
-  console.log("→ locating Public Folder…");
+  // 1. Find the FMELi Library folder
+  console.log(`→ locating "${LIBRARY_FOLDER_NAME}"…`);
   const root = await listFolder("0");
-  const publicFolder = root.find(
-    (e) => e.isfolder && e.name === PUBLIC_FOLDER_NAME,
+  const libraryFolder = root.find(
+    (e) => e.isfolder && e.name === LIBRARY_FOLDER_NAME,
   );
-  if (!publicFolder) {
-    throw new Error(`Could not find "${PUBLIC_FOLDER_NAME}" at the pCloud root`);
+  if (!libraryFolder) {
+    throw new Error(
+      `Could not find "${LIBRARY_FOLDER_NAME}" at the pCloud root. ` +
+        `Make sure the church library has been copied out of "Public Folder".`,
+    );
   }
 
   // 2. Walk each top-level category
-  const categoryFolders = await listFolder(publicFolder.folderid);
-  const knownCats = Object.keys(PCLOUD_FOLDER_TO_CATEGORY);
+  const categoryFolders = await listFolder(libraryFolder.folderid);
 
   let totalFiles = 0;
   let totalCreated = 0;
@@ -365,6 +393,11 @@ async function main() {
 
     for (const file of files) {
       const parsed = parseFilename(file.name);
+      // If the filename didn't carry a date, fall back to the deepest
+      // year in the folder trail so every message has SOMETHING sortable.
+      if (!parsed.date) {
+        parsed.date = fallbackDateFromTrail(file.trail);
+      }
       const docId = deterministicId(file.fileid);
 
       // Build slug from the parsed title; fall back to the bare
