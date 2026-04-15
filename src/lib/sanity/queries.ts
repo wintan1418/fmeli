@@ -35,22 +35,28 @@ export const ALL_PAGE_SLUGS_QUERY = groq`
 `;
 
 /**
- * Messages archive — newest first, last 60 shipped at build time.
+ * Messages archive — newest first, last 120 shipped at build time.
  *
- * Optional category filter: pass $category as a slug string. The filter
- * matches BOTH the message's direct category AND any sub-category whose
- * parent's slug is $category — so picking "Special Meetings" pulls in
- * everything under it (Life Campaign, Singles Rendezvous, etc.) without
- * needing a separate query path.
+ * Optional filters (both nullable, both AND-ed):
+ *   $category — slug string. Matches the message's direct category OR
+ *               any sub-category whose parent's slug is $category. So
+ *               picking "Special Meetings" pulls in every message under
+ *               every Special-Meetings sub-category.
+ *   $year     — 4-digit string (e.g. "2025"). Filters on the YEAR
+ *               portion of the message's `date` field. Pass null to
+ *               skip year filtering entirely.
  *
- * Pass null/undefined to skip filtering entirely.
+ * Limit raised to 120 because we now have ~1,500 imported messages
+ * and the chip filters narrow them down quickly — a per-category
+ * page commonly has 50-200 entries.
  */
 export const MESSAGES_LIST_QUERY = groq`
   *[_type == "message"
       && ($category == null
           || category->slug.current == $category
           || category->parent->slug.current == $category)
-    ] | order(date desc)[0...60]{
+      && ($year == null || string::split(date, "-")[0] == $year)
+    ] | order(date desc)[0...120]{
       _id,
       title,
       "slug": slug.current,
@@ -72,6 +78,19 @@ export const MESSAGES_LIST_QUERY = groq`
       "preacher": preacher->{ name, "image": image.asset->url },
       "series": series->{ title, "slug": slug.current }
     }
+`;
+
+/**
+ * Distinct years that have at least one message — for the year filter
+ * pills on /resources/messages. Returned as a sorted descending list
+ * of 4-digit strings.
+ */
+export const MESSAGE_YEARS_QUERY = groq`
+  array::unique(
+    *[_type == "message" && defined(date)] {
+      "year": string::split(date, "-")[0]
+    }.year
+  ) | order(@ desc)
 `;
 
 /**

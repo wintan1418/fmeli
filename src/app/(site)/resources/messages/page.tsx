@@ -8,6 +8,7 @@ import { sanityFetch } from "@/lib/sanity/client";
 import {
   MESSAGES_LIST_QUERY,
   MESSAGE_CATEGORIES_QUERY,
+  MESSAGE_YEARS_QUERY,
 } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import type { Message, MessageCategory } from "@/types/sanity";
@@ -23,18 +24,21 @@ export const metadata: Metadata = {
 export default async function MessagesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string; year?: string }>;
 }) {
-  const { category: activeCategory } = await searchParams;
+  const { category: activeCategory, year: rawYear } = await searchParams;
+  // Only accept 4-digit year strings — anything else is treated as no filter.
+  const activeYear = rawYear && /^\d{4}$/.test(rawYear) ? rawYear : null;
 
-  const [messages, categories] = await Promise.all([
+  const [messages, categories, years] = await Promise.all([
     sanityFetch<Message[]>({
       query: MESSAGES_LIST_QUERY,
-      params: { category: activeCategory ?? null },
-      // Tag includes the filter so each filtered view caches separately.
+      params: { category: activeCategory ?? null, year: activeYear },
+      // Tag includes the filters so each filtered view caches separately.
       tags: [
         "sanity:message:list",
         activeCategory ? `sanity:message:category:${activeCategory}` : "sanity:message:category:all",
+        activeYear ? `sanity:message:year:${activeYear}` : "sanity:message:year:all",
       ],
       revalidate: 300,
     }),
@@ -43,7 +47,25 @@ export default async function MessagesPage({
       tags: ["sanity:messageCategory:list"],
       revalidate: 3600,
     }),
+    sanityFetch<string[]>({
+      query: MESSAGE_YEARS_QUERY,
+      tags: ["sanity:message:years"],
+      revalidate: 3600,
+    }),
   ]);
+
+  // Build a query-string helper that preserves whichever of category/year
+  // is NOT being changed by the chip the user clicks. Using URLSearchParams
+  // keeps escaping correct without hand-rolled string concat.
+  const buildHref = (next: { category?: string | null; year?: string | null }) => {
+    const params = new URLSearchParams();
+    const nextCategory = next.category === undefined ? activeCategory ?? null : next.category;
+    const nextYear = next.year === undefined ? activeYear : next.year;
+    if (nextCategory) params.set("category", nextCategory);
+    if (nextYear) params.set("year", nextYear);
+    const qs = params.toString();
+    return qs ? `/resources/messages?${qs}` : "/resources/messages";
+  };
 
   const activeCategoryDoc = activeCategory
     ? categories?.find((c) => c.slug === activeCategory) ?? null
@@ -112,14 +134,14 @@ export default async function MessagesPage({
                 Browse
               </span>
               <CategoryChip
-                href="/resources/messages"
+                href={buildHref({ category: null })}
                 label="All"
                 active={!activeCategory}
               />
               {roots.map((c) => (
                 <CategoryChip
                   key={c._id}
-                  href={`/resources/messages?category=${c.slug}`}
+                  href={buildHref({ category: c.slug })}
                   label={c.title}
                   active={activeRootSlug === c.slug}
                 />
@@ -130,14 +152,14 @@ export default async function MessagesPage({
           {/* Second-row chips — sub-categories of whichever root is
               active. Only renders when the active root has children. */}
           {subChipsForActiveRoot.length > 0 && (
-            <div className="mb-12 flex flex-wrap items-center gap-2 pl-1">
+            <div className="mb-4 flex flex-wrap items-center gap-2 pl-1">
               <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
                 ↳
               </span>
               {subChipsForActiveRoot.map((c) => (
                 <CategoryChip
                   key={c._id}
-                  href={`/resources/messages?category=${c.slug}`}
+                  href={buildHref({ category: c.slug })}
                   label={c.title}
                   active={activeCategory === c.slug}
                   size="sm"
@@ -146,7 +168,35 @@ export default async function MessagesPage({
             </div>
           )}
 
-          {subChipsForActiveRoot.length === 0 && <div className="mb-12" />}
+          {/* Year filter row. Pulled from a distinct-years query so the
+              list automatically reflects whatever's actually in the
+              archive. Clicking a year preserves the active category. */}
+          {years && years.length > 0 && (
+            <div className="mb-12 flex flex-wrap items-center gap-2">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
+                Year
+              </span>
+              <CategoryChip
+                href={buildHref({ year: null })}
+                label="All years"
+                active={!activeYear}
+                size="sm"
+              />
+              {years.map((y) => (
+                <CategoryChip
+                  key={y}
+                  href={buildHref({ year: y })}
+                  label={y}
+                  active={activeYear === y}
+                  size="sm"
+                />
+              ))}
+            </div>
+          )}
+
+          {(!years || years.length === 0) && subChipsForActiveRoot.length === 0 && (
+            <div className="mb-12" />
+          )}
 
           {messages && messages.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -243,21 +293,23 @@ export default async function MessagesPage({
             <div className="rounded-[var(--radius-card)] border border-dashed border-ink/15 p-12 text-center text-ink-soft">
               <Clock size={32} className="mx-auto text-brand-gold" />
               <p className="mt-4 font-[family-name:var(--font-display)] text-2xl">
-                {activeCategoryDoc
-                  ? `No messages in ${activeCategoryDoc.title} yet.`
+                {activeCategoryDoc || activeYear
+                  ? `No messages match the current filters${
+                      activeYear ? ` (${activeYear})` : ""
+                    }.`
                   : "Message archive coming soon."}
               </p>
               <p className="mt-3 text-sm">
-                {activeCategoryDoc ? (
+                {activeCategoryDoc || activeYear ? (
                   <>
                     Try{" "}
                     <Link
                       href="/resources/messages"
                       className="text-brand-red underline"
                     >
-                      browsing every category
+                      clearing all filters
                     </Link>{" "}
-                    to see all messages.
+                    to see every message.
                   </>
                 ) : (
                   <>
