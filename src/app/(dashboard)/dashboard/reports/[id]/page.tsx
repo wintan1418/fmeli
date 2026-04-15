@@ -17,13 +17,12 @@ import {
   canSeeAllAssemblies,
 } from "@/lib/dashboard/session";
 import { client as readClient } from "@/lib/sanity/client";
+import { DASH_REPORT_BY_ID_QUERY } from "@/lib/sanity/dashboard-queries";
 import { CommentForm } from "./CommentForm";
 
 export const metadata = {
   title: "Report · Dashboard",
 };
-
-export const dynamic = "force-dynamic";
 
 const PERIOD_LABEL: Record<string, string> = {
   weekly: "Weekly",
@@ -53,30 +52,7 @@ export default async function ReportDetailPage({
   const { id } = await params;
 
   const report = await readClient.fetch<ReportDetail | null>(
-    `*[_type == "assemblyReport" && _id == $id][0]{
-        _id,
-        weekOf,
-        period,
-        status,
-        submittedAt,
-        attendance,
-        finances,
-        highlights,
-        prayerPoints,
-        testimonies,
-        challenges,
-        nextWeekFocus,
-        "assemblyId": assembly._ref,
-        "assemblyCity": assembly->city,
-        "submittedByName": submittedBy->name,
-        comments[]{
-          _key,
-          authorName,
-          authorRole,
-          body,
-          createdAt
-        }
-      }`,
+    DASH_REPORT_BY_ID_QUERY,
     { id },
   );
 

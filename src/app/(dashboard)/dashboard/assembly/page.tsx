@@ -7,14 +7,16 @@ import {
   canSeeAllAssemblies,
 } from "@/lib/dashboard/session";
 import { client as readClient } from "@/lib/sanity/client";
+import {
+  DASH_ASSEMBLIES_LIST_QUERY,
+  DASH_ASSEMBLY_BY_ID_QUERY,
+} from "@/lib/sanity/dashboard-queries";
 import type { Assembly, AssemblyOption } from "@/types/sanity";
 import { AssemblyForm } from "./AssemblyForm";
 
 export const metadata = {
   title: "Assembly profile · Dashboard",
 };
-
-export const dynamic = "force-dynamic";
 
 export default async function AssemblyProfilePage({
   searchParams,
@@ -26,9 +28,7 @@ export default async function AssemblyProfilePage({
   const { assembly: requestedFromQuery } = await searchParams;
 
   const assemblies = await readClient.fetch<AssemblyOption[]>(
-    `*[_type == "assembly"] | order(order asc, city asc){
-        _id, city, state
-      }`,
+    DASH_ASSEMBLIES_LIST_QUERY,
   );
 
   // Admins can pick via ?assembly=... For the first load they get the
@@ -54,17 +54,7 @@ export default async function AssemblyProfilePage({
   }
 
   const doc = await readClient.fetch<Assembly | null>(
-    `*[_type == "assembly" && _id == $id][0]{
-        _id,
-        city,
-        "slug": slug.current,
-        tagline,
-        address,
-        phone,
-        email,
-        mapUrl,
-        serviceTimes
-      }`,
+    DASH_ASSEMBLY_BY_ID_QUERY,
     { id: assemblyId },
   );
 

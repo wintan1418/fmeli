@@ -6,13 +6,12 @@ import {
   canSeeAllAssemblies,
 } from "@/lib/dashboard/session";
 import { client as readClient } from "@/lib/sanity/client";
+import { DASH_REPORTS_LIST_QUERY } from "@/lib/sanity/dashboard-queries";
 import type { ReportListRow } from "@/types/sanity";
 
 export const metadata = {
   title: "Weekly reports · Dashboard",
 };
-
-export const dynamic = "force-dynamic";
 
 const PERIOD_LABEL: Record<string, string> = {
   weekly: "Weekly",
@@ -41,23 +40,7 @@ export default async function ReportsListPage() {
   // Assembly leads only see their own assembly's reports. We pass the id
   // either way and let the GROQ filter ignore it for admins.
   const reports = await readClient.fetch<ReportListRow[]>(
-    `*[_type == "assemblyReport"
-        && ($seeAll == true || assembly._ref == $assemblyId)
-      ] | order(weekOf desc)[0...100]{
-        _id,
-        weekOf,
-        period,
-        status,
-        "attendanceTotal": attendance.total,
-        "totalGiving": coalesce(finances.tithe, 0)
-                     + coalesce(finances.offering, 0)
-                     + coalesce(finances.projects, 0)
-                     + coalesce(finances.missions, 0)
-                     + coalesce(finances.other, 0),
-        "assemblyCity": assembly->city,
-        "submittedByName": submittedBy->name,
-        "commentCount": count(comments)
-      }`,
+    DASH_REPORTS_LIST_QUERY,
     {
       seeAll,
       assemblyId: session.assemblyId ?? "",

@@ -6,6 +6,7 @@ import {
   resolveAssemblyScope,
 } from "@/lib/dashboard/session";
 import { sanityWrite } from "@/lib/sanity/write-client";
+import { DASH_ASSEMBLY_SLUG_QUERY } from "@/lib/sanity/dashboard-queries";
 
 export type AssemblyActionState = {
   status: "idle" | "error" | "success";
@@ -89,10 +90,9 @@ export async function saveAssemblyProfile(
   let slug: string | null = null;
   try {
     const fresh = await sanityWrite("fetch assembly slug", (c) =>
-      c.fetch<{ slug?: string }>(
-        `*[_id == $id][0]{ "slug": slug.current }`,
-        { id: assemblyId },
-      ),
+      c.fetch<{ slug?: string }>(DASH_ASSEMBLY_SLUG_QUERY, {
+        id: assemblyId,
+      }),
     );
     slug = fresh?.slug ?? null;
   } catch {

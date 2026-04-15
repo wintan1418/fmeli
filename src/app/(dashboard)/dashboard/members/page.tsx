@@ -5,14 +5,16 @@ import {
   canSeeAllAssemblies,
 } from "@/lib/dashboard/session";
 import { client as readClient } from "@/lib/sanity/client";
+import {
+  DASH_MEMBERS_LIST_QUERY,
+  DASH_ASSEMBLIES_LIST_QUERY,
+} from "@/lib/sanity/dashboard-queries";
 import type { AssemblyOption, MemberListRow } from "@/types/sanity";
 import { AddMemberForm } from "./AddMemberForm";
 
 export const metadata = {
   title: "Members · Dashboard",
 };
-
-export const dynamic = "force-dynamic";
 
 const STAGE_LABEL: Record<string, string> = {
   visitor: "Visitor",
@@ -28,31 +30,11 @@ export default async function MembersPage() {
   const seeAll = canSeeAllAssemblies(session);
 
   const [members, assemblies] = await Promise.all([
-    readClient.fetch<MemberListRow[]>(
-      `*[_type == "member"
-          && status != "removed"
-          && ($seeAll == true || assembly._ref == $assemblyId)
-        ] | order(submittedAt desc, lastName asc)[0...250]{
-          _id,
-          firstName,
-          lastName,
-          email,
-          phone,
-          lifeStage,
-          status,
-          joinedAt,
-          "assemblyCity": assembly->city
-        }`,
-      {
-        seeAll,
-        assemblyId: session.assemblyId ?? "",
-      },
-    ),
-    readClient.fetch<AssemblyOption[]>(
-      `*[_type == "assembly"] | order(order asc, city asc){
-          _id, city, state
-        }`,
-    ),
+    readClient.fetch<MemberListRow[]>(DASH_MEMBERS_LIST_QUERY, {
+      seeAll,
+      assemblyId: session.assemblyId ?? "",
+    }),
+    readClient.fetch<AssemblyOption[]>(DASH_ASSEMBLIES_LIST_QUERY),
   ]);
 
   const pinnedAssemblyId = seeAll ? null : session.assemblyId;

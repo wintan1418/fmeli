@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireDashboardSession } from "@/lib/dashboard/session";
 import { sanityWrite } from "@/lib/sanity/write-client";
 import { client as readClient } from "@/lib/sanity/client";
+import { DASH_REPORT_ASSEMBLY_ID_QUERY } from "@/lib/sanity/dashboard-queries";
 
 export type CommentActionState = {
   status: "idle" | "error" | "success";
@@ -33,9 +34,7 @@ export async function addReportComment(
   // Admins can comment on any. We do this check server-side because the
   // client form has no idea what scope rules apply.
   const report = await readClient.fetch<{ assemblyId?: string } | null>(
-    `*[_type == "assemblyReport" && _id == $id][0]{
-        "assemblyId": assembly._ref
-      }`,
+    DASH_REPORT_ASSEMBLY_ID_QUERY,
     { id: reportId },
   );
 
