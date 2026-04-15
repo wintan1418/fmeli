@@ -50,7 +50,7 @@ const RESOURCES: ResourceCard[] = [
     title: "Lively music",
     body: "Original songs and arrangements from the FMELi music team — for personal worship and private listening.",
     icon: Music2,
-    available: false,
+    available: true,
   },
   {
     href: "/resources/tips",

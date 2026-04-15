@@ -128,6 +128,21 @@ export type WorshipSession = {
   assembly?: { slug?: string; city?: string };
 };
 
+export type Track = {
+  _id: string;
+  title: string;
+  slug?: string;
+  artist?: string;
+  releasedAt?: string;
+  durationSeconds?: number;
+  youtubeId?: string;
+  audioUrl?: string;
+  audioFileUrl?: string;
+  cover?: SanityImage;
+  lyrics?: PortableTextBlock[];
+  writers?: string[];
+};
+
 export type Member = {
   _id: string;
   firstName?: string;

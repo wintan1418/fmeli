@@ -58,6 +58,7 @@ export default defineConfig({
                     S.documentTypeListItem("worshipSession").title(
                       "Worship Sessions",
                     ),
+                    S.documentTypeListItem("track").title("Lively Music"),
                   ]),
               ),
             S.divider(),

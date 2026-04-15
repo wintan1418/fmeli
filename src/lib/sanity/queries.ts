@@ -147,6 +147,46 @@ export const ALL_WORSHIP_SESSION_SLUGS_QUERY = groq`
   *[_type == "worshipSession" && defined(slug.current)]{ "slug": slug.current }
 `;
 
+// ────────────────────────────────────────────────────────────
+// Lively music tracks
+// ────────────────────────────────────────────────────────────
+
+export const TRACKS_LIST_QUERY = groq`
+  *[_type == "track"] | order(releasedAt desc)[0...60]{
+    _id,
+    title,
+    "slug": slug.current,
+    artist,
+    releasedAt,
+    durationSeconds,
+    youtubeId,
+    audioUrl,
+    "audioFileUrl": audioFile.asset->url,
+    cover
+  }
+`;
+
+export const TRACK_BY_SLUG_QUERY = groq`
+  *[_type == "track" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    artist,
+    releasedAt,
+    durationSeconds,
+    youtubeId,
+    audioUrl,
+    "audioFileUrl": audioFile.asset->url,
+    cover,
+    lyrics,
+    writers
+  }
+`;
+
+export const ALL_TRACK_SLUGS_QUERY = groq`
+  *[_type == "track" && defined(slug.current)]{ "slug": slug.current }
+`;
+
 /** Upcoming events (future only). */
 export const EVENTS_UPCOMING_QUERY = groq`
   *[_type == "event" && startsAt >= now()] | order(startsAt asc){

@@ -4,6 +4,7 @@ import message from "./documents/message";
 import messageSeries from "./documents/messageSeries";
 import messageCategory from "./documents/messageCategory";
 import worshipSession from "./documents/worshipSession";
+import track from "./documents/track";
 import event from "./documents/event";
 import registration from "./documents/registration";
 import pastor from "./documents/pastor";
@@ -33,6 +34,7 @@ export const schemaTypes = [
   messageSeries,
   messageCategory,
   worshipSession,
+  track,
   meeting,
   event,
   registration,
