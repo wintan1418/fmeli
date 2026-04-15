@@ -74,7 +74,16 @@ export default defineType({
     }),
     defineField({
       name: "liveStreamUrl",
-      title: "Live stream URL",
+      title: "YouTube live stream URL",
+      description:
+        "Paste the YouTube live stream URL — channel /live URL, video URL, or full embed URL all work. The /live page renders this as the main 16:9 player.",
+      type: "url",
+    }),
+    defineField({
+      name: "mixlrEmbedUrl",
+      title: "Mixlr embed URL",
+      description:
+        "Paste the Mixlr show embed URL (looks like https://mixlr.com/users/<your-name>/embed). The /live page renders this as the audio player below the YouTube video so listeners can tune in even when video isn't streaming.",
       type: "url",
     }),
     defineField({
