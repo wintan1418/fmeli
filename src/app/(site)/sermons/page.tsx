@@ -142,7 +142,6 @@ export default async function SermonsPage() {
                             target="_blank"
                             rel="noopener noreferrer"
                             download
-                            onClick={(e) => e.stopPropagation()}
                             aria-label={`Download ${s.title}`}
                             className="relative z-10 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition hover:scale-105"
                             style={{
