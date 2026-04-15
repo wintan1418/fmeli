@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { redirect } from "next/navigation";
-import { createClient } from "next-sanity";
+import { getWriteClient } from "@/lib/sanity/write-client";
 
 /**
  * Paystack verify callback.
@@ -12,13 +12,12 @@ import { createClient } from "next-sanity";
  */
 export async function GET(req: NextRequest) {
   const secret = process.env.PAYSTACK_SECRET_KEY;
-  const writeToken = process.env.SANITY_API_WRITE_TOKEN;
 
   const url = new URL(req.url);
   const reference = url.searchParams.get("reference");
   const registrationId = url.searchParams.get("registrationId");
 
-  if (!secret || !writeToken) {
+  if (!secret) {
     return NextResponse.json(
       { message: "Payment verification not configured" },
       { status: 503 },
@@ -47,13 +46,7 @@ export async function GET(req: NextRequest) {
     const status = data?.data?.status;
     const amount = typeof data?.data?.amount === "number" ? data.data.amount / 100 : undefined;
 
-    const writeClient = createClient({
-      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
-      apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2024-10-01",
-      token: writeToken,
-      useCdn: false,
-    });
+    const writeClient = getWriteClient();
 
     const updated = await writeClient
       .patch(registrationId)

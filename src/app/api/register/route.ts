@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient } from "next-sanity";
+import { getWriteClient } from "@/lib/sanity/write-client";
 
 /**
  * Event registration endpoint.
@@ -29,17 +29,6 @@ type Payload = {
 };
 
 export async function POST(req: NextRequest) {
-  const token = process.env.SANITY_API_WRITE_TOKEN;
-  if (!token) {
-    return NextResponse.json(
-      {
-        message:
-          "Registration is not configured yet. Set SANITY_API_WRITE_TOKEN in the project environment to accept submissions.",
-      },
-      { status: 503 },
-    );
-  }
-
   let body: Payload;
   try {
     body = (await req.json()) as Payload;
@@ -54,13 +43,18 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const writeClient = createClient({
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
-    apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2024-10-01",
-    token,
-    useCdn: false,
-  });
+  let writeClient;
+  try {
+    writeClient = getWriteClient();
+  } catch {
+    return NextResponse.json(
+      {
+        message:
+          "Registration is not configured yet. Set SANITY_API_WRITE_TOKEN in the project environment to accept submissions.",
+      },
+      { status: 503 },
+    );
+  }
 
   try {
     const doc = await writeClient.create({

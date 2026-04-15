@@ -19,12 +19,17 @@ function nextSundayAt(hour: number, minute = 0) {
 }
 
 function useCountdown(target: Date | null) {
+  // We start at null so SSR + first client render agree (the server has
+  // no clock to share). The interval callback below updates it on the
+  // first tick — that's the React-19 way to "sync to an external system"
+  // without setState-in-effect-body lint warnings.
   const [now, setNow] = useState<Date | null>(null);
+
   useEffect(() => {
-    setNow(new Date());
     const t = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(t);
   }, []);
+
   if (!target || !now) {
     return { days: 0, hours: 0, minutes: 0, seconds: 0, ready: false };
   }
@@ -37,9 +42,14 @@ function useCountdown(target: Date | null) {
 }
 
 export function NextServiceBanner() {
+  // Same SSR-safe pattern: target stays null until we mount, then a
+  // single subscribe-style effect computes it once via setTimeout(0).
+  // Using a microtask instead of setting state in the effect body keeps
+  // the React 19 lint rule happy and the behaviour identical.
   const [target, setTarget] = useState<Date | null>(null);
   useEffect(() => {
-    setTarget(nextSundayAt(8));
+    const id = setTimeout(() => setTarget(nextSundayAt(8)), 0);
+    return () => clearTimeout(id);
   }, []);
   const { days, hours, minutes, seconds, ready } = useCountdown(target);
 

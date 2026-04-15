@@ -37,7 +37,7 @@ type AssemblyOption = {
 };
 
 type EventPayment = {
-  enabled: boolean;
+  enabled?: boolean;
   amount?: number;
   currency?: string;
   allowPaystack?: boolean;

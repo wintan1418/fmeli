@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, Calendar, MapPin } from "lucide-react";
+import { Calendar, MapPin } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { sanityFetch } from "@/lib/sanity/client";
 import { EVENTS_ALL_QUERY } from "@/lib/sanity/queries";

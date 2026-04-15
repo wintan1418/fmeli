@@ -78,7 +78,7 @@ export function FeaturedSermons() {
         </FadeIn>
 
         <StaggerChildren className="mt-14 grid gap-6 md:grid-cols-3">
-          {SERMONS.map((s, i) => (
+          {SERMONS.map((s) => (
             <StaggerItem key={s.title}>
               <Link
                 href={s.href}
