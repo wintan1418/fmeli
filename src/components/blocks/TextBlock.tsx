@@ -1,12 +1,36 @@
 import { PortableText, type PortableTextBlock } from "next-sanity";
 import { Container } from "@/components/ui/Container";
+import { cn } from "@/lib/utils";
+
+type Tone = "default" | "white" | "blue";
 
 type Props = {
   eyebrow?: string;
   heading?: string;
   body?: PortableTextBlock[];
   alignment?: "left" | "center";
-  tone?: "default" | "white" | "blue";
+  tone?: Tone;
+};
+
+const TONE_CLASSES: Record<
+  Tone,
+  { section: string; heading: string; eyebrow: string }
+> = {
+  default: {
+    section: "bg-off-white text-ink-soft",
+    heading: "text-ink",
+    eyebrow: "text-brand-red",
+  },
+  white: {
+    section: "bg-white text-ink-soft",
+    heading: "text-ink",
+    eyebrow: "text-brand-red",
+  },
+  blue: {
+    section: "bg-brand-blue-ink text-white",
+    heading: "text-white",
+    eyebrow: "text-brand-gold",
+  },
 };
 
 export function TextBlock({
@@ -16,74 +40,46 @@ export function TextBlock({
   alignment = "left",
   tone = "default",
 }: Props) {
-  const bg =
-    tone === "blue"
-      ? "var(--color-brand-blue-ink)"
-      : tone === "white"
-        ? "white"
-        : "var(--color-off-white)";
-  const text = tone === "blue" ? "white" : "var(--color-ink-soft)";
-  const headingColor = tone === "blue" ? "white" : "var(--color-ink)";
+  const t = TONE_CLASSES[tone];
+  const center = alignment === "center";
+  // Eyebrow rule (the small horizontal bar) — same color as the eyebrow text.
+  const ruleClass = tone === "blue" ? "bg-brand-gold" : "bg-brand-red";
 
   return (
-    <section
-      className="py-20 md:py-28"
-      style={{ background: bg, color: text }}
-    >
+    <section className={cn("py-20 md:py-28", t.section)}>
       <Container>
         <div
-          className={
-            alignment === "center"
-              ? "mx-auto max-w-3xl text-center"
-              : "max-w-3xl"
-          }
+          className={cn(center ? "mx-auto max-w-3xl text-center" : "max-w-3xl")}
         >
           {eyebrow && (
             <p
-              className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em]"
-              style={{
-                color:
-                  tone === "blue"
-                    ? "var(--color-brand-gold)"
-                    : "var(--color-brand-red)",
-                justifyContent: alignment === "center" ? "center" : undefined,
-              }}
+              className={cn(
+                "flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em]",
+                t.eyebrow,
+                center && "justify-center",
+              )}
             >
-              {alignment === "center" && (
-                <span
-                  className="inline-block h-px w-10"
-                  style={{
-                    background:
-                      tone === "blue"
-                        ? "var(--color-brand-gold)"
-                        : "var(--color-brand-red)",
-                  }}
-                />
+              {center && (
+                <span className={cn("inline-block h-px w-10", ruleClass)} />
               )}
               {eyebrow}
-              {alignment === "center" && (
-                <span
-                  className="inline-block h-px w-10"
-                  style={{
-                    background:
-                      tone === "blue"
-                        ? "var(--color-brand-gold)"
-                        : "var(--color-brand-red)",
-                  }}
-                />
+              {center && (
+                <span className={cn("inline-block h-px w-10", ruleClass)} />
               )}
             </p>
           )}
           {heading && (
             <h2
-              className="mt-6 font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.1] md:text-5xl"
-              style={{ color: headingColor }}
+              className={cn(
+                "mt-6 font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.1] md:text-5xl",
+                t.heading,
+              )}
             >
               {heading}
             </h2>
           )}
           {body && body.length > 0 && (
-            <div className="prose prose-lg mt-8" style={{ color: text }}>
+            <div className="prose prose-lg mt-8">
               <PortableText value={body} />
             </div>
           )}

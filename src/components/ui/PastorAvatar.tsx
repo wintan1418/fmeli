@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { urlFor } from "@/lib/sanity/image";
+import { cn } from "@/lib/utils";
 
 type Props = {
   name?: string;
@@ -12,6 +13,10 @@ type Props = {
  * Circular avatar for a pastor. Shows the uploaded image if available,
  * otherwise falls back to initials on a branded gradient so the assembly
  * cards never look broken.
+ *
+ * The width/height/fontSize live in `style` because they vary per-call;
+ * everything else (gradient fallback, gold ring, drop shadow) is in
+ * className so we get one source of truth for the look.
  */
 export function PastorAvatar({ name, image, size = 72, className }: Props) {
   const src = image?.asset?._ref
@@ -24,17 +29,19 @@ export function PastorAvatar({ name, image, size = 72, className }: Props) {
     .join("")
     .toUpperCase();
 
+  // Shared with both branches: gold ring + soft outer shadow.
+  const ringClasses =
+    "shadow-[0_0_0_2px_var(--color-brand-gold),0_8px_24px_-8px_rgb(11_20_27/0.25)]";
+
   if (src) {
     return (
       <div
-        className={className}
-        style={{
-          width: size,
-          height: size,
-          borderRadius: "9999px",
-          overflow: "hidden",
-          boxShadow: "0 0 0 2px var(--color-brand-gold), 0 8px 24px -8px rgb(11 20 27 / 0.25)",
-        }}
+        className={cn(
+          "overflow-hidden rounded-full",
+          ringClasses,
+          className,
+        )}
+        style={{ width: size, height: size }}
       >
         <Image
           src={src}
@@ -50,23 +57,15 @@ export function PastorAvatar({ name, image, size = 72, className }: Props) {
 
   return (
     <div
-      className={className}
+      className={cn(
+        "flex items-center justify-center rounded-full bg-gradient-to-br from-brand-blue to-brand-red font-[family-name:var(--font-display)] font-semibold tracking-wide text-white",
+        ringClasses,
+        className,
+      )}
       style={{
         width: size,
         height: size,
-        borderRadius: "9999px",
-        background:
-          "linear-gradient(135deg, var(--color-brand-blue) 0%, var(--color-brand-red) 100%)",
-        color: "white",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily: "var(--font-display)",
-        fontWeight: 600,
         fontSize: Math.round(size * 0.38),
-        letterSpacing: "0.02em",
-        boxShadow:
-          "0 0 0 2px var(--color-brand-gold), 0 8px 24px -8px rgb(11 20 27 / 0.25)",
       }}
     >
       {initials}

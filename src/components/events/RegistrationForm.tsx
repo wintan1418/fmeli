@@ -219,27 +219,18 @@ export function RegistrationForm({
 
   if (status === "success") {
     return (
-      <div className="rounded-[var(--radius-card)] border border-[color:var(--color-brand-gold)]/30 bg-white p-10 text-center shadow-[var(--shadow-card)]">
-        <CheckCircle2
-          size={52}
-          className="mx-auto text-[color:var(--color-brand-gold)]"
-        />
-        <h3
-          className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold"
-          style={{ color: "var(--color-ink)" }}
-        >
+      <div className="rounded-[var(--radius-card)] border border-brand-gold/30 bg-white p-10 text-center shadow-[var(--shadow-card)]">
+        <CheckCircle2 size={52} className="mx-auto text-brand-gold" />
+        <h3 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-ink">
           You&rsquo;re in.
         </h3>
-        <p
-          className="mt-4 text-base leading-7"
-          style={{ color: "var(--color-ink-soft)" }}
-        >
+        <p className="mt-4 text-base leading-7 text-ink-soft">
           Your registration for <strong>{eventTitle}</strong> was received.
           We&rsquo;ll send confirmation details to your email.
         </p>
         <Link
           href={`/events/${eventSlug}`}
-          className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-[color:var(--color-brand-blue-ink)] px-7 text-sm font-semibold text-white transition hover:bg-[color:var(--color-brand-blue-deep)]"
+          className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-brand-blue-ink px-7 text-sm font-semibold text-white transition hover:bg-brand-blue-deep"
         >
           Back to event
           <ArrowRight size={16} />
@@ -250,33 +241,22 @@ export function RegistrationForm({
 
   if (status === "awaiting_transfer" && bankDetails) {
     return (
-      <div className="rounded-[var(--radius-card)] border border-[color:var(--color-brand-gold)]/30 bg-white p-8 shadow-[var(--shadow-card)] md:p-10">
+      <div className="rounded-[var(--radius-card)] border border-brand-gold/30 bg-white p-8 shadow-[var(--shadow-card)] md:p-10">
         <div className="flex items-center gap-3">
-          <Building2
-            size={22}
-            style={{ color: "var(--color-brand-gold)" }}
-          />
-          <h3
-            className="font-[family-name:var(--font-display)] text-2xl font-semibold"
-            style={{ color: "var(--color-ink)" }}
-          >
+          <Building2 size={22} className="text-brand-gold" />
+          <h3 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-ink">
             Pay by bank transfer
           </h3>
         </div>
-        <p
-          className="mt-3 text-sm leading-6"
-          style={{ color: "var(--color-ink-soft)" }}
-        >
+        <p className="mt-3 text-sm leading-6 text-ink-soft">
           Transfer{" "}
-          <strong style={{ color: "var(--color-brand-red)" }}>
-            {amountDisplay}
-          </strong>{" "}
-          to the account below. Your spot is held as{" "}
+          <strong className="text-brand-red">{amountDisplay}</strong> to the
+          account below. Your spot is held as{" "}
           <strong>transfer pending</strong> until the church office verifies
           the payment — usually within 24 hours.
         </p>
 
-        <dl className="mt-8 space-y-4 rounded-[var(--radius-card)] border border-[color:rgb(11_20_27/0.08)] bg-[color:var(--color-off-white)] p-6">
+        <dl className="mt-8 space-y-4 rounded-[var(--radius-card)] border border-ink/8 bg-off-white p-6">
           {[
             { label: "Bank", value: bankDetails.bankName },
             { label: "Account name", value: bankDetails.accountName },
@@ -284,27 +264,21 @@ export function RegistrationForm({
           ].map(
             (row) =>
               row.value && (
-                <div key={row.label} className="flex items-center justify-between gap-4">
-                  <dt
-                    className="text-[10px] font-semibold uppercase tracking-[0.2em]"
-                    style={{ color: "var(--color-muted)" }}
-                  >
+                <div
+                  key={row.label}
+                  className="flex items-center justify-between gap-4"
+                >
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">
                     {row.label}
                   </dt>
-                  <dd
-                    className="font-[family-name:var(--font-display)] text-base font-semibold tabular-nums"
-                    style={{ color: "var(--color-ink)" }}
-                  >
+                  <dd className="font-[family-name:var(--font-display)] text-base font-semibold tabular-nums text-ink">
                     {row.value}
                   </dd>
                 </div>
               ),
           )}
           {bankDetails.instructions && (
-            <p
-              className="border-t border-[color:rgb(11_20_27/0.08)] pt-4 text-xs leading-5"
-              style={{ color: "var(--color-ink-soft)" }}
-            >
+            <p className="border-t border-ink/8 pt-4 text-xs leading-5 text-ink-soft">
               {bankDetails.instructions}
             </p>
           )}
@@ -312,7 +286,7 @@ export function RegistrationForm({
 
         <Link
           href={`/events/${eventSlug}`}
-          className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-[color:var(--color-brand-blue-ink)] px-7 text-sm font-semibold text-white transition hover:bg-[color:var(--color-brand-blue-deep)]"
+          className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-brand-blue-ink px-7 text-sm font-semibold text-white transition hover:bg-brand-blue-deep"
         >
           Done — back to event
           <ArrowRight size={16} />
@@ -325,22 +299,16 @@ export function RegistrationForm({
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="rounded-[var(--radius-card)] border border-[color:rgb(11_20_27/0.08)] bg-white p-8 shadow-[var(--shadow-card)] md:p-10"
+      className="rounded-[var(--radius-card)] border border-ink/8 bg-white p-8 shadow-[var(--shadow-card)] md:p-10"
     >
       <div className="flex items-center justify-between gap-4">
         {spotsLeft !== null && (
-          <p
-            className="inline-flex items-center gap-2 rounded-full bg-[color:var(--color-brand-red-soft)] px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em]"
-            style={{ color: "var(--color-brand-red-deep)" }}
-          >
+          <p className="inline-flex items-center gap-2 rounded-full bg-brand-red-soft px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-red-deep">
             {full ? "Fully booked" : `${spotsLeft} spots remaining`}
           </p>
         )}
         {amountDisplay && (
-          <p
-            className="font-[family-name:var(--font-display)] text-2xl font-semibold"
-            style={{ color: "var(--color-brand-red)" }}
-          >
+          <p className="font-[family-name:var(--font-display)] text-2xl font-semibold text-brand-red">
             {amountDisplay}
           </p>
         )}
@@ -459,10 +427,7 @@ export function RegistrationForm({
                   className="h-5 w-5 rounded"
                   disabled={full || status === "submitting"}
                 />
-                <span
-                  className="text-sm"
-                  style={{ color: "var(--color-ink-soft)" }}
-                >
+                <span className="text-sm text-ink-soft">
                   {field.placeholder || field.label}
                 </span>
               </label>
@@ -493,27 +458,18 @@ export function RegistrationForm({
 
       {/* Payment method */}
       {paymentRequired && (
-        <fieldset className="mt-10 border-t border-[color:rgb(11_20_27/0.08)] pt-8">
-          <legend
-            className="px-3 text-[10px] font-semibold uppercase tracking-[0.22em]"
-            style={{ color: "var(--color-brand-red)" }}
-          >
+        <fieldset className="mt-10 border-t border-ink/8 pt-8">
+          <legend className="px-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-red">
             Payment method
           </legend>
           <div className="grid gap-4 md:grid-cols-2">
             {payment?.allowPaystack !== false && (
               <label
-                className="flex cursor-pointer items-start gap-3 rounded-[var(--radius-card)] border p-5 transition-all"
-                style={{
-                  borderColor:
-                    paymentMethod === "paystack"
-                      ? "var(--color-brand-red)"
-                      : "rgb(11 20 27 / 0.12)",
-                  background:
-                    paymentMethod === "paystack"
-                      ? "var(--color-brand-red-soft)"
-                      : "white",
-                }}
+                className={`flex cursor-pointer items-start gap-3 rounded-[var(--radius-card)] border p-5 transition-all ${
+                  paymentMethod === "paystack"
+                    ? "border-brand-red bg-brand-red-soft"
+                    : "border-ink/12 bg-white"
+                }`}
               >
                 <input
                   type="radio"
@@ -524,17 +480,11 @@ export function RegistrationForm({
                   className="mt-1"
                 />
                 <div>
-                  <div
-                    className="flex items-center gap-2 font-semibold"
-                    style={{ color: "var(--color-ink)" }}
-                  >
+                  <div className="flex items-center gap-2 font-semibold text-ink">
                     <CreditCard size={16} />
                     Pay online (Paystack)
                   </div>
-                  <p
-                    className="mt-1 text-xs"
-                    style={{ color: "var(--color-ink-soft)" }}
-                  >
+                  <p className="mt-1 text-xs text-ink-soft">
                     Card, bank account or USSD — instant confirmation.
                   </p>
                 </div>
@@ -542,17 +492,11 @@ export function RegistrationForm({
             )}
             {payment?.allowTransfer !== false && (
               <label
-                className="flex cursor-pointer items-start gap-3 rounded-[var(--radius-card)] border p-5 transition-all"
-                style={{
-                  borderColor:
-                    paymentMethod === "transfer"
-                      ? "var(--color-brand-red)"
-                      : "rgb(11 20 27 / 0.12)",
-                  background:
-                    paymentMethod === "transfer"
-                      ? "var(--color-brand-red-soft)"
-                      : "white",
-                }}
+                className={`flex cursor-pointer items-start gap-3 rounded-[var(--radius-card)] border p-5 transition-all ${
+                  paymentMethod === "transfer"
+                    ? "border-brand-red bg-brand-red-soft"
+                    : "border-ink/12 bg-white"
+                }`}
               >
                 <input
                   type="radio"
@@ -563,17 +507,11 @@ export function RegistrationForm({
                   className="mt-1"
                 />
                 <div>
-                  <div
-                    className="flex items-center gap-2 font-semibold"
-                    style={{ color: "var(--color-ink)" }}
-                  >
+                  <div className="flex items-center gap-2 font-semibold text-ink">
                     <Building2 size={16} />
                     Bank transfer
                   </div>
-                  <p
-                    className="mt-1 text-xs"
-                    style={{ color: "var(--color-ink-soft)" }}
-                  >
+                  <p className="mt-1 text-xs text-ink-soft">
                     Send to our account — verified by the office within 24h.
                   </p>
                 </div>
@@ -584,10 +522,7 @@ export function RegistrationForm({
       )}
 
       {status === "error" && (
-        <div
-          className="mt-6 flex items-start gap-3 rounded-lg border border-[color:var(--color-brand-red)]/30 bg-[color:var(--color-brand-red-soft)] px-5 py-4"
-          style={{ color: "var(--color-brand-red-deep)" }}
-        >
+        <div className="mt-6 flex items-start gap-3 rounded-lg border border-brand-red/30 bg-brand-red-soft px-5 py-4 text-brand-red-deep">
           <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
           <p className="text-sm">
             {errorMessage ??
@@ -597,13 +532,13 @@ export function RegistrationForm({
       )}
 
       <div className="mt-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <p className="text-xs" style={{ color: "var(--color-muted)" }}>
+        <p className="text-xs text-muted">
           By registering you agree to receive event details by email or SMS.
         </p>
         <button
           type="submit"
           disabled={full || status === "submitting"}
-          className="group inline-flex h-14 items-center gap-3 rounded-full bg-[color:var(--color-brand-red)] px-8 text-sm font-semibold uppercase tracking-[0.16em] text-white transition-all duration-300 hover:bg-[color:var(--color-brand-red-deep)] disabled:cursor-not-allowed disabled:opacity-50"
+          className="group inline-flex h-14 items-center gap-3 rounded-full bg-brand-red px-8 text-sm font-semibold uppercase tracking-[0.16em] text-white transition-all duration-300 hover:bg-brand-red-deep disabled:cursor-not-allowed disabled:opacity-50"
         >
           {status === "submitting" ? (
             <>

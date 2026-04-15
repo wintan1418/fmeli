@@ -169,14 +169,9 @@ export function HeroSlider() {
               {HERO_IMAGES.map((_, i) => (
                 <span
                   key={i}
-                  className="h-[3px] transition-all duration-500"
-                  style={{
-                    width: i === index ? 28 : 12,
-                    background:
-                      i === index
-                        ? "var(--color-brand-gold)"
-                        : "rgba(255,255,255,0.35)",
-                  }}
+                  className={`h-[3px] transition-all duration-500 ${
+                    i === index ? "w-7 bg-brand-gold" : "w-3 bg-white/35"
+                  }`}
                 />
               ))}
             </div>

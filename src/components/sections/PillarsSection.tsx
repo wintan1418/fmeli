@@ -48,59 +48,29 @@ const PILLARS: Pillar[] = [
 
 export function PillarsSection() {
   return (
-    <section
-      className="relative overflow-hidden py-24 md:py-32"
-      style={{ background: "var(--color-off-white)" }}
-    >
+    <section className="relative overflow-hidden bg-off-white py-24 md:py-32">
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 -z-0 h-[1px] w-[240px] -translate-x-1/2"
-        style={{
-          backgroundImage:
-            "linear-gradient(90deg, transparent, var(--color-brand-gold), transparent)",
-        }}
+        className="pointer-events-none absolute left-1/2 top-0 -z-0 h-[1px] w-[240px] -translate-x-1/2 bg-[linear-gradient(90deg,transparent,var(--color-brand-gold),transparent)]"
       />
       <Container>
         <FadeIn>
           <div className="mx-auto max-w-3xl text-center">
-            <p
-              className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em]"
-              style={{ color: "var(--color-brand-red)" }}
-            >
-              <span
-                className="inline-block h-px w-10"
-                style={{ background: "var(--color-brand-red)" }}
-              />
+            <p className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-brand-red">
+              <span className="inline-block h-px w-10 bg-brand-red" />
               How we live it
-              <span
-                className="inline-block h-px w-10"
-                style={{ background: "var(--color-brand-red)" }}
-              />
+              <span className="inline-block h-px w-10 bg-brand-red" />
             </p>
-            <h2
-              className="mt-6 font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] tracking-tight md:text-5xl lg:text-[64px]"
-              style={{ color: "var(--color-ink)" }}
-            >
+            <h2 className="mt-6 font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] tracking-tight text-ink md:text-5xl lg:text-[64px]">
               For the Word.{" "}
-              <span
-                className="italic"
-                style={{ color: "var(--color-brand-red)" }}
-              >
+              <span className="italic text-brand-red">
                 The testimony of Jesus.
               </span>
               <br />
               We pray. We worship.{" "}
-              <span
-                className="italic"
-                style={{ color: "var(--color-brand-red)" }}
-              >
-                We are given.
-              </span>
+              <span className="italic text-brand-red">We are given.</span>
             </h2>
-            <p
-              className="mt-8 text-lg leading-8"
-              style={{ color: "var(--color-ink-soft)" }}
-            >
+            <p className="mt-8 text-lg leading-8 text-ink-soft">
               These are not slogans — they are the rhythm of our life together.
               Four pillars that shape every gathering, every assembly, every
               song, every message.
@@ -114,7 +84,7 @@ export function PillarsSection() {
         >
           {PILLARS.map((p) => (
             <StaggerItem key={p.number}>
-              <article className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-(--color-brand-blue-ink) shadow-[var(--shadow-card)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[var(--shadow-card-hover)]">
+              <article className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-brand-blue-ink shadow-[var(--shadow-card)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[var(--shadow-card-hover)]">
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <Image
                     src={p.image}
@@ -123,39 +93,26 @@ export function PillarsSection() {
                     sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                     className="object-cover object-center transition-transform duration-[1.2s] ease-out group-hover:scale-[1.07]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-(--color-brand-blue-ink) via-(--color-brand-blue-ink)/40 to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-(--color-brand-red-deep)/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-blue-ink via-brand-blue-ink/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-brand-red-deep/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-                  <span className="absolute left-6 top-6 font-[family-name:var(--font-display)] text-5xl font-semibold text-(--color-brand-gold)/90">
+                  <span className="absolute left-6 top-6 font-[family-name:var(--font-display)] text-5xl font-semibold text-brand-gold/90">
                     {p.number}
                   </span>
                 </div>
 
-                <div
-                  className="relative flex flex-1 flex-col gap-4 p-7"
-                  style={{ color: "var(--color-brand-white)" }}
-                >
+                <div className="relative flex flex-1 flex-col gap-4 p-7 text-brand-white">
                   <div
                     aria-hidden
-                    className="absolute left-7 top-0 h-px w-12 -translate-y-[1px] transition-all duration-500 group-hover:w-20"
-                    style={{ background: "var(--color-brand-gold)" }}
+                    className="absolute left-7 top-0 h-px w-12 -translate-y-[1px] bg-brand-gold transition-all duration-500 group-hover:w-20"
                   />
-                  <h3
-                    className="font-[family-name:var(--font-display)] text-2xl font-semibold leading-tight md:text-[26px]"
-                    style={{ color: "var(--color-brand-white)" }}
-                  >
+                  <h3 className="font-[family-name:var(--font-display)] text-2xl font-semibold leading-tight text-brand-white md:text-[26px]">
                     {p.title}
                   </h3>
-                  <p
-                    className="text-sm italic leading-6"
-                    style={{ color: "rgb(255 255 255 / 0.75)" }}
-                  >
+                  <p className="text-sm italic leading-6 text-white/75">
                     &ldquo;{p.quote}&rdquo;
                   </p>
-                  <p
-                    className="mt-auto text-[10px] font-semibold uppercase tracking-[0.24em]"
-                    style={{ color: "var(--color-brand-gold)" }}
-                  >
+                  <p className="mt-auto text-[10px] font-semibold uppercase tracking-[0.24em] text-brand-gold">
                     {p.scripture}
                   </p>
                 </div>
