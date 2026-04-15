@@ -81,6 +81,7 @@ export type MessageCategory = {
   title: string;
   slug?: string;
   description?: string;
+  parent?: { title?: string; slug?: string } | null;
 };
 
 export type Message = {
@@ -101,7 +102,11 @@ export type Message = {
   thumbnail?: SanityImage;
   notes?: PortableTextBlock[];
   transcript?: PortableTextBlock[];
-  category?: { title?: string; slug?: string };
+  category?: {
+    title?: string;
+    slug?: string;
+    parent?: { title?: string; slug?: string } | null;
+  };
   preacher?: { name?: string; role?: string; image?: SanityImage };
   series?: { title?: string; slug?: string; artwork?: SanityImage };
   assembly?: { slug?: string; city?: string };

@@ -49,6 +49,34 @@ export default async function MessagesPage({
     ? categories?.find((c) => c.slug === activeCategory) ?? null
     : null;
 
+  // Group categories into roots + children. Roots are top-level
+  // (Sunday / Wednesday / Special Meetings); children inherit roots
+  // via their `parent` ref. The chip bar shows roots on the top row,
+  // and the children of whichever root is active on the second row.
+  const roots = (categories ?? []).filter((c) => !c.parent);
+  const childrenByParentSlug = new Map<string, typeof roots>();
+  for (const c of categories ?? []) {
+    const parentSlug = c.parent?.slug;
+    if (!parentSlug) continue;
+    if (!childrenByParentSlug.has(parentSlug)) {
+      childrenByParentSlug.set(parentSlug, []);
+    }
+    childrenByParentSlug.get(parentSlug)!.push(c);
+  }
+
+  // Which root chip should be highlighted? If the active category IS
+  // a root, that one. If it's a child, highlight its parent so the
+  // user sees the second-row sub-chips.
+  const activeRootSlug =
+    activeCategoryDoc?.parent?.slug ??
+    (activeCategoryDoc && !activeCategoryDoc.parent
+      ? activeCategoryDoc.slug
+      : null);
+
+  const subChipsForActiveRoot = activeRootSlug
+    ? childrenByParentSlug.get(activeRootSlug) ?? []
+    : [];
+
   return (
     <>
       <PageHero
@@ -77,27 +105,48 @@ export default async function MessagesPage({
 
       <section className="bg-off-white py-20 md:py-28">
         <Container>
-          {/* Category filter chips — clicking sets ?category=<slug>. */}
-          {categories && categories.length > 0 && (
-            <div className="mb-12 flex flex-wrap items-center gap-2">
+          {/* Top-row chips — root categories. Always visible. */}
+          {roots.length > 0 && (
+            <div className="mb-4 flex flex-wrap items-center gap-2">
               <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
-                Categories
+                Browse
               </span>
               <CategoryChip
                 href="/resources/messages"
                 label="All"
                 active={!activeCategory}
               />
-              {categories.map((c) => (
+              {roots.map((c) => (
+                <CategoryChip
+                  key={c._id}
+                  href={`/resources/messages?category=${c.slug}`}
+                  label={c.title}
+                  active={activeRootSlug === c.slug}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Second-row chips — sub-categories of whichever root is
+              active. Only renders when the active root has children. */}
+          {subChipsForActiveRoot.length > 0 && (
+            <div className="mb-12 flex flex-wrap items-center gap-2 pl-1">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
+                ↳
+              </span>
+              {subChipsForActiveRoot.map((c) => (
                 <CategoryChip
                   key={c._id}
                   href={`/resources/messages?category=${c.slug}`}
                   label={c.title}
                   active={activeCategory === c.slug}
+                  size="sm"
                 />
               ))}
             </div>
           )}
+
+          {subChipsForActiveRoot.length === 0 && <div className="mb-12" />}
 
           {messages && messages.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -229,18 +278,21 @@ function CategoryChip({
   href,
   label,
   active,
+  size = "md",
 }: {
   href: string;
   label: string;
   active: boolean;
+  size?: "md" | "sm";
 }) {
+  const padding = size === "sm" ? "px-3 py-1 text-[11px]" : "px-3.5 py-1.5 text-xs";
   return (
     <Link
       href={href}
       className={
         active
-          ? "rounded-full border border-brand-blue-ink bg-brand-blue-ink px-3.5 py-1.5 text-xs font-semibold text-white"
-          : "rounded-full border border-ink/12 bg-white px-3.5 py-1.5 text-xs font-medium text-ink transition hover:border-ink/30 hover:bg-ink/2"
+          ? `rounded-full border border-brand-blue-ink bg-brand-blue-ink font-semibold text-white ${padding}`
+          : `rounded-full border border-ink/12 bg-white font-medium text-ink transition hover:border-ink/30 hover:bg-ink/2 ${padding}`
       }
     >
       {label}

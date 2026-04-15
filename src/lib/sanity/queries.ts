@@ -37,13 +37,19 @@ export const ALL_PAGE_SLUGS_QUERY = groq`
 /**
  * Messages archive — newest first, last 60 shipped at build time.
  *
- * Optional category filter: pass $category as a slug string to scope to
- * one bucket, or null/undefined for the unfiltered list. The check is
- * written so that a missing/null $category short-circuits the join.
+ * Optional category filter: pass $category as a slug string. The filter
+ * matches BOTH the message's direct category AND any sub-category whose
+ * parent's slug is $category — so picking "Special Meetings" pulls in
+ * everything under it (Life Campaign, Singles Rendezvous, etc.) without
+ * needing a separate query path.
+ *
+ * Pass null/undefined to skip filtering entirely.
  */
 export const MESSAGES_LIST_QUERY = groq`
   *[_type == "message"
-      && ($category == null || category->slug.current == $category)
+      && ($category == null
+          || category->slug.current == $category
+          || category->parent->slug.current == $category)
     ] | order(date desc)[0...60]{
       _id,
       title,
@@ -58,19 +64,28 @@ export const MESSAGES_LIST_QUERY = groq`
       audioUrl,
       "audioFileUrl": audioFile.asset->url,
       thumbnail,
-      "category": category->{ title, "slug": slug.current },
+      "category": category->{
+        title,
+        "slug": slug.current,
+        "parent": parent->{ title, "slug": slug.current }
+      },
       "preacher": preacher->{ name, "image": image.asset->url },
       "series": series->{ title, "slug": slug.current }
     }
 `;
 
-/** Every message category (for filter chips on the archive). */
+/**
+ * Message categories — returned as a flat list with parent metadata
+ * inlined. The page component groups them client-side: roots first
+ * (those with no parent), then children grouped by parent.
+ */
 export const MESSAGE_CATEGORIES_QUERY = groq`
   *[_type == "messageCategory"] | order(order asc, title asc){
     _id,
     title,
     "slug": slug.current,
-    description
+    description,
+    "parent": parent->{ "slug": slug.current, title }
   }
 `;
 

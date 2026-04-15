@@ -1,15 +1,58 @@
 import { ptBlock, ptH3, imageRef } from "./lib.mjs";
 
 // ────────────────────────────────────────────────────────────
-// Message categories — editable in Studio so the office can add
-// new buckets later. The slugs are stable so seeded messages can
-// reference them by deterministic _id.
+// Message categories — two-level hierarchy.
+//
+// Roots (no parent) appear as the top-row chips on /resources/messages.
+// Children (parent set) appear as a second row when their root is active.
+//
+// The shape mirrors how FMELi actually organises:
+//   Sunday          (top-level)
+//     ├ School of Life
+//     ├ Morning Teaching
+//     └ Sunday Message
+//   Wednesday       (top-level)
+//     └ Wednesday Teaching (STS)
+//   Special Meetings (top-level — open list, the office adds more in Studio)
+//     ├ Life Campaign
+//     ├ Singles Rendezvous
+//     ├ Real Men Conference
+//     ├ Feminine Meeting
+//     ├ ZOE Conference
+//     ├ Christmas Service
+//     ├ Youth Convergence
+//     └ Couple's Garden
+//
+// The pCloud import script reuses these slugs to map source folders →
+// category refs, so any change here needs to stay in sync with the
+// PCLOUD_FOLDER_TO_CATEGORY map in scripts/import-pcloud.mjs.
 // ────────────────────────────────────────────────────────────
 const categoryRows = [
-  { slug: "sunday", title: "Sunday Messages", order: 1, description: "The weekly Sunday gathering — verse by verse, line upon line." },
-  { slug: "wednesday", title: "Wednesday Teaching", order: 2, description: "Midweek teaching series for the household of faith." },
-  { slug: "convention", title: "Convention", order: 3, description: "Annual convention messages from across the FMELi family." },
-  { slug: "special", title: "Special Meetings", order: 4, description: "Life campaigns, vigils and one-off gatherings." },
+  // Roots
+  { slug: "sunday", title: "Sunday", order: 1, description: "The weekly Sunday gathering — School of Life, Morning Teaching, and the Sunday message." },
+  { slug: "wednesday", title: "Wednesday", order: 2, description: "Midweek teaching series for the household of faith." },
+  { slug: "special-meetings", title: "Special Meetings", order: 3, description: "Conferences, conventions, vigils, campaigns and one-off gatherings." },
+
+  // Sunday children
+  { slug: "school-of-life", title: "School of Life", parent: "sunday", order: 11, description: "Foundational teaching for new and growing believers." },
+  { slug: "morning-teaching", title: "Morning Teaching", parent: "sunday", order: 12, description: "The opening Sunday teaching session." },
+  { slug: "sunday-message", title: "Sunday Message", parent: "sunday", order: 13, description: "The main Sunday preaching." },
+
+  // Wednesday children
+  { slug: "wednesday-teaching", title: "Wednesday Teaching (STS)", parent: "wednesday", order: 21, description: "Sound Teaching Sessions — verse by verse, line upon line." },
+
+  // Special Meetings children — every recurring FMELi event the church runs
+  { slug: "life-campaign", title: "Life Campaign", parent: "special-meetings", order: 31 },
+  { slug: "singles-rendezvous", title: "Singles Rendezvous", parent: "special-meetings", order: 32 },
+  { slug: "real-men-conference", title: "Real Men Conference", parent: "special-meetings", order: 33 },
+  { slug: "feminine-meeting", title: "Feminine Meeting", parent: "special-meetings", order: 34 },
+  { slug: "zoe-conference", title: "ZOE Conference", parent: "special-meetings", order: 35 },
+  { slug: "christmas-service", title: "Christmas Service", parent: "special-meetings", order: 36 },
+  { slug: "youth-convergence", title: "Youth Convergence", parent: "special-meetings", order: 37 },
+  { slug: "couples-garden", title: "Couple's Garden", parent: "special-meetings", order: 38 },
+  { slug: "cross-over-service", title: "Cross Over Service", parent: "special-meetings", order: 39 },
+  { slug: "vigil", title: "Vigil", parent: "special-meetings", order: 40 },
+  { slug: "corn-feast", title: "Corn Feast", parent: "special-meetings", order: 41 },
 ];
 
 const messageRows = [
@@ -19,7 +62,7 @@ const messageRows = [
     date: "2026-04-12",
     scripture: "Psalm 119:130",
     series: "messageSeries.unveiled-mysteries",
-    category: "sunday",
+    category: "sunday-message",
     preacher: "pastor.set-man",
     excerpt:
       "Light does not come from striving; it comes from the Word finding a doorway into a willing heart.",
@@ -32,7 +75,7 @@ const messageRows = [
     date: "2026-04-05",
     scripture: "1 Peter 1:5",
     series: "messageSeries.life-in-the-spirit",
-    category: "sunday",
+    category: "sunday-message",
     preacher: "pastor.set-man",
     excerpt:
       "The same power that raised Christ is the power that holds you on the worst day you will ever have.",
@@ -45,7 +88,7 @@ const messageRows = [
     date: "2026-03-29",
     scripture: "Ephesians 5:32",
     series: "messageSeries.unveiled-mysteries",
-    category: "sunday",
+    category: "sunday-message",
     preacher: "pastor.set-man",
     excerpt:
       "Marriage is a shadow. The substance is Christ and His Church — and that mystery is great.",
@@ -58,7 +101,7 @@ const messageRows = [
     date: "2026-03-22",
     scripture: "Romans 8:14",
     series: "messageSeries.life-in-the-spirit",
-    category: "wednesday",
+    category: "wednesday-teaching",
     preacher: "pastor.lagos-lead",
     excerpt:
       "Sons are not driven; they are led. The Spirit's leading is the believer's birthright, not a special-case privilege.",
@@ -70,7 +113,7 @@ const messageRows = [
     title: "The Overcomers",
     date: "2026-03-15",
     scripture: "Revelation 12:11",
-    category: "convention",
+    category: "zoe-conference",
     preacher: "pastor.set-man",
     excerpt:
       "They overcame him by the blood of the Lamb and by the word of their testimony — and they loved not their lives unto death.",
@@ -84,7 +127,7 @@ const messageRows = [
     date: "2026-03-08",
     scripture: "John 15:4",
     series: "messageSeries.life-in-the-spirit",
-    category: "wednesday",
+    category: "wednesday-teaching",
     preacher: "pastor.abeokuta-lead",
     excerpt:
       "Fruit is a function of union. Stop trying to produce; start learning to remain.",
@@ -97,7 +140,7 @@ const messageRows = [
     date: "2026-03-01",
     scripture: "Philippians 3:10",
     series: "messageSeries.unveiled-mysteries",
-    category: "convention",
+    category: "zoe-conference",
     preacher: "pastor.set-man",
     excerpt:
       "There is a knowing of Christ that is only available on the road His own feet walked.",
@@ -109,7 +152,7 @@ const messageRows = [
     title: "A House of Prayer",
     date: "2026-02-22",
     scripture: "Isaiah 56:7",
-    category: "special",
+    category: "vigil",
     preacher: "pastor.akure-lead",
     excerpt:
       "He did not call it a house of preaching, of singing, or of programmes. He called it a house of prayer for all nations.",
@@ -128,6 +171,14 @@ export function buildMessageCategoryDocs() {
     slug: { _type: "slug", current: c.slug },
     description: c.description,
     order: c.order,
+    ...(c.parent
+      ? {
+          parent: {
+            _type: "reference",
+            _ref: `messageCategory.${c.parent}`,
+          },
+        }
+      : {}),
   }));
 }
 
