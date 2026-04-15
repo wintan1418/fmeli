@@ -2,71 +2,93 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PortableText } from "next-sanity";
-import { ArrowLeft, ExternalLink, Headphones, Download, FileText } from "lucide-react";
+import {
+  ArrowLeft,
+  ExternalLink,
+  Headphones,
+  Download,
+  FileText,
+} from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { sanityFetch } from "@/lib/sanity/client";
-import { SERMON_BY_SLUG_QUERY } from "@/lib/sanity/queries";
-import type { Sermon } from "@/types/sanity";
+import {
+  MESSAGE_BY_SLUG_QUERY,
+  ALL_MESSAGE_SLUGS_QUERY,
+} from "@/lib/sanity/queries";
+import type { Message } from "@/types/sanity";
 
 export const revalidate = 3600;
 
-export async function generateMetadata(
-  { params }: { params: Promise<{ slug: string }> },
-): Promise<Metadata> {
+export async function generateStaticParams() {
+  const rows = await sanityFetch<{ slug: string }[]>({
+    query: ALL_MESSAGE_SLUGS_QUERY,
+    tags: ["sanity:message:list"],
+  });
+  return (rows ?? []).map((r) => ({ slug: r.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
-  const sermon = await sanityFetch<Sermon | null>({
-    query: SERMON_BY_SLUG_QUERY,
+  const message = await sanityFetch<Message | null>({
+    query: MESSAGE_BY_SLUG_QUERY,
     params: { slug },
-    tags: [`sanity:sermon:${slug}`],
+    tags: [`sanity:message:${slug}`],
   });
   return {
-    title: sermon?.title ?? "Sermon",
-    description: sermon?.excerpt,
+    title: message?.title ?? "Message",
+    description: message?.excerpt,
   };
 }
 
-export default async function SermonPage(
-  { params }: { params: Promise<{ slug: string }> },
-) {
+export default async function MessagePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
-  const sermon = await sanityFetch<Sermon | null>({
-    query: SERMON_BY_SLUG_QUERY,
+  const message = await sanityFetch<Message | null>({
+    query: MESSAGE_BY_SLUG_QUERY,
     params: { slug },
-    tags: [`sanity:sermon:${slug}`],
+    tags: [`sanity:message:${slug}`],
     revalidate: 3600,
   });
-  if (!sermon) notFound();
+  if (!message) notFound();
 
-  const audioSrc = sermon.audioFileUrl ?? null;
-  const audioExternal = !audioSrc && sermon.audioUrl ? sermon.audioUrl : null;
-  const audioDownloadHref = sermon.audioFileUrl ?? sermon.audioUrl ?? null;
+  const audioSrc = message.audioFileUrl ?? null;
+  const audioExternal = !audioSrc && message.audioUrl ? message.audioUrl : null;
+  const audioDownloadHref = message.audioFileUrl ?? message.audioUrl ?? null;
   const excerptDownloadHref =
-    sermon.excerptFileUrl ?? sermon.excerptUrl ?? null;
-  const hasVideo = Boolean(sermon.youtubeId || sermon.videoFileUrl);
+    message.excerptFileUrl ?? message.excerptUrl ?? null;
+  const hasVideo = Boolean(message.youtubeId || message.videoFileUrl);
 
   return (
     <>
       <section className="relative bg-brand-blue-ink pt-32 pb-16 md:pt-44">
         <Container className="relative">
           <Link
-            href="/sermons"
+            href="/resources/messages"
             className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60"
           >
             <ArrowLeft size={14} />
-            All sermons
+            All messages
           </Link>
           <p className="mt-8 text-xs font-semibold uppercase tracking-[0.22em] text-brand-gold">
-            {sermon.date} {sermon.scripture && `· ${sermon.scripture}`}
-            {sermon.durationMinutes ? ` · ${sermon.durationMinutes} min` : ""}
+            {message.category?.title && `${message.category.title} · `}
+            {message.date} {message.scripture && `· ${message.scripture}`}
+            {message.durationMinutes ? ` · ${message.durationMinutes} min` : ""}
           </p>
           <h1 className="mt-4 max-w-4xl font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] text-white md:text-6xl">
-            {sermon.title}
+            {message.title}
           </h1>
-          {sermon.preacher?.name && (
+          {message.preacher?.name && (
             <p className="mt-4 text-base text-white/75">
-              {sermon.preacher.name}
-              {sermon.preacher.role && ` · ${sermon.preacher.role}`}
-              {sermon.assembly?.city && ` · ${sermon.assembly.city}`}
+              {message.preacher.name}
+              {message.preacher.role && ` · ${message.preacher.role}`}
+              {message.assembly?.city && ` · ${message.assembly.city}`}
             </p>
           )}
 
@@ -101,17 +123,17 @@ export default async function SermonPage(
 
           {hasVideo && (
             <div className="mt-12 aspect-video w-full overflow-hidden rounded-[var(--radius-card)] border border-white/10 bg-black">
-              {sermon.youtubeId ? (
+              {message.youtubeId ? (
                 <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${sermon.youtubeId}`}
-                  title={sermon.title}
+                  src={`https://www.youtube-nocookie.com/embed/${message.youtubeId}`}
+                  title={message.title}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="h-full w-full"
                 />
               ) : (
                 <video
-                  src={sermon.videoFileUrl ?? undefined}
+                  src={message.videoFileUrl ?? undefined}
                   controls
                   preload="metadata"
                   className="h-full w-full"
@@ -151,26 +173,28 @@ export default async function SermonPage(
         </Container>
       </section>
 
-      {(sermon.excerpt || sermon.notes?.length || sermon.transcript?.length) && (
+      {(message.excerpt ||
+        message.notes?.length ||
+        message.transcript?.length) && (
         <section className="bg-off-white py-20 md:py-28">
           <Container>
-            {sermon.excerpt && (
+            {message.excerpt && (
               <p className="mx-auto max-w-3xl text-center font-[family-name:var(--font-display)] text-2xl italic leading-snug text-ink md:text-3xl">
-                “{sermon.excerpt}”
+                “{message.excerpt}”
               </p>
             )}
 
-            {sermon.notes && sermon.notes.length > 0 && (
+            {message.notes && message.notes.length > 0 && (
               <article className="prose prose-lg mx-auto mt-16 max-w-3xl text-ink-soft">
-                <h2 className="text-ink">Sermon notes</h2>
-                <PortableText value={sermon.notes} />
+                <h2 className="text-ink">Message notes</h2>
+                <PortableText value={message.notes} />
               </article>
             )}
 
-            {sermon.transcript && sermon.transcript.length > 0 && (
+            {message.transcript && message.transcript.length > 0 && (
               <article className="prose prose-lg mx-auto mt-16 max-w-3xl border-t border-ink/8 pt-16 text-ink-soft">
                 <h2 className="text-ink">Transcript</h2>
-                <PortableText value={sermon.transcript} />
+                <PortableText value={message.transcript} />
               </article>
             )}
           </Container>

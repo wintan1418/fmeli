@@ -34,9 +34,9 @@ export const ALL_PAGE_SLUGS_QUERY = groq`
   *[_type == "page" && defined(slug.current)]{ "slug": slug.current }
 `;
 
-/** Sermons archive — newest first, last 60 shipped at build time. */
-export const SERMONS_LIST_QUERY = groq`
-  *[_type == "sermon"] | order(date desc)[0...60]{
+/** Messages archive — newest first, last 60 shipped at build time. */
+export const MESSAGES_LIST_QUERY = groq`
+  *[_type == "message"] | order(date desc)[0...60]{
     _id,
     title,
     "slug": slug.current,
@@ -50,14 +50,25 @@ export const SERMONS_LIST_QUERY = groq`
     audioUrl,
     "audioFileUrl": audioFile.asset->url,
     thumbnail,
+    "category": category->{ title, "slug": slug.current },
     "preacher": preacher->{ name, "image": image.asset->url },
     "series": series->{ title, "slug": slug.current }
   }
 `;
 
-/** Single sermon by slug. */
-export const SERMON_BY_SLUG_QUERY = groq`
-  *[_type == "sermon" && slug.current == $slug][0]{
+/** Every message category (for filter chips on the archive). */
+export const MESSAGE_CATEGORIES_QUERY = groq`
+  *[_type == "messageCategory"] | order(order asc, title asc){
+    _id,
+    title,
+    "slug": slug.current,
+    description
+  }
+`;
+
+/** Single message by slug. */
+export const MESSAGE_BY_SLUG_QUERY = groq`
+  *[_type == "message" && slug.current == $slug][0]{
     _id,
     title,
     "slug": slug.current,
@@ -73,10 +84,16 @@ export const SERMON_BY_SLUG_QUERY = groq`
     notes,
     transcript,
     durationMinutes,
+    "category": category->{ title, "slug": slug.current },
     "preacher": preacher->{ name, role, bio, image },
     "series": series->{ title, "slug": slug.current, artwork },
     "assembly": assembly->{ "slug": slug.current, city }
   }
+`;
+
+/** Every published message slug — for generateStaticParams. */
+export const ALL_MESSAGE_SLUGS_QUERY = groq`
+  *[_type == "message" && defined(slug.current)]{ "slug": slug.current }
 `;
 
 /** Upcoming events (future only). */

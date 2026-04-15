@@ -9,7 +9,7 @@ type Props = {
 
 /**
  * Shared hero used at the top of every archive & feature page.
- * Keeps visual rhythm consistent across /sermons, /meetings, etc.
+ * Keeps visual rhythm consistent across /resources/messages, /meetings, etc.
  */
 export function PageHero({ eyebrow, title, subtitle, children }: Props) {
   return (

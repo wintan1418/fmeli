@@ -41,8 +41,21 @@ export default defineConfig({
             S.documentTypeListItem("page").title("Pages"),
             S.documentTypeListItem("post").title("Blog"),
             S.divider(),
-            S.documentTypeListItem("sermon").title("Sermons"),
-            S.documentTypeListItem("sermonSeries").title("Sermon Series"),
+            S.listItem()
+              .title("Resources · Messages")
+              .child(
+                S.list()
+                  .title("Messages")
+                  .items([
+                    S.documentTypeListItem("message").title("Messages"),
+                    S.documentTypeListItem("messageSeries").title(
+                      "Message Series",
+                    ),
+                    S.documentTypeListItem("messageCategory").title(
+                      "Categories",
+                    ),
+                  ]),
+              ),
             S.divider(),
             S.documentTypeListItem("event").title("Events"),
             S.documentTypeListItem("registration").title("Event Registrations"),

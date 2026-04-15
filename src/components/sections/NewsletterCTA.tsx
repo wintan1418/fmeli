@@ -31,7 +31,7 @@ export function NewsletterCTA() {
                   </span>
                 </h2>
                 <p className="mt-6 max-w-lg text-lg leading-8 text-(--color-brand-white)/80">
-                  Join thousands receiving new sermons, meeting reminders, and
+                  Join thousands receiving new messages, meeting reminders, and
                   the latest writings from the FMELi ministry.
                 </p>
 
@@ -70,7 +70,7 @@ export function NewsletterCTA() {
                 <div className="mt-10 grid gap-6 border-t border-(--color-brand-white)/10 pt-8 sm:grid-cols-3">
                   {[
                     { icon: Radio, label: "Watch live", sub: "Sundays 8am" },
-                    { icon: BookOpen, label: "Sermon notes", sub: "PDF downloads" },
+                    { icon: BookOpen, label: "Message notes", sub: "PDF downloads" },
                     { icon: Mail, label: "Weekly email", sub: "No spam, ever" },
                   ].map(({ icon: Icon, label, sub }) => (
                     <div key={label} className="flex items-center gap-3">

@@ -85,10 +85,10 @@ export function MemberSignupForm({ assemblies }: Props) {
             <ArrowRight size={14} />
           </Link>
           <Link
-            href="/sermons"
+            href="/resources/messages"
             className="inline-flex items-center gap-2 rounded-full border border-[color:rgb(11_20_27/0.12)] px-6 py-3 text-sm font-semibold text-[color:var(--color-ink)]"
           >
-            Listen to a sermon
+            Listen to a message
           </Link>
         </div>
       </div>

@@ -17,7 +17,7 @@ export default defineType({
       options: {
         list: [
           { title: "Internal page", value: "internal" },
-          { title: "Sermon", value: "sermon" },
+          { title: "Message", value: "message" },
           { title: "Event", value: "event" },
           { title: "External URL", value: "external" },
         ],
@@ -33,10 +33,10 @@ export default defineType({
       hidden: ({ parent }) => parent?.kind !== "internal",
     }),
     defineField({
-      name: "sermon",
+      name: "message",
       type: "reference",
-      to: [{ type: "sermon" }],
-      hidden: ({ parent }) => parent?.kind !== "sermon",
+      to: [{ type: "message" }],
+      hidden: ({ parent }) => parent?.kind !== "message",
     }),
     defineField({
       name: "event",

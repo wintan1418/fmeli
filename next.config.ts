@@ -13,6 +13,23 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Permanent redirects for routes that moved when we reorganised the
+  // resources area. Keep these around so external links and search
+  // engines find the new home.
+  async redirects() {
+    return [
+      {
+        source: "/sermons",
+        destination: "/resources/messages",
+        permanent: true,
+      },
+      {
+        source: "/sermons/:slug",
+        destination: "/resources/messages/:slug",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

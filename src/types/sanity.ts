@@ -76,7 +76,14 @@ export type AssemblyOption = {
   state?: string;
 };
 
-export type Sermon = {
+export type MessageCategory = {
+  _id: string;
+  title: string;
+  slug?: string;
+  description?: string;
+};
+
+export type Message = {
   _id: string;
   title: string;
   slug?: string;
@@ -93,6 +100,7 @@ export type Sermon = {
   thumbnail?: SanityImage;
   notes?: PortableTextBlock[];
   transcript?: PortableTextBlock[];
+  category?: { title?: string; slug?: string };
   preacher?: { name?: string; role?: string; image?: SanityImage };
   series?: { title?: string; slug?: string; artwork?: SanityImage };
   assembly?: { slug?: string; city?: string };

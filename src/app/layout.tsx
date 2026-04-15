@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s · FMELi",
   },
   description:
-    "Full Manifestation of Eternal Life (FMELi) — Eternal Life Embassy. Sermons, meetings, and assemblies across Nigeria. The entrance of Your word gives light.",
+    "Full Manifestation of Eternal Life (FMELi) — Eternal Life Embassy. Messages, meetings, and assemblies across Nigeria. The entrance of Your word gives light.",
 };
 
 export default function RootLayout({

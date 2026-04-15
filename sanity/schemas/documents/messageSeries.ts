@@ -1,9 +1,14 @@
 import { defineField, defineType } from "sanity";
 import { StackIcon } from "@sanity/icons";
 
+/**
+ * A series of messages — e.g. "Unveiled Mysteries", "Life in the Spirit".
+ * Renamed from sermonSeries when we moved the resources area to use
+ * "message" as the canonical term.
+ */
 export default defineType({
-  name: "sermonSeries",
-  title: "Sermon Series",
+  name: "messageSeries",
+  title: "Message Series",
   type: "document",
   icon: StackIcon,
   fields: [

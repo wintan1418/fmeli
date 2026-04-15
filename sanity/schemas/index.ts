@@ -1,7 +1,8 @@
 import siteSettings from "./documents/siteSettings";
 import page from "./documents/page";
-import sermon from "./documents/sermon";
-import sermonSeries from "./documents/sermonSeries";
+import message from "./documents/message";
+import messageSeries from "./documents/messageSeries";
+import messageCategory from "./documents/messageCategory";
 import event from "./documents/event";
 import registration from "./documents/registration";
 import pastor from "./documents/pastor";
@@ -27,8 +28,9 @@ export const schemaTypes = [
   siteSettings,
   page,
   post,
-  sermon,
-  sermonSeries,
+  message,
+  messageSeries,
+  messageCategory,
   meeting,
   event,
   registration,

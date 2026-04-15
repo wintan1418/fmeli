@@ -37,7 +37,7 @@ const COLUMNS = {
     { label: "Contact", href: "/contact" },
   ],
   Media: [
-    { label: "Sermons", href: "/sermons" },
+    { label: "Messages", href: "/resources/messages" },
     { label: "Watch Live", href: "/live" },
     { label: "Blog", href: "/blog" },
     { label: "Give", href: "/give" },

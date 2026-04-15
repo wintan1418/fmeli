@@ -16,12 +16,14 @@ type PageDoc = {
 // Reserved slugs that live as their own routes — never resolved by the catchall.
 const RESERVED = new Set([
   "events",
-  "sermons",
+  "resources",
   "meetings",
   "assemblies",
   "blog",
   "give",
   "live",
+  "members",
+  "dashboard",
   "studio",
   "api",
 ]);

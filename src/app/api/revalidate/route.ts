@@ -10,8 +10,9 @@ import { parseBody } from "next-sanity/webhook";
  * on the document that changed.
  *
  * Tags emitted elsewhere (see src/lib/sanity/client.ts):
- *   sanity:page:{slug}, sanity:sermon:{slug}, sanity:sermon:list,
- *   sanity:event:{slug}, sanity:event:list, sanity:settings
+ *   sanity:page:{slug}, sanity:message:{slug}, sanity:message:list,
+ *   sanity:messageCategory:list, sanity:event:{slug}, sanity:event:list,
+ *   sanity:settings
  */
 
 type WebhookPayload = {
@@ -52,9 +53,13 @@ export async function POST(req: NextRequest) {
     case "page":
       if (slug) tags.push(`sanity:page:${slug}`);
       break;
-    case "sermon":
-      tags.push("sanity:sermon:list");
-      if (slug) tags.push(`sanity:sermon:${slug}`);
+    case "message":
+      tags.push("sanity:message:list");
+      if (slug) tags.push(`sanity:message:${slug}`);
+      break;
+    case "messageCategory":
+      tags.push("sanity:messageCategory:list");
+      tags.push("sanity:message:list");
       break;
     case "event":
       tags.push("sanity:event:list");

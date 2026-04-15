@@ -23,7 +23,7 @@ const SERMONS: Sermon[] = [
     duration: "52 min",
     scripture: "Revelation 12:11",
     thumbnail: "/images/fmeli/word-preaching.jpg",
-    href: "/sermons/overcomers-day-6",
+    href: "/resources/messages/overcomers-day-6",
     tag: "Featured",
   },
   {
@@ -33,7 +33,7 @@ const SERMONS: Sermon[] = [
     duration: "48 min",
     scripture: "1 Corinthians 11:26",
     thumbnail: "/images/fmeli/worship-hands-up.jpg",
-    href: "/sermons/qa-communion",
+    href: "/resources/messages/qa-communion",
   },
   {
     title: "Brothers in the Vineyard",
@@ -42,7 +42,7 @@ const SERMONS: Sermon[] = [
     duration: "55 min",
     scripture: "Hebrews 10:24–25",
     thumbnail: "/images/fmeli/brothers-embrace.jpg",
-    href: "/sermons/brothers-vineyard",
+    href: "/resources/messages/brothers-vineyard",
   },
 ];
 
@@ -65,10 +65,10 @@ export function FeaturedSermons() {
               </h2>
             </div>
             <Link
-              href="/sermons"
+              href="/resources/messages"
               className="group inline-flex items-center gap-2 text-sm font-semibold text-(--color-brand-blue-ink) transition hover:text-(--color-brand-red)"
             >
-              All sermons
+              All messages
               <ArrowRight
                 size={16}
                 className="transition-transform group-hover:translate-x-1"

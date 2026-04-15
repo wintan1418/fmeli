@@ -1,9 +1,19 @@
 import { defineField, defineType } from "sanity";
 import { PlayIcon } from "@sanity/icons";
 
+/**
+ * A FMELi message — sermons, teaching sessions, convention messages,
+ * special meeting recordings. Was previously named "sermon" before we
+ * reorganised the resources area; "message" is the term the office uses
+ * day-to-day so the schema follows.
+ *
+ * Categories live in the messageCategory document so the office can add
+ * new buckets (Sunday, Wednesday teaching, convention, etc.) without a
+ * code change.
+ */
 export default defineType({
-  name: "sermon",
-  title: "Sermon",
+  name: "message",
+  title: "Message",
   type: "document",
   icon: PlayIcon,
   fields: [
@@ -19,6 +29,13 @@ export default defineType({
       validation: (R) => R.required(),
     }),
     defineField({
+      name: "category",
+      type: "reference",
+      to: [{ type: "messageCategory" }],
+      description:
+        "Which group does this message belong to? Pick one or create a new category in Studio.",
+    }),
+    defineField({
       name: "preacher",
       type: "reference",
       to: [{ type: "pastor" }],
@@ -27,7 +44,7 @@ export default defineType({
     defineField({
       name: "series",
       type: "reference",
-      to: [{ type: "sermonSeries" }],
+      to: [{ type: "messageSeries" }],
     }),
     defineField({
       name: "date",
@@ -54,7 +71,7 @@ export default defineType({
       name: "audioUrl",
       title: "Audio download link (pCloud / external)",
       description:
-        "Paste the public share link to the message file. FMELi hosts messages on pCloud — paste the pCloud public link here and the site will surface a Download pill on the sermon card.",
+        "Paste the public share link to the message file. FMELi hosts messages on pCloud — paste the pCloud public link here and the site will surface a Download pill on the message card.",
       type: "url",
     }),
     defineField({
@@ -69,7 +86,8 @@ export default defineType({
     defineField({
       name: "videoFile",
       title: "Video file (uploaded to Sanity)",
-      description: "Drag-and-drop a sermon video file. Prefer YouTube ID for long videos.",
+      description:
+        "Drag-and-drop a message video file. Prefer YouTube ID for long videos.",
       type: "file",
       options: {
         accept: "video/*",
@@ -86,10 +104,11 @@ export default defineType({
       name: "excerptFile",
       title: "Excerpt document (uploaded — PDF / DOCX)",
       description:
-        "Drag-and-drop the written excerpt of the message here. Visitors can download it directly from the sermon card.",
+        "Drag-and-drop the written excerpt of the message here. Visitors can download it directly from the message card.",
       type: "file",
       options: {
-        accept: ".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        accept:
+          ".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       },
     }),
     defineField({
@@ -101,14 +120,14 @@ export default defineType({
     }),
     defineField({
       name: "notes",
-      title: "Sermon notes",
+      title: "Message notes",
       type: "array",
       of: [{ type: "block" }],
     }),
     defineField({
       name: "transcript",
       title: "Full transcript",
-      description: "Optional — the complete spoken transcript of the sermon.",
+      description: "Optional — the complete spoken transcript of the message.",
       type: "array",
       of: [{ type: "block" }],
     }),
@@ -145,6 +164,18 @@ export default defineType({
     },
   ],
   preview: {
-    select: { title: "title", subtitle: "date", media: "thumbnail" },
+    select: {
+      title: "title",
+      subtitle: "date",
+      categoryTitle: "category.title",
+      media: "thumbnail",
+    },
+    prepare: ({ title, subtitle, categoryTitle, media }) => ({
+      title,
+      subtitle: categoryTitle
+        ? `${categoryTitle} · ${subtitle ?? ""}`
+        : subtitle,
+      media,
+    }),
   },
 });
