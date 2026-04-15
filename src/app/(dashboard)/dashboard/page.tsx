@@ -1,119 +1,48 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { ArrowRight, Building2, ScrollText, UsersRound } from "lucide-react";
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import {
-  Building2,
-  Home,
-  LogOut,
-  ScrollText,
-  UsersRound,
-} from "lucide-react";
-import { auth, signOut } from "@/auth";
+  requireDashboardSession,
+  canSeeAllAssemblies,
+} from "@/lib/dashboard/session";
 
 export const metadata = {
   title: "Dashboard · FMELi",
 };
 
-const ROLE_LABEL: Record<string, string> = {
-  assembly_lead: "Assembly Lead",
-  office_admin: "Office Admin",
-  super_admin: "Super Admin",
-};
-
 export default async function DashboardHomePage() {
-  const session = await auth();
-  if (!session?.user) {
-    // Belt-and-braces: middleware already gates this, but if anything
-    // upstream lets us through with no session, bounce to login.
-    redirect("/dashboard/login");
-  }
-
-  const role = session.user.role ?? "assembly_lead";
-  const scopeLabel =
-    role === "assembly_lead"
-      ? session.user.assemblyCity ?? "your assembly"
-      : "every assembly";
+  const session = await requireDashboardSession();
+  const scopeLine = canSeeAllAssemblies(session)
+    ? "You're an admin — every assembly is in scope."
+    : `You're leading ${session.assemblyCity ?? "your assembly"}.`;
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-16">
-      {/* Header */}
-      <header className="flex flex-wrap items-start justify-between gap-6">
-        <div>
-          <p
-            className="text-xs font-semibold uppercase tracking-[0.28em]"
-            style={{ color: "var(--color-brand-red)" }}
-          >
-            FMELi · Pastor Dashboard
-          </p>
-          <h1
-            className="mt-3 font-[family-name:var(--font-display)] text-4xl font-semibold leading-tight md:text-5xl"
-            style={{ color: "var(--color-ink)" }}
-          >
-            Welcome, {session.user.name?.split(" ")[0] ?? "Pastor"}.
-          </h1>
-          <p
-            className="mt-3 text-base"
-            style={{ color: "var(--color-ink-soft)" }}
-          >
-            You&rsquo;re signed in as{" "}
-            <strong>{ROLE_LABEL[role] ?? "Pastor"}</strong> with access to{" "}
-            <strong>{scopeLabel}</strong>.
-          </p>
-        </div>
-
-        <form
-          action={async () => {
-            "use server";
-            await signOut({ redirectTo: "/dashboard/login" });
-          }}
-        >
-          <button
-            type="submit"
-            className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition hover:scale-[1.02]"
-            style={{
-              borderColor: "rgb(11 20 27 / 0.12)",
-              color: "var(--color-ink)",
-            }}
-          >
-            <LogOut size={14} />
-            Sign out
-          </button>
-        </form>
-      </header>
-
-      {/* Card grid */}
-      <section className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+    <DashboardShell
+      session={session}
+      title={`Welcome, ${session.name.split(" ")[0]}.`}
+      description={scopeLine}
+    >
+      <section className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         <DashboardCard
           icon={<ScrollText size={20} />}
-          title="Weekly report"
-          body="Submit this week's attendance, finances, highlights, and prayer points. Coming next."
-          href="#"
-          disabled
+          title="Weekly reports"
+          body="Submit this week's attendance, finances, highlights and prayer points."
+          href="/dashboard/reports"
         />
         <DashboardCard
           icon={<UsersRound size={20} />}
           title="Members"
-          body="Browse and manage members for your assembly. Coming next."
-          href="#"
-          disabled
+          body="Browse, search and add members for your assembly."
+          href="/dashboard/members"
         />
         <DashboardCard
           icon={<Building2 size={20} />}
           title="Assembly profile"
-          body="Update service times, contact info, and the lead pastor card. Coming next."
-          href="#"
-          disabled
+          body="Update service times, contact info and the visit-us card."
+          href="/dashboard/assembly"
         />
       </section>
-
-      <Link
-        href="/"
-        className="mt-12 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em]"
-        style={{ color: "var(--color-muted)" }}
-      >
-        <Home size={12} />
-        Back to fmeli.org
-      </Link>
-    </div>
+    </DashboardShell>
   );
 }
 
@@ -122,21 +51,17 @@ function DashboardCard({
   title,
   body,
   href,
-  disabled = false,
 }: {
   icon: React.ReactNode;
   title: string;
   body: string;
   href: string;
-  disabled?: boolean;
 }) {
-  const inner = (
-    <div
-      className="flex h-full flex-col gap-3 rounded-[var(--radius-card)] border bg-white p-7 transition hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
-      style={{
-        borderColor: "rgb(11 20 27 / 0.08)",
-        opacity: disabled ? 0.55 : 1,
-      }}
+  return (
+    <Link
+      href={href}
+      className="group flex h-full flex-col gap-3 rounded-[var(--radius-card)] border bg-white p-7 transition hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
+      style={{ borderColor: "rgb(11 20 27 / 0.08)" }}
     >
       <span
         className="inline-flex h-10 w-10 items-center justify-center rounded-full"
@@ -157,9 +82,16 @@ function DashboardCard({
       <p className="text-sm" style={{ color: "var(--color-ink-soft)" }}>
         {body}
       </p>
-    </div>
+      <span
+        className="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em]"
+        style={{ color: "var(--color-brand-red)" }}
+      >
+        Open
+        <ArrowRight
+          size={12}
+          className="transition group-hover:translate-x-0.5"
+        />
+      </span>
+    </Link>
   );
-
-  if (disabled) return inner;
-  return <Link href={href}>{inner}</Link>;
 }
