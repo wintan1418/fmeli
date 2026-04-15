@@ -144,6 +144,64 @@ export default defineType({
       readOnly: true,
       initialValue: () => new Date().toISOString(),
     }),
+
+    defineField({
+      name: "comments",
+      title: "Comments",
+      description:
+        "Conversation thread between the assembly lead and the office on this report. Added from the dashboard, not Studio.",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "reportComment",
+          title: "Comment",
+          fields: [
+            defineField({
+              name: "author",
+              type: "reference",
+              to: [{ type: "pastor" }],
+            }),
+            defineField({
+              name: "authorName",
+              type: "string",
+              description: "Snapshot at write time so deleted pastors still resolve.",
+            }),
+            defineField({
+              name: "authorRole",
+              type: "string",
+              options: {
+                list: ["assembly_lead", "office_admin", "super_admin"],
+              },
+            }),
+            defineField({
+              name: "body",
+              type: "text",
+              rows: 3,
+              validation: (R) => R.required().max(2000),
+            }),
+            defineField({
+              name: "createdAt",
+              type: "datetime",
+              readOnly: true,
+            }),
+          ],
+          preview: {
+            select: {
+              authorName: "authorName",
+              body: "body",
+              createdAt: "createdAt",
+            },
+            prepare: ({ authorName, body, createdAt }) => ({
+              title: authorName ?? "Comment",
+              subtitle: createdAt
+                ? `${createdAt.slice(0, 10)} · ${(body ?? "").slice(0, 60)}`
+                : (body ?? "").slice(0, 80),
+            }),
+          },
+        },
+      ],
+    }),
   ],
   orderings: [
     {

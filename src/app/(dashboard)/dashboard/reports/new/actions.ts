@@ -53,14 +53,18 @@ export async function submitWeeklyReport(
 ): Promise<ReportActionState> {
   const session = await requireDashboardSession();
 
-  // Assembly leads always file under their own assembly. Admins may pass
-  // a specific assemblyId via a hidden field on the form (the form below
-  // restricts admins to picking from a dropdown).
-  const requestedAssemblyId = txt(formData, "assemblyId");
-  const assemblyId =
-    session.role === "assembly_lead"
-      ? session.assemblyId
-      : requestedAssemblyId ?? session.assemblyId;
+  // Only assembly leads can FILE reports. Office/super admins are
+  // read-only viewers of the report archive across every assembly —
+  // they review what the leads send up, not author it themselves.
+  if (session.role !== "assembly_lead") {
+    return {
+      status: "error",
+      message:
+        "Only assembly leads can submit reports. Admins have read-only access to the archive.",
+    };
+  }
+
+  const assemblyId = session.assemblyId;
 
   if (!assemblyId) {
     return {

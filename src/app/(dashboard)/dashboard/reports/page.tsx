@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, FileText, Users, Banknote } from "lucide-react";
+import { Plus, FileText, Users, Banknote, MessageSquare } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import {
   requireDashboardSession,
@@ -22,6 +22,7 @@ type ReportRow = {
   totalGiving?: number | null;
   assemblyCity?: string | null;
   submittedByName?: string | null;
+  commentCount?: number;
 };
 
 const PERIOD_LABEL: Record<string, string> = {
@@ -65,7 +66,8 @@ export default async function ReportsListPage() {
                      + coalesce(finances.missions, 0)
                      + coalesce(finances.other, 0),
         "assemblyCity": assembly->city,
-        "submittedByName": submittedBy->name
+        "submittedByName": submittedBy->name,
+        "commentCount": count(comments)
       }`,
     {
       seeAll,
@@ -83,17 +85,29 @@ export default async function ReportsListPage() {
           : `Reports you've submitted for ${session.assemblyCity ?? "your assembly"}.`
       }
       actions={
-        <Link
-          href="/dashboard/reports/new"
-          className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition hover:scale-[1.02]"
-          style={{
-            background: "var(--color-brand-red)",
-            color: "white",
-          }}
-        >
-          <Plus size={14} />
-          New report
-        </Link>
+        session.role === "assembly_lead" ? (
+          <Link
+            href="/dashboard/reports/new"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition hover:scale-[1.02]"
+            style={{
+              background: "var(--color-brand-red)",
+              color: "white",
+            }}
+          >
+            <Plus size={14} />
+            New report
+          </Link>
+        ) : (
+          <span
+            className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em]"
+            style={{
+              borderColor: "rgb(11 20 27 / 0.12)",
+              color: "var(--color-muted)",
+            }}
+          >
+            Read-only review access
+          </span>
+        )
       }
     >
       {reports.length === 0 ? (
@@ -110,12 +124,24 @@ export default async function ReportsListPage() {
                 <Th>Total giving</Th>
                 <Th>Status</Th>
                 <Th>Submitted by</Th>
+                <Th>Comments</Th>
               </tr>
             </thead>
             <tbody className="divide-y" style={{ borderColor: "rgb(11 20 27 / 0.06)" }}>
               {reports.map((r) => (
-                <tr key={r._id} className="hover:bg-[color:rgb(11_20_27/0.02)]">
-                  <Td bold>{r.weekOf ?? "—"}</Td>
+                <tr
+                  key={r._id}
+                  className="transition hover:bg-[color:rgb(11_20_27/0.02)]"
+                >
+                  <Td bold>
+                    <Link
+                      href={`/dashboard/reports/${r._id}`}
+                      className="underline-offset-2 hover:underline"
+                      style={{ color: "var(--color-brand-blue-ink)" }}
+                    >
+                      {r.weekOf ?? "—"}
+                    </Link>
+                  </Td>
                   <Td>{PERIOD_LABEL[r.period ?? "weekly"] ?? r.period}</Td>
                   {seeAll && <Td>{r.assemblyCity ?? "—"}</Td>}
                   <Td>{r.attendanceTotal ?? "—"}</Td>
@@ -136,6 +162,19 @@ export default async function ReportsListPage() {
                     </span>
                   </Td>
                   <Td>{r.submittedByName ?? "—"}</Td>
+                  <Td>
+                    {r.commentCount && r.commentCount > 0 ? (
+                      <span
+                        className="inline-flex items-center gap-1.5 text-xs"
+                        style={{ color: "var(--color-brand-blue-ink)" }}
+                      >
+                        <MessageSquare size={12} />
+                        {r.commentCount}
+                      </span>
+                    ) : (
+                      <span style={{ color: "var(--color-muted)" }}>—</span>
+                    )}
+                  </Td>
                 </tr>
               ))}
             </tbody>

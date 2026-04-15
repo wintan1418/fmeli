@@ -1,8 +1,6 @@
+import { redirect } from "next/navigation";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
-import {
-  requireDashboardSession,
-  canSeeAllAssemblies,
-} from "@/lib/dashboard/session";
+import { requireDashboardSession } from "@/lib/dashboard/session";
 import { client as readClient } from "@/lib/sanity/client";
 import { ReportForm } from "./ReportForm";
 
@@ -16,17 +14,20 @@ type Assembly = { _id: string; city: string; state?: string };
 
 export default async function NewReportPage() {
   const session = await requireDashboardSession();
-  const seeAll = canSeeAllAssemblies(session);
 
-  // Admins get a picker over every assembly. Leads get only theirs (to
-  // populate the read-only display string), so we still fetch them.
+  // Reports are filed by assembly leads. Office/super admins read the
+  // archive but don't author it — bounce them back to the list.
+  if (session.role !== "assembly_lead") {
+    redirect("/dashboard/reports");
+  }
+
+  // The form needs the city label even though it's pinned, so still
+  // pull the assembly list (one row, but lets us reuse the form).
   const assemblies = await readClient.fetch<Assembly[]>(
     `*[_type == "assembly"] | order(order asc, city asc){
         _id, city, state
       }`,
   );
-
-  const pinnedAssemblyId = seeAll ? null : session.assemblyId;
 
   return (
     <DashboardShell
@@ -36,7 +37,7 @@ export default async function NewReportPage() {
     >
       <ReportForm
         assemblies={assemblies}
-        pinnedAssemblyId={pinnedAssemblyId}
+        pinnedAssemblyId={session.assemblyId}
       />
     </DashboardShell>
   );
