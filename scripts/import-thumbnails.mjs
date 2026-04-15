@@ -181,6 +181,32 @@ async function main() {
   console.log();
 
   // 4. Match
+  //
+  // Two-pass strategy:
+  //   Pass A — exact normalised key. Best signal, no ambiguity.
+  //   Pass B — word-set containment. Tokenise both sides, drop the
+  //            stop-words ("the", "of", "in", "and", "a", "to") and
+  //            require every remaining token from the shorter side
+  //            to appear in the longer side. Both sides must have at
+  //            least 3 content tokens — otherwise "marriage" or
+  //            "1 sts" would shotgun-match anything containing those
+  //            words. The longest content match wins, so a message
+  //            whose title fully matches an image key beats one that
+  //            only partially overlaps.
+  const STOP_WORDS = new Set([
+    "the", "of", "in", "and", "a", "to", "is", "for", "on", "by", "at",
+  ]);
+  const tokensFor = (k) =>
+    k.split(" ").filter((t) => t.length > 0 && !STOP_WORDS.has(t));
+
+  // Pre-compute content tokens for every image key, and only keep
+  // images with ≥3 content tokens — short keys can't safely match.
+  const imageEntries = [];
+  for (const [imgKey, img] of imagesByKey) {
+    const toks = tokensFor(imgKey);
+    if (toks.length >= 3) imageEntries.push({ imgKey, img, tokens: toks });
+  }
+
   let matched = 0;
   let unmatched = 0;
   let uploaded = 0;
@@ -189,7 +215,29 @@ async function main() {
 
   for (const msg of candidates) {
     const key = normalise(msg.title);
-    const img = imagesByKey.get(key);
+    let img = imagesByKey.get(key);
+    if (!img) {
+      const msgTokens = tokensFor(key);
+      if (msgTokens.length >= 3) {
+        const msgSet = new Set(msgTokens);
+        let bestScore = 0;
+        for (const entry of imageEntries) {
+          // Whichever side is shorter must be a subset of the other.
+          const [shortToks, longSet] =
+            entry.tokens.length <= msgTokens.length
+              ? [entry.tokens, msgSet]
+              : [msgTokens, new Set(entry.tokens)];
+          if (shortToks.every((t) => longSet.has(t))) {
+            // Score = size of the smaller side. Longer wins ties.
+            const score = shortToks.length;
+            if (score > bestScore) {
+              bestScore = score;
+              img = entry.img;
+            }
+          }
+        }
+      }
+    }
     if (img) {
       matched += 1;
       matches.push({ msg, img });
