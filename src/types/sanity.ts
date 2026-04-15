@@ -93,6 +93,7 @@ export type Message = {
   excerptUrl?: string;
   excerptFileUrl?: string;
   durationMinutes?: number;
+  featured?: boolean;
   youtubeId?: string;
   audioUrl?: string;
   audioFileUrl?: string;

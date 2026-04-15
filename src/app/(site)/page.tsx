@@ -6,12 +6,12 @@ import { PillarsSection } from "@/components/sections/PillarsSection";
 import { LiveStats } from "@/components/sections/LiveStats";
 import { MeetingsGrid } from "@/components/sections/MeetingsGrid";
 import { UpcomingEvents } from "@/components/sections/UpcomingEvents";
-import { FeaturedSermons } from "@/components/sections/FeaturedSermons";
+import { FeaturedMessages } from "@/components/sections/FeaturedMessages";
 import { ScripturePullquote } from "@/components/sections/ScripturePullquote";
 import { AssembliesBand } from "@/components/sections/AssembliesBand";
 import { NewsletterCTA } from "@/components/sections/NewsletterCTA";
 
-export default function Home() {
+export default async function Home() {
   return (
     <>
       <HeroSlider />
@@ -22,7 +22,7 @@ export default function Home() {
       <LiveStats />
       <MeetingsGrid />
       <UpcomingEvents />
-      <FeaturedSermons />
+      <FeaturedMessages />
       <ScripturePullquote />
       <AssembliesBand />
       <NewsletterCTA />

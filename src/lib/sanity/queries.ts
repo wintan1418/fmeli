@@ -104,6 +104,30 @@ export const ALL_MESSAGE_SLUGS_QUERY = groq`
   *[_type == "message" && defined(slug.current)]{ "slug": slug.current }
 `;
 
+/**
+ * The 3 messages used by the homepage featured grid.
+ *
+ * Ordering: featured docs first (so the office can pin a message
+ * to the homepage by toggling the boolean in Studio), then by date
+ * descending. Limit 3. Trimmed projection — only the fields the
+ * card needs.
+ */
+export const FEATURED_MESSAGES_QUERY = groq`
+  *[_type == "message"] | order(featured desc, date desc)[0...3]{
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    scripture,
+    excerpt,
+    durationMinutes,
+    featured,
+    thumbnail,
+    "category": category->{ title, "slug": slug.current },
+    "preacher": preacher->{ name }
+  }
+`;
+
 // ────────────────────────────────────────────────────────────
 // Worship sessions
 // ────────────────────────────────────────────────────────────
