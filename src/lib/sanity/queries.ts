@@ -56,7 +56,7 @@ export const MESSAGES_LIST_QUERY = groq`
           || category->slug.current == $category
           || category->parent->slug.current == $category)
       && ($year == null || string::split(date, "-")[0] == $year)
-    ] | order(date desc)[0...120]{
+    ] | order(date desc)[$offset...$end]{
       _id,
       title,
       "slug": slug.current,
@@ -83,6 +83,20 @@ export const MESSAGES_LIST_QUERY = groq`
       "preacher": preacher->{ name, "image": image.asset->url },
       "series": series->{ title, "slug": slug.current }
     }
+`;
+
+/**
+ * Total count of messages matching the same $category / $year filter
+ * combo as MESSAGES_LIST_QUERY — used by the page to render the
+ * pagination bar. Same filter logic, no projection.
+ */
+export const MESSAGES_COUNT_QUERY = groq`
+  count(*[_type == "message"
+      && ($category == null
+          || category->slug.current == $category
+          || category->parent->slug.current == $category)
+      && ($year == null || string::split(date, "-")[0] == $year)
+    ])
 `;
 
 /**

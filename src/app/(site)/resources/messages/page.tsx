@@ -7,9 +7,12 @@ import { PageHero } from "@/components/ui/PageHero";
 import { sanityFetch } from "@/lib/sanity/client";
 import {
   MESSAGES_LIST_QUERY,
+  MESSAGES_COUNT_QUERY,
   MESSAGE_CATEGORIES_QUERY,
   MESSAGE_YEARS_QUERY,
 } from "@/lib/sanity/queries";
+
+const PAGE_SIZE = 24;
 import { urlFor } from "@/lib/sanity/image";
 import type { Message, MessageCategory } from "@/types/sanity";
 
@@ -24,19 +27,41 @@ export const metadata: Metadata = {
 export default async function MessagesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; year?: string }>;
+  searchParams: Promise<{ category?: string; year?: string; page?: string }>;
 }) {
-  const { category: activeCategory, year: rawYear } = await searchParams;
+  const { category: activeCategory, year: rawYear, page: rawPage } = await searchParams;
   // Only accept 4-digit year strings — anything else is treated as no filter.
   const activeYear = rawYear && /^\d{4}$/.test(rawYear) ? rawYear : null;
+  // Page numbers come from the URL; clamp to ≥1 and integer.
+  const pageNum = (() => {
+    const n = parseInt(rawPage ?? "1", 10);
+    return Number.isFinite(n) && n >= 1 ? n : 1;
+  })();
+  const offset = (pageNum - 1) * PAGE_SIZE;
+  const end = offset + PAGE_SIZE;
 
-  const [messages, categories, years] = await Promise.all([
+  const [messages, totalCount, categories, years] = await Promise.all([
     sanityFetch<Message[]>({
       query: MESSAGES_LIST_QUERY,
-      params: { category: activeCategory ?? null, year: activeYear },
+      params: {
+        category: activeCategory ?? null,
+        year: activeYear,
+        offset,
+        end,
+      },
       // Tag includes the filters so each filtered view caches separately.
       tags: [
         "sanity:message:list",
+        activeCategory ? `sanity:message:category:${activeCategory}` : "sanity:message:category:all",
+        activeYear ? `sanity:message:year:${activeYear}` : "sanity:message:year:all",
+      ],
+      revalidate: 300,
+    }),
+    sanityFetch<number>({
+      query: MESSAGES_COUNT_QUERY,
+      params: { category: activeCategory ?? null, year: activeYear },
+      tags: [
+        "sanity:message:count",
         activeCategory ? `sanity:message:category:${activeCategory}` : "sanity:message:category:all",
         activeYear ? `sanity:message:year:${activeYear}` : "sanity:message:year:all",
       ],
@@ -54,15 +79,31 @@ export default async function MessagesPage({
     }),
   ]);
 
-  // Build a query-string helper that preserves whichever of category/year
-  // is NOT being changed by the chip the user clicks. Using URLSearchParams
-  // keeps escaping correct without hand-rolled string concat.
-  const buildHref = (next: { category?: string | null; year?: string | null }) => {
+  const totalPages = Math.max(1, Math.ceil((totalCount ?? 0) / PAGE_SIZE));
+
+  // Build a query-string helper that preserves whichever filter is NOT
+  // being changed by the chip the user clicks. Changing category or
+  // year resets the page back to 1, since the prior page index almost
+  // certainly doesn't exist in the new filtered list.
+  const buildHref = (next: {
+    category?: string | null;
+    year?: string | null;
+    page?: number | null;
+  }) => {
     const params = new URLSearchParams();
-    const nextCategory = next.category === undefined ? activeCategory ?? null : next.category;
+    const nextCategory =
+      next.category === undefined ? activeCategory ?? null : next.category;
     const nextYear = next.year === undefined ? activeYear : next.year;
+    const filterChanged =
+      next.category !== undefined || next.year !== undefined;
+    const nextPage = filterChanged
+      ? null
+      : next.page === undefined
+        ? pageNum
+        : next.page;
     if (nextCategory) params.set("category", nextCategory);
     if (nextYear) params.set("year", nextYear);
+    if (nextPage && nextPage > 1) params.set("page", String(nextPage));
     const qs = params.toString();
     return qs ? `/resources/messages?${qs}` : "/resources/messages";
   };
@@ -199,6 +240,18 @@ export default async function MessagesPage({
           )}
 
           {messages && messages.length > 0 ? (
+            <>
+            <div className="mb-6 flex items-baseline justify-between text-xs uppercase tracking-[0.18em] text-muted">
+              <span>
+                {totalCount.toLocaleString()} message
+                {totalCount === 1 ? "" : "s"}
+                {totalPages > 1 && (
+                  <>
+                    {" · "}page {pageNum} of {totalPages}
+                  </>
+                )}
+              </span>
+            </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {messages.map((m) => {
                 // Fall back: message thumbnail → its category's
@@ -297,6 +350,14 @@ export default async function MessagesPage({
                 );
               })}
             </div>
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={pageNum}
+                totalPages={totalPages}
+                buildHref={(p) => buildHref({ page: p })}
+              />
+            )}
+            </>
           ) : (
             <div className="rounded-[var(--radius-card)] border border-dashed border-ink/15 p-12 text-center text-ink-soft">
               <Clock size={32} className="mx-auto text-brand-gold" />
@@ -357,5 +418,92 @@ function CategoryChip({
     >
       {label}
     </Link>
+  );
+}
+
+/**
+ * Build a compact list of page numbers with ellipses for archives
+ * with many pages. Always shows first, last, current, and the two
+ * neighbours of current. Examples:
+ *
+ *   total=4,  current=2 → [1, 2, 3, 4]
+ *   total=20, current=1 → [1, 2, 3, "…", 20]
+ *   total=20, current=10 → [1, "…", 9, 10, 11, "…", 20]
+ *   total=20, current=20 → [1, "…", 18, 19, 20]
+ */
+function paginationRange(current: number, total: number): Array<number | "…"> {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  const out: Array<number | "…"> = [1];
+  const left = Math.max(2, current - 1);
+  const right = Math.min(total - 1, current + 1);
+  if (left > 2) out.push("…");
+  for (let i = left; i <= right; i++) out.push(i);
+  if (right < total - 1) out.push("…");
+  out.push(total);
+  return out;
+}
+
+function Pagination({
+  currentPage,
+  totalPages,
+  buildHref,
+}: {
+  currentPage: number;
+  totalPages: number;
+  buildHref: (page: number) => string;
+}) {
+  const pages = paginationRange(currentPage, totalPages);
+  const prevHref = currentPage > 1 ? buildHref(currentPage - 1) : null;
+  const nextHref = currentPage < totalPages ? buildHref(currentPage + 1) : null;
+  const baseChip =
+    "inline-flex h-10 min-w-10 items-center justify-center rounded-full border px-3 text-sm font-medium transition";
+  const inactive =
+    "border-ink/12 bg-white text-ink hover:border-ink/30 hover:bg-ink/2";
+  const active =
+    "border-brand-blue-ink bg-brand-blue-ink text-white font-semibold";
+  const disabled =
+    "border-ink/8 bg-ink/2 text-muted cursor-not-allowed pointer-events-none";
+
+  return (
+    <nav
+      aria-label="Pagination"
+      className="mt-12 flex flex-wrap items-center justify-center gap-2"
+    >
+      {prevHref ? (
+        <Link href={prevHref} className={`${baseChip} ${inactive}`}>
+          ← Prev
+        </Link>
+      ) : (
+        <span className={`${baseChip} ${disabled}`}>← Prev</span>
+      )}
+      {pages.map((p, i) =>
+        p === "…" ? (
+          <span
+            key={`gap-${i}`}
+            className="inline-flex h-10 min-w-10 items-center justify-center text-sm text-muted"
+          >
+            …
+          </span>
+        ) : (
+          <Link
+            key={p}
+            href={buildHref(p)}
+            className={`${baseChip} ${p === currentPage ? active : inactive}`}
+            aria-current={p === currentPage ? "page" : undefined}
+          >
+            {p}
+          </Link>
+        ),
+      )}
+      {nextHref ? (
+        <Link href={nextHref} className={`${baseChip} ${inactive}`}>
+          Next →
+        </Link>
+      ) : (
+        <span className={`${baseChip} ${disabled}`}>Next →</span>
+      )}
+    </nav>
   );
 }
