@@ -20,11 +20,22 @@ export const metadata: Metadata = {
     "Messages, teachings and convention recordings from FMELi — filter by category and download for offline.",
 };
 
-export default async function MessagesPage() {
+export default async function MessagesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const { category: activeCategory } = await searchParams;
+
   const [messages, categories] = await Promise.all([
     sanityFetch<Message[]>({
       query: MESSAGES_LIST_QUERY,
-      tags: ["sanity:message:list"],
+      params: { category: activeCategory ?? null },
+      // Tag includes the filter so each filtered view caches separately.
+      tags: [
+        "sanity:message:list",
+        activeCategory ? `sanity:message:category:${activeCategory}` : "sanity:message:category:all",
+      ],
       revalidate: 300,
     }),
     sanityFetch<MessageCategory[]>({
@@ -34,35 +45,56 @@ export default async function MessagesPage() {
     }),
   ]);
 
+  const activeCategoryDoc = activeCategory
+    ? categories?.find((c) => c.slug === activeCategory) ?? null
+    : null;
+
   return (
     <>
       <PageHero
-        eyebrow="The archive"
+        eyebrow={activeCategoryDoc ? activeCategoryDoc.title : "The archive"}
         title={
-          <>
-            Messages from{" "}
-            <span className="italic text-brand-gold-soft">the pulpit</span>
-          </>
+          activeCategoryDoc ? (
+            <>
+              {activeCategoryDoc.title.toLowerCase().includes("sunday")
+                ? "Sunday "
+                : ""}
+              messages from{" "}
+              <span className="italic text-brand-gold-soft">the pulpit</span>
+            </>
+          ) : (
+            <>
+              Messages from{" "}
+              <span className="italic text-brand-gold-soft">the pulpit</span>
+            </>
+          )
         }
-        subtitle="Sunday messages, midweek teaching, convention sessions and more — notes, audio and video where available."
+        subtitle={
+          activeCategoryDoc?.description ??
+          "Sunday messages, midweek teaching, convention sessions and more — notes, audio and video where available."
+        }
       />
 
       <section className="bg-off-white py-20 md:py-28">
         <Container>
-          {/* Category chips — purely informational for now; clicking is a
-              follow-up commit (we'll add ?category=<slug> filtering then). */}
+          {/* Category filter chips — clicking sets ?category=<slug>. */}
           {categories && categories.length > 0 && (
             <div className="mb-12 flex flex-wrap items-center gap-2">
               <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
                 Categories
               </span>
+              <CategoryChip
+                href="/resources/messages"
+                label="All"
+                active={!activeCategory}
+              />
               {categories.map((c) => (
-                <span
+                <CategoryChip
                   key={c._id}
-                  className="rounded-full border border-ink/12 bg-white px-3.5 py-1.5 text-xs font-medium text-ink"
-                >
-                  {c.title}
-                </span>
+                  href={`/resources/messages?category=${c.slug}`}
+                  label={c.title}
+                  active={activeCategory === c.slug}
+                />
               ))}
             </div>
           )}
@@ -162,16 +194,56 @@ export default async function MessagesPage() {
             <div className="rounded-[var(--radius-card)] border border-dashed border-ink/15 p-12 text-center text-ink-soft">
               <Clock size={32} className="mx-auto text-brand-gold" />
               <p className="mt-4 font-[family-name:var(--font-display)] text-2xl">
-                Message archive coming soon.
+                {activeCategoryDoc
+                  ? `No messages in ${activeCategoryDoc.title} yet.`
+                  : "Message archive coming soon."}
               </p>
               <p className="mt-3 text-sm">
-                The content team is preparing the first batch of messages.
-                Subscribe to the newsletter to be notified when they land.
+                {activeCategoryDoc ? (
+                  <>
+                    Try{" "}
+                    <Link
+                      href="/resources/messages"
+                      className="text-brand-red underline"
+                    >
+                      browsing every category
+                    </Link>{" "}
+                    to see all messages.
+                  </>
+                ) : (
+                  <>
+                    The content team is preparing the first batch of messages.
+                    Subscribe to the newsletter to be notified when they land.
+                  </>
+                )}
               </p>
             </div>
           )}
         </Container>
       </section>
     </>
+  );
+}
+
+function CategoryChip({
+  href,
+  label,
+  active,
+}: {
+  href: string;
+  label: string;
+  active: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={
+        active
+          ? "rounded-full border border-brand-blue-ink bg-brand-blue-ink px-3.5 py-1.5 text-xs font-semibold text-white"
+          : "rounded-full border border-ink/12 bg-white px-3.5 py-1.5 text-xs font-medium text-ink transition hover:border-ink/30 hover:bg-ink/2"
+      }
+    >
+      {label}
+    </Link>
   );
 }

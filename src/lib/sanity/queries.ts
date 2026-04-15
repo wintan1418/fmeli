@@ -34,26 +34,34 @@ export const ALL_PAGE_SLUGS_QUERY = groq`
   *[_type == "page" && defined(slug.current)]{ "slug": slug.current }
 `;
 
-/** Messages archive — newest first, last 60 shipped at build time. */
+/**
+ * Messages archive — newest first, last 60 shipped at build time.
+ *
+ * Optional category filter: pass $category as a slug string to scope to
+ * one bucket, or null/undefined for the unfiltered list. The check is
+ * written so that a missing/null $category short-circuits the join.
+ */
 export const MESSAGES_LIST_QUERY = groq`
-  *[_type == "message"] | order(date desc)[0...60]{
-    _id,
-    title,
-    "slug": slug.current,
-    date,
-    scripture,
-    excerpt,
-    excerptUrl,
-    "excerptFileUrl": excerptFile.asset->url,
-    durationMinutes,
-    youtubeId,
-    audioUrl,
-    "audioFileUrl": audioFile.asset->url,
-    thumbnail,
-    "category": category->{ title, "slug": slug.current },
-    "preacher": preacher->{ name, "image": image.asset->url },
-    "series": series->{ title, "slug": slug.current }
-  }
+  *[_type == "message"
+      && ($category == null || category->slug.current == $category)
+    ] | order(date desc)[0...60]{
+      _id,
+      title,
+      "slug": slug.current,
+      date,
+      scripture,
+      excerpt,
+      excerptUrl,
+      "excerptFileUrl": excerptFile.asset->url,
+      durationMinutes,
+      youtubeId,
+      audioUrl,
+      "audioFileUrl": audioFile.asset->url,
+      thumbnail,
+      "category": category->{ title, "slug": slug.current },
+      "preacher": preacher->{ name, "image": image.asset->url },
+      "series": series->{ title, "slug": slug.current }
+    }
 `;
 
 /** Every message category (for filter chips on the archive). */
