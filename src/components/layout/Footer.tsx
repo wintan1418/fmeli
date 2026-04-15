@@ -32,7 +32,7 @@ function Facebook({ size = 16 }: { size?: number }) {
 const COLUMNS = {
   Ministry: [
     { label: "About Us", href: "/about" },
-    { label: "Life Campaign", href: "/life-campaign" },
+    { label: "Become a Member", href: "/members/join" },
     { label: "What We Believe", href: "/beliefs" },
     { label: "Contact", href: "/contact" },
   ],
