@@ -7,6 +7,7 @@ import worshipSession from "./documents/worshipSession";
 import track from "./documents/track";
 import tip from "./documents/tip";
 import tipCategory from "./documents/tipCategory";
+import book from "./documents/book";
 import event from "./documents/event";
 import registration from "./documents/registration";
 import pastor from "./documents/pastor";
@@ -39,6 +40,7 @@ export const schemaTypes = [
   track,
   tip,
   tipCategory,
+  book,
   meeting,
   event,
   registration,

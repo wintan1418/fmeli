@@ -17,6 +17,7 @@ type PageDoc = {
 const RESERVED = new Set([
   "events",
   "resources",
+  "shop",
   "meetings",
   "assemblies",
   "blog",

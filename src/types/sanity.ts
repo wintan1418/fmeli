@@ -167,6 +167,25 @@ export type Tip = {
   };
 };
 
+export type Book = {
+  _id: string;
+  title: string;
+  slug?: string;
+  subtitle?: string;
+  author?: string;
+  cover?: SanityImage;
+  price?: number;
+  compareAtPrice?: number;
+  buyUrl?: string;
+  summary?: string;
+  description?: PortableTextBlock[];
+  pages?: number;
+  language?: string;
+  publishedAt?: string;
+  outOfStock?: boolean;
+  featured?: boolean;
+};
+
 export type Member = {
   _id: string;
   firstName?: string;

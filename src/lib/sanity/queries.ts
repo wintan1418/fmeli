@@ -233,6 +233,50 @@ export const ALL_TIP_SLUGS_QUERY = groq`
   *[_type == "tip" && defined(slug.current)]{ "slug": slug.current }
 `;
 
+// ────────────────────────────────────────────────────────────
+// Shop · Books
+// ────────────────────────────────────────────────────────────
+
+export const BOOKS_LIST_QUERY = groq`
+  *[_type == "book"] | order(featured desc, publishedAt desc)[0...60]{
+    _id,
+    title,
+    "slug": slug.current,
+    subtitle,
+    author,
+    cover,
+    price,
+    compareAtPrice,
+    summary,
+    outOfStock,
+    featured
+  }
+`;
+
+export const BOOK_BY_SLUG_QUERY = groq`
+  *[_type == "book" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    subtitle,
+    author,
+    cover,
+    price,
+    compareAtPrice,
+    buyUrl,
+    summary,
+    description,
+    pages,
+    language,
+    publishedAt,
+    outOfStock
+  }
+`;
+
+export const ALL_BOOK_SLUGS_QUERY = groq`
+  *[_type == "book" && defined(slug.current)]{ "slug": slug.current }
+`;
+
 /** Upcoming events (future only). */
 export const EVENTS_UPCOMING_QUERY = groq`
   *[_type == "event" && startsAt >= now()] | order(startsAt asc){

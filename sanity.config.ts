@@ -66,6 +66,7 @@ export default defineConfig({
                     ),
                   ]),
               ),
+            S.documentTypeListItem("book").title("Shop · Books"),
             S.divider(),
             S.documentTypeListItem("event").title("Events"),
             S.documentTypeListItem("registration").title("Event Registrations"),
