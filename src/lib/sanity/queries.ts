@@ -52,9 +52,22 @@ export const SERMONS_LIST_QUERY = groq`
 /** Single sermon by slug. */
 export const SERMON_BY_SLUG_QUERY = groq`
   *[_type == "sermon" && slug.current == $slug][0]{
-    ...,
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    scripture,
+    youtubeId,
+    audioUrl,
+    "audioFileUrl": audioFile.asset->url,
+    "videoFileUrl": videoFile.asset->url,
+    excerpt,
+    notes,
+    transcript,
+    durationMinutes,
     "preacher": preacher->{ name, role, bio, image },
-    "series": series->{ title, "slug": slug.current, artwork }
+    "series": series->{ title, "slug": slug.current, artwork },
+    "assembly": assembly->{ "slug": slug.current, city }
   }
 `;
 
