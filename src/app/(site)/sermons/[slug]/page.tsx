@@ -1,39 +1,20 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { PortableText, type PortableTextBlock } from "next-sanity";
+import { PortableText } from "next-sanity";
 import { ArrowLeft, ExternalLink, Headphones, Download, FileText } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { sanityFetch } from "@/lib/sanity/client";
 import { SERMON_BY_SLUG_QUERY } from "@/lib/sanity/queries";
+import type { Sermon } from "@/types/sanity";
 
 export const revalidate = 3600;
-
-type SermonDoc = {
-  _id: string;
-  title: string;
-  slug?: string;
-  date?: string;
-  scripture?: string;
-  youtubeId?: string;
-  audioUrl?: string;
-  audioFileUrl?: string;
-  videoFileUrl?: string;
-  excerpt?: string;
-  excerptUrl?: string;
-  excerptFileUrl?: string;
-  durationMinutes?: number;
-  notes?: PortableTextBlock[];
-  transcript?: PortableTextBlock[];
-  preacher?: { name?: string; role?: string };
-  assembly?: { slug?: string; city?: string };
-};
 
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> },
 ): Promise<Metadata> {
   const { slug } = await params;
-  const sermon = await sanityFetch<SermonDoc | null>({
+  const sermon = await sanityFetch<Sermon | null>({
     query: SERMON_BY_SLUG_QUERY,
     params: { slug },
     tags: [`sanity:sermon:${slug}`],
@@ -48,7 +29,7 @@ export default async function SermonPage(
   { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
-  const sermon = await sanityFetch<SermonDoc | null>({
+  const sermon = await sanityFetch<Sermon | null>({
     query: SERMON_BY_SLUG_QUERY,
     params: { slug },
     tags: [`sanity:sermon:${slug}`],

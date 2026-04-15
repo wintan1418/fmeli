@@ -7,6 +7,7 @@ import {
   canSeeAllAssemblies,
 } from "@/lib/dashboard/session";
 import { client as readClient } from "@/lib/sanity/client";
+import type { Assembly, AssemblyOption } from "@/types/sanity";
 import { AssemblyForm } from "./AssemblyForm";
 
 export const metadata = {
@@ -14,20 +15,6 @@ export const metadata = {
 };
 
 export const dynamic = "force-dynamic";
-
-type AssemblyDoc = {
-  _id: string;
-  city: string;
-  slug: string;
-  tagline?: string;
-  address?: string;
-  phone?: string;
-  email?: string;
-  mapUrl?: string;
-  serviceTimes?: { label?: string; day?: string; time?: string }[];
-};
-
-type Assembly = { _id: string; city: string; state?: string };
 
 export default async function AssemblyProfilePage({
   searchParams,
@@ -38,7 +25,7 @@ export default async function AssemblyProfilePage({
   const seeAll = canSeeAllAssemblies(session);
   const { assembly: requestedFromQuery } = await searchParams;
 
-  const assemblies = await readClient.fetch<Assembly[]>(
+  const assemblies = await readClient.fetch<AssemblyOption[]>(
     `*[_type == "assembly"] | order(order asc, city asc){
         _id, city, state
       }`,
@@ -66,7 +53,7 @@ export default async function AssemblyProfilePage({
     );
   }
 
-  const doc = await readClient.fetch<AssemblyDoc | null>(
+  const doc = await readClient.fetch<Assembly | null>(
     `*[_type == "assembly" && _id == $id][0]{
         _id,
         city,

@@ -5,6 +5,7 @@ import {
   canSeeAllAssemblies,
 } from "@/lib/dashboard/session";
 import { client as readClient } from "@/lib/sanity/client";
+import type { AssemblyOption, MemberListRow } from "@/types/sanity";
 import { AddMemberForm } from "./AddMemberForm";
 
 export const metadata = {
@@ -12,20 +13,6 @@ export const metadata = {
 };
 
 export const dynamic = "force-dynamic";
-
-type MemberRow = {
-  _id: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  phone?: string;
-  lifeStage?: string;
-  status?: string;
-  joinedAt?: string;
-  assemblyCity?: string | null;
-};
-
-type Assembly = { _id: string; city: string; state?: string };
 
 const STAGE_LABEL: Record<string, string> = {
   visitor: "Visitor",
@@ -41,7 +28,7 @@ export default async function MembersPage() {
   const seeAll = canSeeAllAssemblies(session);
 
   const [members, assemblies] = await Promise.all([
-    readClient.fetch<MemberRow[]>(
+    readClient.fetch<MemberListRow[]>(
       `*[_type == "member"
           && status != "removed"
           && ($seeAll == true || assembly._ref == $assemblyId)
@@ -61,7 +48,7 @@ export default async function MembersPage() {
         assemblyId: session.assemblyId ?? "",
       },
     ),
-    readClient.fetch<Assembly[]>(
+    readClient.fetch<AssemblyOption[]>(
       `*[_type == "assembly"] | order(order asc, city asc){
           _id, city, state
         }`,

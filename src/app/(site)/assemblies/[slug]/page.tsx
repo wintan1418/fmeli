@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { PortableText, type PortableTextBlock } from "next-sanity";
+import { PortableText } from "next-sanity";
 import { ArrowLeft, MapPin, Phone, Mail, Clock, ExternalLink } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PastorAvatar } from "@/components/ui/PastorAvatar";
@@ -12,35 +12,9 @@ import {
   ASSEMBLY_BY_SLUG_QUERY,
   ALL_ASSEMBLY_SLUGS_QUERY,
 } from "@/lib/sanity/queries";
+import type { Assembly } from "@/types/sanity";
 
 export const revalidate = 600;
-
-type Pastor = {
-  _id: string;
-  name?: string;
-  role?: string;
-  department?: string;
-  image?: { asset?: { _ref?: string } };
-  bio?: PortableTextBlock[];
-};
-
-type AssemblyDoc = {
-  _id: string;
-  slug: string;
-  city: string;
-  state?: string;
-  tagline?: string;
-  address?: string;
-  phone?: string;
-  email?: string;
-  mapUrl?: string;
-  mapEmbed?: string;
-  about?: PortableTextBlock[];
-  heroImage?: { asset?: { _ref?: string } };
-  serviceTimes?: { label: string; day?: string; time?: string }[];
-  leadPastor?: Pastor | null;
-  leaders?: Pastor[];
-};
 
 export async function generateStaticParams() {
   const rows = await sanityFetch<{ slug: string }[]>({
@@ -54,7 +28,7 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> },
 ): Promise<Metadata> {
   const { slug } = await params;
-  const a = await sanityFetch<AssemblyDoc | null>({
+  const a = await sanityFetch<Assembly | null>({
     query: ASSEMBLY_BY_SLUG_QUERY,
     params: { slug },
     tags: [`sanity:assembly:${slug}`],
@@ -69,7 +43,7 @@ export default async function AssemblyPage(
   { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
-  const a = await sanityFetch<AssemblyDoc | null>({
+  const a = await sanityFetch<Assembly | null>({
     query: ASSEMBLY_BY_SLUG_QUERY,
     params: { slug },
     tags: [`sanity:assembly:${slug}`],

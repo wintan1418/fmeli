@@ -9,49 +9,9 @@ import {
   EVENT_BY_SLUG_QUERY,
   ASSEMBLIES_QUERY,
 } from "@/lib/sanity/queries";
+import type { EventDoc, AssemblyOption } from "@/types/sanity";
 
 export const revalidate = 60;
-
-type EventDoc = {
-  _id: string;
-  title: string;
-  slug: string;
-  tagline?: string;
-  startsAt: string;
-  location?: string;
-  capacity?: number;
-  registrationEnabled?: boolean;
-  registrationDeadline?: string;
-  registrationMode?: "internal" | "external";
-  externalRegistrationUrl?: string;
-  payment?: {
-    enabled?: boolean;
-    amount?: number;
-    currency?: string;
-    allowPaystack?: boolean;
-    allowTransfer?: boolean;
-  };
-  registrationFields?: Array<{
-    label: string;
-    name: string;
-    kind:
-      | "text"
-      | "textarea"
-      | "email"
-      | "tel"
-      | "number"
-      | "date"
-      | "select"
-      | "checkbox";
-    required?: boolean;
-    options?: string[];
-    placeholder?: string;
-  }>;
-  assembly?: { city: string };
-  registeredCount?: number;
-};
-
-type Assembly = { _id: string; city: string; state?: string };
 
 type BankDetails = {
   bankName?: string;
@@ -86,7 +46,7 @@ export default async function RegisterPage(
       tags: [`sanity:event:${slug}`],
       revalidate: 60,
     }),
-    sanityFetch<Assembly[]>({
+    sanityFetch<AssemblyOption[]>({
       query: ASSEMBLIES_QUERY,
       tags: ["sanity:assembly:list"],
       revalidate: 3600,

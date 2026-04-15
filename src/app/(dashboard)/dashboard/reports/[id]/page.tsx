@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { PortableText, type PortableTextBlock } from "next-sanity";
+import type { ReportDetail } from "@/types/sanity";
 import {
   ArrowLeft,
   CalendarDays,
@@ -23,46 +24,6 @@ export const metadata = {
 };
 
 export const dynamic = "force-dynamic";
-
-type ReportDoc = {
-  _id: string;
-  weekOf?: string;
-  period?: string;
-  status?: string;
-  submittedAt?: string;
-  assemblyId?: string;
-  assemblyCity?: string | null;
-  submittedByName?: string | null;
-  attendance?: {
-    total?: number;
-    men?: number;
-    women?: number;
-    youth?: number;
-    children?: number;
-    firstTimers?: number;
-    decisions?: number;
-  };
-  finances?: {
-    tithe?: number;
-    offering?: number;
-    projects?: number;
-    missions?: number;
-    other?: number;
-    notes?: string;
-  };
-  highlights?: PortableTextBlock[];
-  prayerPoints?: PortableTextBlock[];
-  testimonies?: PortableTextBlock[];
-  challenges?: PortableTextBlock[];
-  nextWeekFocus?: string;
-  comments?: {
-    _key: string;
-    authorName?: string;
-    authorRole?: string;
-    body?: string;
-    createdAt?: string;
-  }[];
-};
 
 const PERIOD_LABEL: Record<string, string> = {
   weekly: "Weekly",
@@ -91,7 +52,7 @@ export default async function ReportDetailPage({
   const session = await requireDashboardSession();
   const { id } = await params;
 
-  const report = await readClient.fetch<ReportDoc | null>(
+  const report = await readClient.fetch<ReportDetail | null>(
     `*[_type == "assemblyReport" && _id == $id][0]{
         _id,
         weekOf,

@@ -7,29 +7,13 @@ import { PageHero } from "@/components/ui/PageHero";
 import { sanityFetch } from "@/lib/sanity/client";
 import { SERMONS_LIST_QUERY } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
+import type { Sermon } from "@/types/sanity";
 
 export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Sermons",
   description: "Sermons, teachings and messages from FMELi.",
-};
-
-type Sermon = {
-  _id: string;
-  title: string;
-  slug: string;
-  date?: string;
-  scripture?: string;
-  excerpt?: string;
-  excerptUrl?: string;
-  excerptFileUrl?: string;
-  durationMinutes?: number;
-  youtubeId?: string;
-  audioUrl?: string;
-  audioFileUrl?: string;
-  thumbnail?: { asset?: { _ref?: string } };
-  preacher?: { name?: string };
 };
 
 export default async function SermonsPage() {

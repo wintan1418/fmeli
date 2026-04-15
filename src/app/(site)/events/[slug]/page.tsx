@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { PortableText, type PortableTextBlock } from "next-sanity";
+import { PortableText } from "next-sanity";
 import { ArrowRight, Calendar, Clock, MapPin, Users, ArrowLeft } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { sanityFetch } from "@/lib/sanity/client";
@@ -11,29 +11,9 @@ import {
   ALL_EVENT_SLUGS_QUERY,
 } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
+import type { EventDoc } from "@/types/sanity";
 
 export const revalidate = 600;
-
-type EventDoc = {
-  _id: string;
-  title: string;
-  slug: string;
-  tagline?: string;
-  isSpecial?: boolean;
-  startsAt: string;
-  endsAt?: string;
-  location?: string;
-  heroImage?: { asset?: { _ref?: string } };
-  description?: PortableTextBlock[];
-  registrationEnabled?: boolean;
-  registrationDeadline?: string;
-  capacity?: number;
-  registrationMode?: "internal" | "external";
-  externalRegistrationUrl?: string;
-  assembly?: { city: string; state?: string; address?: string };
-  parentMeeting?: { slug: string; title: string };
-  registeredCount?: number;
-};
 
 export async function generateStaticParams() {
   const slugs = await sanityFetch<{ slug: string }[]>({
