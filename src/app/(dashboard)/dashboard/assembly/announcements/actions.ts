@@ -137,11 +137,11 @@ export async function createAnnouncement(
   try {
     const created = await sanityWrite("create announcement", (c) =>
       c.create({
-        _type: "assemblyAnnouncement",
         ...clean,
+        _type: "assemblyAnnouncement",
         assembly: { _type: "reference", _ref: assemblyId },
         createdBy: { _type: "reference", _ref: session.pastorId },
-      } as Record<string, unknown>),
+      }),
     );
     await invalidateAssembly(assemblyId);
     return {
