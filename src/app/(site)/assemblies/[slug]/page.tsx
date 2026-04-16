@@ -59,10 +59,18 @@ export default async function AssemblyPage(
     ? urlFor(a.heroImage).width(2400).height(1400).url()
     : "/images/church-cross.jpg";
 
+  const hasWelcomeVideo = Boolean(a.welcomeVideo?.url);
+  const welcomePoster = a.welcomeVideo?.poster
+    ? urlFor(a.welcomeVideo.poster).width(1600).height(900).url()
+    : null;
+
   return (
     <>
-      {/* Hero */}
-      <section className="relative isolate overflow-hidden bg-brand-blue-ink pt-36 pb-24 md:pt-52 md:pb-32">
+      {/* Hero — split layout when there's a welcome video. Copy on the
+          left (city + tagline + pastor attribution + service-time peek),
+          the framed video on the right. No welcome video? Revert to a
+          wide single-column treatment so the page still carries weight. */}
+      <section className="relative isolate overflow-hidden bg-brand-blue-ink pt-32 pb-20 md:pt-44 md:pb-28 lg:pt-52">
         <Image
           src={heroBgUrl}
           alt=""
@@ -70,11 +78,11 @@ export default async function AssemblyPage(
           sizes="100vw"
           unoptimized={heroBgUrl.startsWith("https://")}
           priority
-          className="absolute inset-0 -z-10 object-cover object-center opacity-40"
+          className="absolute inset-0 -z-10 object-cover object-center opacity-30"
         />
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-[linear-gradient(115deg,var(--color-brand-blue-ink)_5%,rgba(6,30,44,0.85)_45%,rgba(6,30,44,0.55)_100%)]"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(115deg,var(--color-brand-blue-ink)_5%,rgba(6,30,44,0.9)_45%,rgba(6,30,44,0.7)_100%)]"
         />
         <div
           aria-hidden
@@ -87,27 +95,95 @@ export default async function AssemblyPage(
         <Container className="relative">
           <Link
             href="/assemblies"
-            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60"
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60 transition hover:text-white"
           >
             <ArrowLeft size={14} />
             All assemblies
           </Link>
-          <p className="mt-10 text-xs font-semibold uppercase tracking-[0.32em] text-brand-gold">
-            FMELi {a.state ?? "Nigeria"}
-          </p>
-          <h1 className="mt-4 font-[family-name:var(--font-display)] text-6xl font-semibold leading-[0.98] text-white md:text-8xl lg:text-[120px]">
-            {a.city}
-          </h1>
-          {a.tagline && (
-            <p className="mt-6 max-w-2xl text-lg italic text-white/75">
-              {a.tagline}
-            </p>
-          )}
+
+          <div
+            className={
+              hasWelcomeVideo
+                ? "mt-10 grid items-center gap-10 lg:mt-14 lg:grid-cols-[1fr_1.15fr] lg:gap-14"
+                : "mt-10 lg:mt-14"
+            }
+          >
+            {/* Copy column */}
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-gold">
+                FMELi {a.state ?? "Nigeria"}
+              </p>
+              <h1
+                className={
+                  // When the hero carries a video, the city name has to
+                  // share space with the player — cap it at 8xl on wide
+                  // screens so the two columns feel balanced. No video?
+                  // Go big (120px) for that cathedral cover-page look.
+                  hasWelcomeVideo
+                    ? "mt-4 font-[family-name:var(--font-display)] text-5xl font-semibold leading-[0.98] text-white break-words sm:text-6xl md:text-7xl lg:text-8xl"
+                    : "mt-4 font-[family-name:var(--font-display)] text-5xl font-semibold leading-[0.98] text-white break-words sm:text-6xl md:text-8xl lg:text-[120px]"
+                }
+              >
+                {a.city}
+              </h1>
+              {a.tagline && (
+                <p className="mt-5 max-w-xl text-base italic text-white/75 sm:text-lg md:mt-6">
+                  {a.tagline}
+                </p>
+              )}
+
+              {a.leadPastor?.name && (
+                <div className="mt-8 flex items-center gap-4">
+                  <PastorAvatar
+                    name={a.leadPastor.name}
+                    image={a.leadPastor.image}
+                    size={56}
+                  />
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-gold-soft">
+                      Lead pastor
+                    </p>
+                    <p className="truncate font-[family-name:var(--font-display)] text-lg font-semibold text-white">
+                      {a.leadPastor.name}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Video column — cinema frame with a floating caption and
+                a gentle gold glow behind the screen. */}
+            {hasWelcomeVideo && (
+              <div className="relative">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -inset-6 -z-10 rounded-[36px] bg-brand-gold/20 blur-[80px]"
+                />
+                {/* The caption sits above the frame as a small gold
+                    eyebrow so the video reads as "a word from <pastor>". */}
+                {(a.welcomeVideo?.caption || a.leadPastor?.name) && (
+                  <p className="mb-3 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-brand-gold sm:text-xs sm:tracking-[0.28em]">
+                    <span className="inline-block h-px w-8 bg-brand-gold" />
+                    {a.welcomeVideo?.caption ??
+                      (a.leadPastor?.name
+                        ? `A welcome from ${a.leadPastor.name}`
+                        : "A welcome")}
+                  </p>
+                )}
+                <VideoHero
+                  url={a.welcomeVideo!.url}
+                  posterUrl={welcomePoster}
+                  caption={null}
+                  variant="cinema"
+                />
+              </div>
+            )}
+          </div>
         </Container>
       </section>
 
-      {/* Active announcements — pinned above everything so the first
-          thing a visitor sees is what's happening now. */}
+      {/* Active announcements — first thing below the hero so
+          visitors see what's happening now. */}
       {a.announcements && a.announcements.length > 0 && (
         <section className="bg-off-white pt-14 md:pt-20">
           <Container>
@@ -115,30 +191,6 @@ export default async function AssemblyPage(
               {a.announcements.map((ann) => (
                 <AssemblyAnnouncementCard key={ann._id} announcement={ann} />
               ))}
-            </div>
-          </Container>
-        </section>
-      )}
-
-      {/* Welcome video — lead pastor's invitation / prayer */}
-      {a.welcomeVideo?.url && (
-        <section className="bg-off-white pt-14 md:pt-20">
-          <Container>
-            <div className="mx-auto max-w-5xl">
-              <VideoHero
-                url={a.welcomeVideo.url}
-                posterUrl={
-                  a.welcomeVideo.poster
-                    ? urlFor(a.welcomeVideo.poster).width(1600).height(900).url()
-                    : null
-                }
-                caption={
-                  a.welcomeVideo.caption ??
-                  (a.leadPastor?.name
-                    ? `A welcome from ${a.leadPastor.name}`
-                    : "A welcome")
-                }
-              />
             </div>
           </Container>
         </section>
