@@ -51,6 +51,36 @@ export type ServiceTime = {
   time?: string;
 };
 
+export type AssemblyWelcomeVideo = {
+  url?: string;
+  poster?: SanityImage;
+  caption?: string;
+};
+
+export type AssemblyAnnouncementKind =
+  | "special"
+  | "event"
+  | "stream"
+  | "general";
+
+export type AssemblyAnnouncement = {
+  _id: string;
+  title: string;
+  slug?: string;
+  kind?: AssemblyAnnouncementKind;
+  body?: PortableTextBlock[];
+  heroImage?: SanityImage;
+  startsAt?: string;
+  endsAt?: string;
+  streamUrl?: string;
+  ctaLabel?: string;
+  isPinned?: boolean;
+  isArchived?: boolean;
+  _createdAt?: string;
+  _updatedAt?: string;
+  assembly?: { _id?: string; slug?: string; city?: string };
+};
+
 export type Assembly = {
   _id: string;
   slug?: string;
@@ -64,9 +94,11 @@ export type Assembly = {
   mapEmbed?: string;
   about?: PortableTextBlock[];
   heroImage?: SanityImage;
+  welcomeVideo?: AssemblyWelcomeVideo;
   serviceTimes?: ServiceTime[];
   leadPastor?: Pastor | null;
   leaders?: Pastor[];
+  announcements?: AssemblyAnnouncement[];
 };
 
 /** Trimmed assembly used for picker dropdowns. */

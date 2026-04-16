@@ -16,6 +16,7 @@ import assemblyReport from "./documents/assemblyReport";
 import member from "./documents/member";
 import meeting from "./documents/meeting";
 import announcement from "./documents/announcement";
+import assemblyAnnouncement from "./documents/assemblyAnnouncement";
 import post from "./documents/post";
 
 import seo from "./objects/seo";
@@ -49,6 +50,7 @@ export const schemaTypes = [
   member,
   pastor,
   announcement,
+  assemblyAnnouncement,
   // Objects
   seo,
   link,

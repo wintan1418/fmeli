@@ -57,6 +57,38 @@ export default defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: "welcomeVideo",
+      title: "Welcome video",
+      description:
+        "Short intro video from the lead pastor — shown prominently at the top of the campus page. Paste a YouTube, Vimeo, or direct MP4 URL.",
+      type: "object",
+      fields: [
+        defineField({
+          name: "url",
+          title: "Video URL",
+          type: "url",
+          description: "YouTube / Vimeo / direct .mp4 link.",
+          validation: (R) =>
+            R.uri({ allowRelative: false, scheme: ["http", "https"] }),
+        }),
+        defineField({
+          name: "poster",
+          title: "Poster image",
+          description:
+            "Shown as the video thumbnail before play. Leave empty to auto-derive from YouTube.",
+          type: "image",
+          options: { hotspot: true },
+        }),
+        defineField({
+          name: "caption",
+          title: "Caption",
+          type: "string",
+          description:
+            "Short line shown above the video — e.g. 'A word from Rev. Busuyi'.",
+        }),
+      ],
+    }),
+    defineField({
       name: "serviceTimes",
       title: "Service times",
       type: "array",

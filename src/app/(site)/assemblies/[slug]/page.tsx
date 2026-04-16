@@ -6,6 +6,8 @@ import { PortableText } from "next-sanity";
 import { ArrowLeft, MapPin, Phone, Mail, Clock, ExternalLink } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PastorAvatar } from "@/components/ui/PastorAvatar";
+import { VideoHero } from "@/components/ui/VideoHero";
+import { AssemblyAnnouncementCard } from "@/components/ui/AssemblyAnnouncementCard";
 import { sanityFetch } from "@/lib/sanity/client";
 import { urlFor } from "@/lib/sanity/image";
 import {
@@ -103,6 +105,44 @@ export default async function AssemblyPage(
           )}
         </Container>
       </section>
+
+      {/* Active announcements — pinned above everything so the first
+          thing a visitor sees is what's happening now. */}
+      {a.announcements && a.announcements.length > 0 && (
+        <section className="bg-off-white pt-14 md:pt-20">
+          <Container>
+            <div className="grid gap-6">
+              {a.announcements.map((ann) => (
+                <AssemblyAnnouncementCard key={ann._id} announcement={ann} />
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
+
+      {/* Welcome video — lead pastor's invitation / prayer */}
+      {a.welcomeVideo?.url && (
+        <section className="bg-off-white pt-14 md:pt-20">
+          <Container>
+            <div className="mx-auto max-w-5xl">
+              <VideoHero
+                url={a.welcomeVideo.url}
+                posterUrl={
+                  a.welcomeVideo.poster
+                    ? urlFor(a.welcomeVideo.poster).width(1600).height(900).url()
+                    : null
+                }
+                caption={
+                  a.welcomeVideo.caption ??
+                  (a.leadPastor?.name
+                    ? `A welcome from ${a.leadPastor.name}`
+                    : "A welcome")
+                }
+              />
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* Lead pastor feature + service times */}
       <section className="bg-off-white py-20 md:py-28">

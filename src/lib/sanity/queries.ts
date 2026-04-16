@@ -488,6 +488,11 @@ export const ASSEMBLY_BY_SLUG_QUERY = groq`
     mapUrl,
     mapEmbed,
     heroImage,
+    welcomeVideo{
+      url,
+      poster,
+      caption
+    },
     serviceTimes,
     about,
     "leadPastor": leadPastor->{
@@ -497,7 +502,92 @@ export const ASSEMBLY_BY_SLUG_QUERY = groq`
       image,
       bio
     },
-    "leaders": leaders[]->{ _id, name, role, image, department }
+    "leaders": leaders[]->{ _id, name, role, image, department },
+    "announcements": *[
+        _type == "assemblyAnnouncement"
+        && assembly._ref == ^._id
+        && !(isArchived == true)
+        && (!defined(startsAt) || startsAt <= now())
+        && (!defined(endsAt) || endsAt >= now())
+      ] | order(isPinned desc, coalesce(startsAt, _createdAt) desc){
+        _id,
+        title,
+        "slug": slug.current,
+        kind,
+        body,
+        heroImage,
+        startsAt,
+        endsAt,
+        streamUrl,
+        ctaLabel,
+        isPinned
+      }
+  }
+`;
+
+/**
+ * Every active announcement for a single assembly — same filter as
+ * the nested projection above, but standalone so dashboard/preview
+ * code can call it without pulling the whole assembly doc.
+ */
+export const ACTIVE_ANNOUNCEMENTS_FOR_ASSEMBLY = groq`
+  *[_type == "assemblyAnnouncement"
+      && assembly._ref == $assemblyId
+      && !(isArchived == true)
+      && (!defined(startsAt) || startsAt <= now())
+      && (!defined(endsAt) || endsAt >= now())
+    ] | order(isPinned desc, coalesce(startsAt, _createdAt) desc){
+      _id,
+      title,
+      "slug": slug.current,
+      kind,
+      body,
+      heroImage,
+      startsAt,
+      endsAt,
+      streamUrl,
+      ctaLabel,
+      isPinned
+    }
+`;
+
+/**
+ * Every announcement (active + archived + upcoming) for one
+ * assembly — for the pastor dashboard list view.
+ */
+export const ALL_ANNOUNCEMENTS_FOR_ASSEMBLY = groq`
+  *[_type == "assemblyAnnouncement" && assembly._ref == $assemblyId]
+    | order(isPinned desc, _createdAt desc){
+      _id,
+      title,
+      "slug": slug.current,
+      kind,
+      startsAt,
+      endsAt,
+      streamUrl,
+      isPinned,
+      isArchived,
+      _createdAt,
+      _updatedAt
+    }
+`;
+
+/** One announcement by _id — for the dashboard edit form. */
+export const ANNOUNCEMENT_BY_ID = groq`
+  *[_type == "assemblyAnnouncement" && _id == $id][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    kind,
+    body,
+    heroImage,
+    startsAt,
+    endsAt,
+    streamUrl,
+    ctaLabel,
+    isPinned,
+    isArchived,
+    "assembly": assembly->{ _id, "slug": slug.current, city }
   }
 `;
 
