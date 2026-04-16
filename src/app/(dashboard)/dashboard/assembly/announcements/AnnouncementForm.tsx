@@ -58,7 +58,7 @@ export function AnnouncementForm({ mode, assemblyId, defaults = {} }: Props) {
 
       <FormSection
         title="Announcement"
-        subtitle="What you want people visiting your campus page to see."
+        subtitle="What you want people visiting your assembly page to see."
       >
         <div className="grid gap-5 md:grid-cols-2">
           <div className="md:col-span-2">
@@ -140,7 +140,7 @@ export function AnnouncementForm({ mode, assemblyId, defaults = {} }: Props) {
 
       <FormSection
         title="Link / stream"
-        subtitle="Where the CTA button goes. Paste a YouTube / Vimeo / Mixlr / registration link. YouTube and Vimeo links embed directly on the campus page."
+        subtitle="Where the CTA button goes. Paste a YouTube / Vimeo / Mixlr / registration link. YouTube and Vimeo links embed directly on the assembly page."
       >
         <FormField label="URL" htmlFor="streamUrl">
           <TextInput
@@ -167,7 +167,7 @@ export function AnnouncementForm({ mode, assemblyId, defaults = {} }: Props) {
                 Pin to top
               </span>
               <span className="block text-xs text-[color:var(--color-muted)]">
-                Force this above other active announcements on the campus page.
+                Force this above other active announcements on the assembly page.
               </span>
             </span>
           </label>

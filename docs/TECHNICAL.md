@@ -97,7 +97,7 @@ of these at the top of the function.
 | ---------------- | ----------------------------------------------------- |
 | `siteSettings`   | Singleton. Nav, footer, liveStreamUrl, bank details.  |
 | `page`           | CMS page with PageBuilder `sections[]`.               |
-| `assembly`       | One per campus. Lead pastor, leaders, service times.  |
+| `assembly`       | One per assembly. Lead pastor, leaders, service times.|
 | `pastor`         | Person. `dashboardRole` gates login.                  |
 | `meeting`        | Recurring meeting (Sunday service, STS, …).           |
 | `event`          | One-off event. Registration, payment, custom fields.  |
@@ -204,6 +204,17 @@ Seed Sanity with dev content:
 ```bash
 node --env-file=.env.local scripts/seed.mjs
 ```
+
+Generate a one-off pastor sign-in link (until SMTP is wired):
+
+```bash
+node --env-file=.env.local scripts/make-login-link.mjs \
+  <email> \
+  https://<your-deployment-host>
+```
+
+`AUTH_SECRET` in `.env.local` **must match** the value in Vercel
+for links generated locally to verify in production.
 
 ## 11. Deployment
 

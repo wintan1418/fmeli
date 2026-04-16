@@ -17,7 +17,7 @@ Legend: ✅ live · 🚧 in progress · 🟡 partial / known gap · ⏭ planned
 - ✅ Pillars section (brand values)
 - ✅ Live stats band
 - ✅ Scripture pull-quote
-- ✅ Assemblies band (9 campuses)
+- ✅ Assemblies band (9 assemblies)
 - ✅ Newsletter CTA (form wired; **SMTP not wired yet**)
 - ✅ Homepage video hero — cinema-framed video slot under the
   welcome note. Office edits URL + copy in siteSettings; YouTube,
@@ -35,7 +35,7 @@ Legend: ✅ live · 🚧 in progress · 🟡 partial / known gap · ⏭ planned
 - ✅ `/blog` + slug
 
 ### Assemblies
-- ✅ `/assemblies` — 9 campuses with lead-pastor overlay cards
+- ✅ `/assemblies` — 9 assemblies with lead-pastor overlay cards
 - ✅ `/assemblies/[slug]` — details, service times, leaders
 - ✅ Per-assembly welcome video (field on `assembly`, rendered
   as a cinema-framed player above the lead-pastor section)
@@ -101,7 +101,7 @@ magic-link). Role-gated via `dashboardRole` on the pastor doc.
 - ✅ `/dashboard/login` — password + magic-link
 - ✅ `/dashboard/auth/verify` — consume magic-link token
 - ✅ `/dashboard` — landing with per-role summary
-- ✅ `/dashboard/assembly` — edit campus basics (hero image,
+- ✅ `/dashboard/assembly` — edit assembly basics (hero image,
   service times, about)
 - ✅ `/dashboard/members` — list members of your assembly
 - ✅ `/dashboard/reports` — list weekly/monthly reports
@@ -109,11 +109,11 @@ magic-link). Role-gated via `dashboardRole` on the pastor doc.
   finances, highlights, prayer points, etc.)
 - ✅ `/dashboard/reports/[id]` — view / comment thread
 - ✅ `/dashboard/assembly/announcements` — pastor list / create /
-  edit / archive / delete announcements for their own campus
+  edit / archive / delete announcements for their own assembly
 - ✅ Welcome-video uploader on `/dashboard/assembly` (paste a
   YouTube / Vimeo / .mp4 URL + caption)
 - ✅ Stream URL per announcement — YouTube / Vimeo links embed
-  inline on the campus page; anything else renders as a CTA
+  inline on the assembly page; anything else renders as a CTA
   button.
 - 🟡 **Magic-link email delivery** — the token is generated
   correctly and the URL works, but emails are not sent yet
@@ -150,6 +150,62 @@ magic-link). Role-gated via `dashboardRole` on the pastor doc.
   CNAME records; zero-downtime with preview tested first)
 - ⏭ Content migration from the legacy WordPress site beyond
   messages (testimonials, archived blog posts, old pages)
+
+---
+
+## Sign-in — what to share with the team
+
+### Sanity Studio (content team, CMS)
+
+- **URL:** `https://fmeli-wintan1418-6959s-projects.vercel.app/studio`
+- **Login:** whichever email the team member uses on Sanity. If
+  they don't have an account yet:
+  1. Go to `https://www.sanity.io/manage`
+  2. Sign in as the project owner (the email that created the
+     FMELi project).
+  3. Pick **FMELi** → **Members** tab → **Invite members** →
+     enter their email → role **Editor** (content staff) or
+     **Administrator** (another dev).
+  4. Sanity emails them an invite; they set their password on
+     first sign-in.
+
+### Pastor dashboard (for the 9 assembly leads + office)
+
+- **URL:** `https://fmeli-wintan1418-6959s-projects.vercel.app/dashboard/login`
+- **Login:** magic link sent to the email on the pastor doc in
+  Sanity. Every assembly lead already has one seeded:
+
+  | Role            | Email                        |
+  | --------------- | ---------------------------- |
+  | Super admin     | `setman@fmeli.org`           |
+  | Lagos lead      | `lagos.lead@fmeli.org`       |
+  | Abeokuta lead   | `abeokuta.lead@fmeli.org`    |
+  | Ibadan lead     | `ibadan.lead@fmeli.org`      |
+  | Akure lead      | `akure.lead@fmeli.org`       |
+  | Osogbo lead     | `osogbo.lead@fmeli.org`      |
+  | Ife lead        | `ife.lead@fmeli.org`         |
+  | Ondo lead       | `ondo.lead@fmeli.org`        |
+  | Benin lead      | `benin.lead@fmeli.org`       |
+  | Ado lead        | `ado.lead@fmeli.org`         |
+
+  The office will swap these for the pastors' real emails in
+  Studio before handing out login links.
+
+- **Generating a one-off login link** (needed until SMTP is
+  wired):
+
+  ```bash
+  node --env-file=.env.local scripts/make-login-link.mjs \
+    <pastor-email> \
+    https://fmeli-wintan1418-6959s-projects.vercel.app
+  ```
+
+  Prints a 10-minute URL that signs the pastor straight in. Send
+  via WhatsApp / SMS / anything — the link itself is the password.
+
+- **Once SMTP is wired** (see Roadmap), pastors just type their
+  email at `/dashboard/login` and get the link delivered
+  automatically. Until then, use the script above.
 
 ---
 

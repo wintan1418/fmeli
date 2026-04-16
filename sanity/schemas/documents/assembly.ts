@@ -3,7 +3,7 @@ import { PinIcon } from "@sanity/icons";
 
 export default defineType({
   name: "assembly",
-  title: "Assembly (Campus)",
+  title: "Assembly",
   type: "document",
   icon: PinIcon,
   fields: [
@@ -60,7 +60,7 @@ export default defineType({
       name: "welcomeVideo",
       title: "Welcome video",
       description:
-        "Short intro video from the lead pastor — shown prominently at the top of the campus page. Paste a YouTube, Vimeo, or direct MP4 URL.",
+        "Short intro video from the lead pastor — shown prominently at the top of the assembly page. Paste a YouTube, Vimeo, or direct MP4 URL.",
       type: "object",
       fields: [
         defineField({

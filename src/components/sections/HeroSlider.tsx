@@ -120,7 +120,7 @@ export function HeroSlider() {
             {[
               { label: "Sunday", value: "8:00 AM" },
               { label: "Wednesday", value: "6:30 PM" },
-              { label: "Assemblies", value: "9 Campuses" },
+              { label: "Assemblies", value: "9 Churches" },
             ].map((item) => (
               <div key={item.label}>
                 <p className="text-[10px] uppercase tracking-[0.22em] text-(--color-brand-white)/50">

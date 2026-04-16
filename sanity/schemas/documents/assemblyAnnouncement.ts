@@ -3,14 +3,14 @@ import { BulbOutlineIcon } from "@sanity/icons";
 
 /**
  * Per-assembly announcement — a promo card shown at the top of the
- * campus page while active. Use cases the pastors asked for:
+ * assembly page while active. Use cases the pastors asked for:
  *   - "We're hosting Singles Rendezvous next Saturday, register here"
  *   - "Prayer vigil tonight, live stream link inside"
  *   - "New members class starting Sunday, 11am"
  *
  * Distinct from the global `announcement` doc (that one is the
  * site-wide ticker/banner). These are scoped to one assembly and
- * render as a hero-style callout on that campus page, optionally
+ * render as a hero-style callout on that assembly page, optionally
  * with a live-stream embed.
  *
  * Authorable from the pastor dashboard — see
@@ -27,7 +27,7 @@ export default defineType({
       title: "Assembly",
       type: "reference",
       to: [{ type: "assembly" }],
-      description: "Which campus is this for?",
+      description: "Which assembly is this for?",
       validation: (R) => R.required(),
     }),
     defineField({
@@ -113,7 +113,7 @@ export default defineType({
       title: "Archived",
       type: "boolean",
       description:
-        "Hide from the campus page without deleting. Useful for reusing old announcements.",
+        "Hide from the assembly page without deleting. Useful for reusing old announcements.",
       initialValue: false,
     }),
     defineField({

@@ -33,7 +33,7 @@ export default async function AssembliesPage() {
             <span className="italic text-brand-gold-soft">your city</span>
           </>
         }
-        subtitle="Nine assemblies across Nigeria — one body, one Word. Each campus is led by pastors who carry the vision of the house. Click through to meet them and see service times."
+        subtitle="Nine assemblies across Nigeria — one body, one Word. Each assembly is led by pastors who carry the vision of the house. Click through to meet them and see service times."
       />
 
       <section className="bg-off-white py-20 md:py-28">

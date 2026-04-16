@@ -51,7 +51,7 @@ export function AssembliesBand() {
             </div>
             <p className="max-w-md text-base leading-7 text-(--color-ink-soft)">
               Nine assemblies across Nigeria, one body, one word. Choose the
-              nearest campus to visit, connect, and belong.
+              nearest assembly to visit, connect, and belong.
             </p>
           </div>
         </FadeIn>

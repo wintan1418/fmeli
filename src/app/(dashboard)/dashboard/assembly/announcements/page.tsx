@@ -95,7 +95,7 @@ export default async function AnnouncementsListPage({
       {seeAll && assemblies.length > 1 && (
         <div className="mb-6 flex flex-wrap items-center gap-2 text-xs">
           <span className="font-semibold uppercase tracking-[0.22em] text-muted">
-            Campus
+            Assembly
           </span>
           {assemblies.map((a) => (
             <Link
@@ -191,7 +191,7 @@ export default async function AnnouncementsListPage({
           </p>
           <p className="mt-2 text-sm text-ink-soft">
             Create one to promote a special meeting or surface a live stream
-            on the campus page.
+            on the assembly page.
           </p>
           <Link
             href="/dashboard/assembly/announcements/new"

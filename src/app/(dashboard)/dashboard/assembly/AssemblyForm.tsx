@@ -223,7 +223,7 @@ export function AssemblyForm({
 
       <FormSection
         title="Welcome video"
-        subtitle="A short intro from the lead pastor, shown at the top of the public campus page. Paste a YouTube or Vimeo link. Leave blank to hide the section."
+        subtitle="A short intro from the lead pastor, shown at the top of the public assembly page. Paste a YouTube or Vimeo link. Leave blank to hide the section."
       >
         <div className="grid gap-5 md:grid-cols-2">
           <div className="md:col-span-2">

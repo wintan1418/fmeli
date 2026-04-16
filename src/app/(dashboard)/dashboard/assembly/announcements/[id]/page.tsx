@@ -58,15 +58,15 @@ export default async function EditAnnouncementPage({
   );
   if (!doc) notFound();
 
-  // Enforce scope — assembly leads can only edit their own campus's
-  // announcements, office/super admins can touch anything.
+  // Enforce scope — assembly leads can only edit their own
+  // assembly's announcements, office/super admins can touch anything.
   const assemblyId = resolveAssemblyScope(session, doc.assembly?._id ?? null);
 
   return (
     <DashboardShell
       session={session}
       title={doc.title}
-      description={`Editing announcement for ${doc.assembly?.city ?? "the campus"}.`}
+      description={`Editing announcement for ${doc.assembly?.city ?? "the assembly"}.`}
       actions={
         <div className="flex items-center gap-3">
           <Link

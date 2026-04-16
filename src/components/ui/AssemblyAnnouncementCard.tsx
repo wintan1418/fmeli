@@ -7,8 +7,8 @@ import { VideoHero } from "./VideoHero";
 
 /**
  * One per-assembly announcement, rendered as a hero-style card with
- * optional inline live stream. Used on the public campus page and
- * in the pastor dashboard preview.
+ * optional inline live stream. Used on the public assembly page
+ * and in the pastor dashboard preview.
  *
  * Layout is adaptive to content:
  *   - with streamUrl that parses as a video → inline VideoHero player
