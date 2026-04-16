@@ -44,6 +44,16 @@ html {
   text-rendering: optimizeLegibility;
 }
 
+html,
+body {
+  /* Safety net: nothing on a page should ever cause the document to
+   * scroll sideways. `overflow-x: clip` is better than `hidden` here
+   * because it doesn't create a new scroll container, so sticky
+   * headers inside pages keep working. */
+  overflow-x: clip;
+  max-width: 100%;
+}
+
 body {
   background: var(--color-off-white);
   color: var(--color-ink-soft);

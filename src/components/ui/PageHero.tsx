@@ -13,7 +13,7 @@ type Props = {
  */
 export function PageHero({ eyebrow, title, subtitle, children }: Props) {
   return (
-    <section className="relative overflow-hidden bg-brand-blue-ink pt-32 pb-20 md:pt-44 md:pb-28">
+    <section className="relative overflow-hidden bg-brand-blue-ink pt-28 pb-16 md:pt-44 md:pb-28">
       <div
         aria-hidden
         className="pointer-events-none absolute -top-20 right-1/4 h-[480px] w-[480px] rounded-full bg-brand-gold/22 blur-[160px]"
@@ -24,16 +24,16 @@ export function PageHero({ eyebrow, title, subtitle, children }: Props) {
       />
       <Container className="relative">
         {eyebrow && (
-          <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-brand-gold">
-            <span className="inline-block h-px w-10 bg-brand-gold" />
+          <p className="flex flex-wrap items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-brand-gold sm:text-xs sm:tracking-[0.32em]">
+            <span className="inline-block h-px w-8 bg-brand-gold sm:w-10" />
             {eyebrow}
           </p>
         )}
-        <h1 className="mt-6 max-w-4xl font-[family-name:var(--font-display)] text-5xl font-semibold leading-[1.05] text-white md:text-7xl">
+        <h1 className="mt-5 max-w-4xl font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.08] text-white break-words sm:text-5xl md:mt-6 md:text-7xl md:leading-[1.05]">
           {title}
         </h1>
         {subtitle && (
-          <div className="mt-6 max-w-2xl text-base leading-8 text-white/80 md:text-lg">
+          <div className="mt-5 max-w-2xl text-sm leading-7 text-white/80 sm:text-base sm:leading-8 md:mt-6 md:text-lg">
             {subtitle}
           </div>
         )}

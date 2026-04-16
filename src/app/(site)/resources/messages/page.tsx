@@ -166,7 +166,7 @@ export default async function MessagesPage({
         }
       />
 
-      <section className="bg-off-white py-20 md:py-28">
+      <section className="bg-off-white py-14 md:py-28">
         <Container>
           {/* Top-row chips — root categories. Always visible. */}
           {roots.length > 0 && (
@@ -297,7 +297,7 @@ export default async function MessagesPage({
                       <div className="text-xs uppercase tracking-[0.18em] text-muted">
                         {m.date} {m.scripture && `· ${m.scripture}`}
                       </div>
-                      <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold leading-tight text-ink">
+                      <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold leading-tight text-ink break-words sm:text-xl">
                         <Link
                           href={`/resources/messages/${m.slug}`}
                           className="before:absolute before:inset-0 before:content-['']"
@@ -467,43 +467,48 @@ function Pagination({
     "border-ink/8 bg-ink/2 text-muted cursor-not-allowed pointer-events-none";
 
   return (
-    <nav
-      aria-label="Pagination"
-      className="mt-12 flex flex-wrap items-center justify-center gap-2"
-    >
-      {prevHref ? (
-        <Link href={prevHref} className={`${baseChip} ${inactive}`}>
-          ← Prev
-        </Link>
-      ) : (
-        <span className={`${baseChip} ${disabled}`}>← Prev</span>
-      )}
-      {pages.map((p, i) =>
-        p === "…" ? (
-          <span
-            key={`gap-${i}`}
-            className="inline-flex h-10 min-w-10 items-center justify-center text-sm text-muted"
-          >
-            …
-          </span>
-        ) : (
-          <Link
-            key={p}
-            href={buildHref(p)}
-            className={`${baseChip} ${p === currentPage ? active : inactive}`}
-            aria-current={p === currentPage ? "page" : undefined}
-          >
-            {p}
+    // On narrow viewports the pagination bar would overflow the
+    // viewport and cause a horizontal page scroll. Wrap it in its
+    // own scroll container so the bar scrolls sideways instead.
+    <div className="mt-10 -mx-4 overflow-x-auto px-4 md:mt-12 md:mx-0 md:px-0">
+      <nav
+        aria-label="Pagination"
+        className="flex min-w-max items-center justify-center gap-2"
+      >
+        {prevHref ? (
+          <Link href={prevHref} className={`${baseChip} ${inactive}`}>
+            ← Prev
           </Link>
-        ),
-      )}
-      {nextHref ? (
-        <Link href={nextHref} className={`${baseChip} ${inactive}`}>
-          Next →
-        </Link>
-      ) : (
-        <span className={`${baseChip} ${disabled}`}>Next →</span>
-      )}
-    </nav>
+        ) : (
+          <span className={`${baseChip} ${disabled}`}>← Prev</span>
+        )}
+        {pages.map((p, i) =>
+          p === "…" ? (
+            <span
+              key={`gap-${i}`}
+              className="inline-flex h-10 min-w-10 items-center justify-center text-sm text-muted"
+            >
+              …
+            </span>
+          ) : (
+            <Link
+              key={p}
+              href={buildHref(p)}
+              className={`${baseChip} ${p === currentPage ? active : inactive}`}
+              aria-current={p === currentPage ? "page" : undefined}
+            >
+              {p}
+            </Link>
+          ),
+        )}
+        {nextHref ? (
+          <Link href={nextHref} className={`${baseChip} ${inactive}`}>
+            Next →
+          </Link>
+        ) : (
+          <span className={`${baseChip} ${disabled}`}>Next →</span>
+        )}
+      </nav>
+    </div>
   );
 }
