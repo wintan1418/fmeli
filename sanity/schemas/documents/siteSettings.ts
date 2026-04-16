@@ -116,6 +116,55 @@ export default defineType({
       validation: (R) => R.max(5),
     }),
     defineField({
+      name: "homepageVideo",
+      title: "Homepage video hero",
+      description:
+        "A cinema-framed video shown on the homepage below the hero slider. Paste a YouTube / Vimeo / direct .mp4 link. Leave blank to hide.",
+      type: "object",
+      fields: [
+        defineField({
+          name: "eyebrow",
+          title: "Eyebrow",
+          type: "string",
+          description:
+            "Small uppercase label above the heading — e.g. 'The living Word'.",
+        }),
+        defineField({
+          name: "heading",
+          type: "string",
+          description: "Headline beside / above the video.",
+        }),
+        defineField({
+          name: "body",
+          type: "text",
+          rows: 3,
+          description: "One-paragraph description.",
+        }),
+        defineField({
+          name: "url",
+          title: "Video URL",
+          type: "url",
+          description: "YouTube / Vimeo / direct .mp4 link.",
+          validation: (R) =>
+            R.uri({ allowRelative: false, scheme: ["http", "https"] }),
+        }),
+        defineField({
+          name: "poster",
+          title: "Poster image",
+          description:
+            "Thumbnail before play. Leave empty to auto-derive from YouTube.",
+          type: "image",
+          options: { hotspot: true },
+        }),
+        defineField({
+          name: "cta",
+          title: "CTA",
+          type: "cta",
+          description: "Optional button under the copy.",
+        }),
+      ],
+    }),
+    defineField({
       name: "bankTransferDetails",
       title: "Bank transfer details",
       description: "Shown to registrants who choose to pay by transfer.",
