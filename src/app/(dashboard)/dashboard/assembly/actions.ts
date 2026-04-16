@@ -57,6 +57,12 @@ export async function saveAssemblyProfile(
     };
   }
 
+  // Welcome video is an object field. Build the nested object only
+  // if a URL is present — otherwise we want to clear the whole field
+  // so the public page hides the section.
+  const welcomeVideoUrl = txt(formData, "welcomeVideoUrl");
+  const welcomeVideoCaption = txt(formData, "welcomeVideoCaption");
+
   const patch: Record<string, unknown> = {
     tagline: txt(formData, "tagline"),
     address: txt(formData, "address"),
@@ -64,6 +70,12 @@ export async function saveAssemblyProfile(
     email: txt(formData, "email"),
     mapUrl: txt(formData, "mapUrl"),
     serviceTimes: readServiceTimes(formData),
+    welcomeVideo: welcomeVideoUrl
+      ? {
+          url: welcomeVideoUrl,
+          caption: welcomeVideoCaption,
+        }
+      : undefined,
   };
 
   // Strip undefined keys so we don't accidentally overwrite existing
@@ -72,10 +84,16 @@ export async function saveAssemblyProfile(
     Object.entries(patch).filter(([, v]) => v !== undefined),
   );
 
+  // Special case: if the URL was cleared, we also need to unset the
+  // whole welcomeVideo object so the public page hides the section.
+  const shouldUnsetVideo =
+    welcomeVideoUrl === undefined && welcomeVideoCaption === undefined;
+
   try {
-    await sanityWrite("patch assembly", (c) =>
-      c.patch(assemblyId).set(cleanedPatch).commit(),
-    );
+    await sanityWrite("patch assembly", (c) => {
+      const p = c.patch(assemblyId).set(cleanedPatch);
+      return (shouldUnsetVideo ? p.unset(["welcomeVideo"]) : p).commit();
+    });
   } catch (err) {
     console.error("[dashboard/assembly] patch failed", err);
     return {

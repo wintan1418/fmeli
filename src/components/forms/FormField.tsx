@@ -11,10 +11,12 @@ import { labelClass } from ".";
 export function FormField({
   label,
   htmlFor,
+  hint,
   children,
 }: {
   label: string;
   htmlFor: string;
+  hint?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -23,6 +25,11 @@ export function FormField({
         {label}
       </label>
       {children}
+      {hint && (
+        <p className="mt-1.5 text-xs leading-5 text-[color:var(--color-muted)]">
+          {hint}
+        </p>
+      )}
     </div>
   );
 }

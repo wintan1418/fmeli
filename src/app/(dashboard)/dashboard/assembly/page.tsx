@@ -96,6 +96,8 @@ export default async function AssemblyProfilePage({
           email: doc.email,
           mapUrl: doc.mapUrl,
           serviceTimes: doc.serviceTimes,
+          welcomeVideoUrl: doc.welcomeVideo?.url,
+          welcomeVideoCaption: doc.welcomeVideo?.caption,
         }}
       />
     </DashboardShell>

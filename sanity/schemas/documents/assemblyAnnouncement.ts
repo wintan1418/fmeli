@@ -1,5 +1,5 @@
 import { defineField, defineType } from "sanity";
-import { MegaphoneIcon } from "@sanity/icons";
+import { BulbOutlineIcon } from "@sanity/icons";
 
 /**
  * Per-assembly announcement — a promo card shown at the top of the
@@ -20,7 +20,7 @@ export default defineType({
   name: "assemblyAnnouncement",
   title: "Assembly announcement",
   type: "document",
-  icon: MegaphoneIcon,
+  icon: BulbOutlineIcon,
   fields: [
     defineField({
       name: "assembly",

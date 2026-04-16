@@ -123,7 +123,8 @@ export const DASH_ASSEMBLY_BY_ID_QUERY = groq`
     phone,
     email,
     mapUrl,
-    serviceTimes
+    serviceTimes,
+    welcomeVideo
   }
 `;
 

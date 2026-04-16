@@ -32,6 +32,8 @@ type Props = {
     email?: string;
     mapUrl?: string;
     serviceTimes?: ServiceTime[];
+    welcomeVideoUrl?: string;
+    welcomeVideoCaption?: string;
   };
 };
 
@@ -216,6 +218,39 @@ export function AssemblyForm({
             <Plus size={12} />
             Add a service time
           </button>
+        </div>
+      </FormSection>
+
+      <FormSection
+        title="Welcome video"
+        subtitle="A short intro from the lead pastor, shown at the top of the public campus page. Paste a YouTube or Vimeo link. Leave blank to hide the section."
+      >
+        <div className="grid gap-5 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <FormField label="Video URL" htmlFor="welcomeVideoUrl">
+              <TextInput
+                id="welcomeVideoUrl"
+                name="welcomeVideoUrl"
+                type="url"
+                defaultValue={defaults.welcomeVideoUrl ?? ""}
+                placeholder="https://youtu.be/…"
+              />
+            </FormField>
+          </div>
+          <div className="md:col-span-2">
+            <FormField
+              label="Caption"
+              htmlFor="welcomeVideoCaption"
+              hint="Short line above the video. Leave blank to default to 'A welcome from <pastor name>'."
+            >
+              <TextInput
+                id="welcomeVideoCaption"
+                name="welcomeVideoCaption"
+                defaultValue={defaults.welcomeVideoCaption ?? ""}
+                placeholder="A welcome from Rev. Busuyi"
+              />
+            </FormField>
+          </div>
         </div>
       </FormSection>
 

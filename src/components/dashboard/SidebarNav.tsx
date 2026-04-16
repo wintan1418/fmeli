@@ -7,6 +7,7 @@ import {
   ScrollText,
   UsersRound,
   Building2,
+  Megaphone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +22,8 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Overview", icon: Home, exact: true },
   { href: "/dashboard/reports", label: "Weekly reports", icon: ScrollText },
   { href: "/dashboard/members", label: "Members", icon: UsersRound },
-  { href: "/dashboard/assembly", label: "Assembly profile", icon: Building2 },
+  { href: "/dashboard/assembly", label: "Assembly profile", icon: Building2, exact: true },
+  { href: "/dashboard/assembly/announcements", label: "Announcements", icon: Megaphone },
 ];
 
 export function SidebarNav() {
