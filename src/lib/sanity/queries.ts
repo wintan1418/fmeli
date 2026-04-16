@@ -14,6 +14,24 @@ export const SITE_SETTINGS_QUERY = groq`
   }
 `;
 
+/**
+ * Homepage video hero — the cinema-style video section that sits
+ * below the hero slider. Pulled separately so the homepage can fetch
+ * just this slice without dragging the footer/nav payload along.
+ */
+export const HOMEPAGE_VIDEO_QUERY = groq`
+  *[_type == "siteSettings"][0]{
+    "video": homepageVideo{
+      eyebrow,
+      heading,
+      body,
+      url,
+      poster,
+      cta
+    }
+  }.video
+`;
+
 /** A CMS Page by slug (Page Builder). */
 export const PAGE_BY_SLUG_QUERY = groq`
   *[_type == "page" && slug.current == $slug][0]{

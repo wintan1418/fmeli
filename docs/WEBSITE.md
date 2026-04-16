@@ -19,8 +19,9 @@ Legend: ✅ live · 🚧 in progress · 🟡 partial / known gap · ⏭ planned
 - ✅ Scripture pull-quote
 - ✅ Assemblies band (9 campuses)
 - ✅ Newsletter CTA (form wired; **SMTP not wired yet**)
-- ⏭ Video hero — replace/augment slider with an in-screen video
-  loop (pastor praying or brand film)
+- ✅ Homepage video hero — cinema-framed video slot under the
+  welcome note. Office edits URL + copy in siteSettings; YouTube,
+  Vimeo, and direct `.mp4` all supported.
 
 ### Resources
 - ✅ `/resources/messages` — paginated archive (24 per page),
@@ -36,13 +37,11 @@ Legend: ✅ live · 🚧 in progress · 🟡 partial / known gap · ⏭ planned
 ### Assemblies
 - ✅ `/assemblies` — 9 campuses with lead-pastor overlay cards
 - ✅ `/assemblies/[slug]` — details, service times, leaders
-- ⏭ **Video intro per assembly** — a short welcome/prayer video
-  from the lead pastor, rendered at the top of the campus page
-  (new field on `assembly`, new section component)
-- ⏭ **Per-assembly special-meeting promo** — when an assembly
-  hosts a special meeting, surface it with a hero banner and
-  stream link (depends on the event/assembly relation already
-  in place via `parentMeeting`)
+- ✅ Per-assembly welcome video (field on `assembly`, rendered
+  as a cinema-framed player above the lead-pastor section)
+- ✅ Per-assembly announcements — new `assemblyAnnouncement`
+  doc type, pinnable, time-windowed, with optional inline live
+  stream embedding. Authored from the dashboard, not Studio.
 
 ### Events
 - ✅ `/events` — upcoming list + all-events tab
@@ -109,15 +108,13 @@ magic-link). Role-gated via `dashboardRole` on the pastor doc.
 - ✅ `/dashboard/reports/new` — submit a new report (attendance,
   finances, highlights, prayer points, etc.)
 - ✅ `/dashboard/reports/[id]` — view / comment thread
-- ⏭ **Pastor upload of special-meeting promos** — new form to
-  create a lightweight "assembly announcement" that the campus
-  page will render. Today announcements exist only as events or
-  as CMS pages edited in Studio.
-- ⏭ **Pastor upload of welcome/prayer video** — per-assembly
-  video field + uploader
-- ⏭ **Stream URL per assembly** — for locally-hosted special
-  meetings; show an embedded player on the campus page when the
-  field is populated.
+- ✅ `/dashboard/assembly/announcements` — pastor list / create /
+  edit / archive / delete announcements for their own campus
+- ✅ Welcome-video uploader on `/dashboard/assembly` (paste a
+  YouTube / Vimeo / .mp4 URL + caption)
+- ✅ Stream URL per announcement — YouTube / Vimeo links embed
+  inline on the campus page; anything else renders as a CTA
+  button.
 - 🟡 **Magic-link email delivery** — the token is generated
   correctly and the URL works, but emails are not sent yet
   because SMTP is not wired. Pastors can still log in with their
@@ -158,20 +155,14 @@ magic-link). Role-gated via `dashboardRole` on the pastor doc.
 
 ## Roadmap — next build
 
-In priority order, based on the current thread:
+In priority order:
 
-1. **Video intro on assembly pages.** New `welcomeVideoUrl` +
-   optional `welcomeVideoPoster` field on `assembly`; a
-   `<VideoHero>` component at the top of `/assemblies/[slug]`.
-2. **Per-assembly announcement / special-meeting promo.** New
-   `assemblyAnnouncement` doc type referenced to `assembly`,
-   with title, body, image, stream URL, starts/ends. Renders as
-   a pinned hero on the campus page when active. Authorable from
-   the pastor dashboard (new `/dashboard/assembly/announcements`
-   route).
-3. **Homepage video hero.** Replace (or combine with) the slider.
-   Either a muted looping background video or an in-screen
-   letterboxed framed video — one hero slot, a caption, a CTA.
-4. **SMTP wiring.** Unblocks magic-link emails + free-event
-   confirmations + newsletter signups.
-5. **Custom domain cutover.** Once content QA passes.
+1. **SMTP wiring.** Unblocks magic-link emails, free-event
+   confirmations, and newsletter signups.
+2. **Online giving.** Paystack one-time + recurring on `/give`.
+3. **Full a11y audit.** Keyboard + screen-reader pass on every
+   public route.
+4. **Custom domain cutover** — point `fmeli.org` DNS at Vercel.
+5. **Sentry error monitoring** (Phase 4 of the architecture plan).
+6. **WordPress content migration** — testimonials, archived
+   blog posts, legacy pages that aren't messages or events.

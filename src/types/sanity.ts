@@ -24,6 +24,29 @@ export type SanityImage = {
 
 export type Slug = { current?: string };
 
+export type CtaLink = {
+  label?: string;
+  href?: string;
+  /**
+   * Internal link to a doc reference (resolved in the link object).
+   */
+  internal?: { _ref?: string };
+};
+
+export type Cta = {
+  link?: CtaLink;
+  style?: "primary" | "secondary" | "ghost";
+};
+
+export type HomepageVideo = {
+  eyebrow?: string;
+  heading?: string;
+  body?: string;
+  url?: string;
+  poster?: SanityImage;
+  cta?: Cta;
+};
+
 // ────────────────────────────────────────────────────────────
 // Documents
 // ────────────────────────────────────────────────────────────

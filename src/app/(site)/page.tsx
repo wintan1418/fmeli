@@ -2,6 +2,7 @@ import { HeroSlider } from "@/components/sections/HeroSlider";
 import { AnnouncementTicker } from "@/components/sections/AnnouncementTicker";
 import { NextServiceBanner } from "@/components/sections/NextServiceBanner";
 import { WelcomeNote } from "@/components/sections/WelcomeNote";
+import { HomepageVideoHero } from "@/components/sections/HomepageVideoHero";
 import { PillarsSection } from "@/components/sections/PillarsSection";
 import { LiveStats } from "@/components/sections/LiveStats";
 import { MeetingsGrid } from "@/components/sections/MeetingsGrid";
@@ -18,6 +19,7 @@ export default async function Home() {
       <AnnouncementTicker />
       <NextServiceBanner />
       <WelcomeNote />
+      <HomepageVideoHero />
       <PillarsSection />
       <LiveStats />
       <MeetingsGrid />
