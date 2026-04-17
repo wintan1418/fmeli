@@ -58,31 +58,33 @@ export function AssembliesBand() {
 
         <StaggerChildren className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {ASSEMBLIES.map((a) => (
-            <StaggerItem key={a.slug}>
+            <StaggerItem key={a.slug} className="min-w-0">
               <Link
                 href={`/assemblies/${a.slug}`}
-                className="group relative flex items-center justify-between overflow-hidden rounded-[var(--radius-card)] border border-(--color-brand-blue-ink)/10 bg-(--color-brand-white) p-6 transition-all duration-500 hover:-translate-y-1 hover:border-(--color-brand-red)/30 hover:shadow-[var(--shadow-card-hover)]"
+                className="group relative flex items-center justify-between overflow-hidden rounded-2xl border border-(--color-brand-blue-ink)/8 bg-(--color-brand-white) p-5 transition-all duration-500 hover:-translate-y-1 hover:border-(--color-brand-gold)/40 hover:shadow-[0_12px_40px_-12px_rgba(232,160,42,0.25)]"
               >
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute inset-y-0 left-0 w-1 origin-bottom scale-y-0 bg-(--color-brand-red) transition-transform duration-500 group-hover:scale-y-100"
+                  className="pointer-events-none absolute inset-y-0 left-0 w-1 origin-bottom scale-y-0 bg-(--color-brand-gold) transition-transform duration-500 group-hover:scale-y-100"
                 />
-                <div className="flex items-center gap-5">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-(--color-brand-blue-soft) text-(--color-brand-blue-ink) transition-colors duration-500 group-hover:bg-(--color-brand-red) group-hover:text-(--color-brand-white)">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-(--color-brand-blue-ink)/8 text-(--color-brand-blue-ink) transition-all duration-500 group-hover:bg-(--color-brand-gold) group-hover:text-(--color-brand-blue-ink) group-hover:shadow-[0_0_20px_rgba(232,160,42,0.35)]">
                     <MapPin size={18} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="font-[family-name:var(--font-display)] text-xl font-semibold text-(--color-ink)">
                       {a.city}
                     </p>
-                    <p className="mt-0.5 text-xs uppercase tracking-[0.18em] text-(--color-muted)">
-                      {a.state} · {a.tagline}
+                    <p className="mt-0.5 text-xs text-(--color-muted)">
+                      <span className="font-semibold uppercase tracking-[0.18em]">{a.state}</span>
+                      <span className="mx-1.5 text-(--color-brand-gold)">·</span>
+                      <span className="italic">{a.tagline}</span>
                     </p>
                   </div>
                 </div>
                 <ArrowUpRight
                   size={18}
-                  className="text-(--color-muted) transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-(--color-brand-red)"
+                  className="flex-shrink-0 text-(--color-muted) transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-(--color-brand-gold)"
                 />
               </Link>
             </StaggerItem>

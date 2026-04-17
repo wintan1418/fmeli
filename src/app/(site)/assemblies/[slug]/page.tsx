@@ -197,7 +197,7 @@ export default async function AssemblyPage(
       )}
 
       {/* Lead pastor feature + service times */}
-      <section className="bg-off-white py-20 md:py-28">
+      <section className="bg-off-white py-16 md:py-28">
         <Container>
           <div className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:items-start">
             {/* Lead pastor */}
@@ -208,17 +208,19 @@ export default async function AssemblyPage(
               </p>
 
               <div className="mt-8 flex items-center gap-6">
-                <PastorAvatar
-                  name={a.leadPastor?.name}
-                  image={a.leadPastor?.image}
-                  size={112}
-                />
-                <div>
-                  <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight text-ink md:text-4xl">
+                <div className="rounded-full ring-4 ring-brand-gold/20">
+                  <PastorAvatar
+                    name={a.leadPastor?.name}
+                    image={a.leadPastor?.image}
+                    size={112}
+                  />
+                </div>
+                <div className="min-w-0">
+                  <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight text-ink break-words md:text-4xl">
                     {a.leadPastor?.name ?? "To be announced"}
                   </h2>
                   {a.leadPastor?.role && (
-                    <p className="mt-2 text-sm text-ink-soft">
+                    <p className="mt-2 inline-flex items-center rounded-full bg-brand-red/8 px-3 py-1 text-xs font-medium text-brand-red">
                       {a.leadPastor.role}
                     </p>
                   )}
@@ -233,11 +235,12 @@ export default async function AssemblyPage(
 
               {/* About this assembly */}
               {a.about && a.about.length > 0 && (
-                <div className="mt-12 border-t border-ink/8 pt-12">
-                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-red">
+                <div className="mt-12 rounded-2xl border border-brand-gold/15 bg-brand-gold/5 p-8">
+                  <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-brand-blue-ink">
+                    <span className="inline-block h-px w-8 bg-brand-gold" />
                     About this assembly
                   </p>
-                  <div className="prose prose-lg mt-6 max-w-none text-ink-soft">
+                  <div className="prose prose-base mt-5 max-w-none text-ink-soft">
                     <PortableText value={a.about} />
                   </div>
                 </div>
@@ -246,23 +249,29 @@ export default async function AssemblyPage(
               {/* Other leaders */}
               {a.leaders && a.leaders.length > 0 && (
                 <div className="mt-12 border-t border-ink/8 pt-12">
-                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-red">
+                  <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-brand-red">
+                    <span className="inline-block h-px w-10 bg-brand-red" />
                     Ministry team
                   </p>
-                  <ul className="mt-6 grid gap-5 sm:grid-cols-2">
+                  <ul className="mt-8 grid gap-4 sm:grid-cols-2">
                     {a.leaders.map((l) => (
-                      <li key={l._id} className="flex items-center gap-4">
+                      <li
+                        key={l._id}
+                        className="flex items-center gap-4 rounded-xl border border-ink/6 bg-white p-4 transition hover:shadow-sm"
+                      >
                         <PastorAvatar
                           name={l.name}
                           image={l.image}
-                          size={56}
+                          size={52}
                         />
-                        <div>
-                          <p className="font-[family-name:var(--font-display)] text-base font-semibold leading-tight text-ink">
+                        <div className="min-w-0">
+                          <p className="truncate font-[family-name:var(--font-display)] text-sm font-semibold leading-tight text-ink">
                             {l.name}
                           </p>
                           {l.role && (
-                            <p className="text-xs text-muted">{l.role}</p>
+                            <p className="mt-0.5 truncate text-xs text-muted">
+                              {l.role}
+                            </p>
                           )}
                         </div>
                       </li>
@@ -273,51 +282,51 @@ export default async function AssemblyPage(
             </div>
 
             {/* Sidebar: contact + service times */}
-            <aside className="space-y-8 lg:sticky lg:top-28">
-              <div className="rounded-[var(--radius-card)] border border-ink/8 bg-white p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-red">
-                  Visit us
-                </p>
-                <dl className="mt-6 space-y-5">
+            <aside className="space-y-6 lg:sticky lg:top-28">
+              <div className="overflow-hidden rounded-2xl border border-ink/8 bg-white shadow-sm">
+                <div className="border-b border-ink/6 bg-off-white px-7 py-4">
+                  <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-brand-red">
+                    <MapPin size={12} />
+                    Visit us
+                  </p>
+                </div>
+                <dl className="space-y-4 p-7">
                   {a.address && (
                     <div className="flex items-start gap-3">
-                      <MapPin
-                        size={16}
-                        className="mt-0.5 flex-shrink-0 text-brand-gold"
-                      />
+                      <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-gold/10">
+                        <MapPin size={14} className="text-brand-gold" />
+                      </div>
                       <div>
-                        <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
+                        <dt className="text-[10px] font-bold uppercase tracking-[0.22em] text-muted">
                           Address
                         </dt>
-                        <dd className="text-ink">{a.address}</dd>
+                        <dd className="mt-0.5 text-sm text-ink">{a.address}</dd>
                       </div>
                     </div>
                   )}
                   {a.phone && (
                     <div className="flex items-start gap-3">
-                      <Phone
-                        size={16}
-                        className="mt-0.5 flex-shrink-0 text-brand-gold"
-                      />
+                      <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-gold/10">
+                        <Phone size={14} className="text-brand-gold" />
+                      </div>
                       <div>
-                        <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
+                        <dt className="text-[10px] font-bold uppercase tracking-[0.22em] text-muted">
                           Phone
                         </dt>
-                        <dd className="text-ink">{a.phone}</dd>
+                        <dd className="mt-0.5 text-sm text-ink">{a.phone}</dd>
                       </div>
                     </div>
                   )}
                   {a.email && (
                     <div className="flex items-start gap-3">
-                      <Mail
-                        size={16}
-                        className="mt-0.5 flex-shrink-0 text-brand-gold"
-                      />
+                      <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-gold/10">
+                        <Mail size={14} className="text-brand-gold" />
+                      </div>
                       <div>
-                        <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
+                        <dt className="text-[10px] font-bold uppercase tracking-[0.22em] text-muted">
                           Email
                         </dt>
-                        <dd className="text-ink">{a.email}</dd>
+                        <dd className="mt-0.5 text-sm text-ink">{a.email}</dd>
                       </div>
                     </div>
                   )}
@@ -326,43 +335,43 @@ export default async function AssemblyPage(
                       href={a.mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-brand-red"
+                      className="mt-2 inline-flex items-center gap-2 rounded-full bg-brand-red/8 px-4 py-2 text-xs font-semibold text-brand-red transition hover:bg-brand-red/15"
                     >
                       Open in Maps
-                      <ExternalLink size={14} />
+                      <ExternalLink size={12} />
                     </a>
                   )}
                 </dl>
               </div>
 
-              <div className="rounded-[var(--radius-card)] bg-brand-blue-ink p-8 text-white">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-gold">
-                  Service times
-                </p>
+              <div className="overflow-hidden rounded-2xl bg-brand-blue-ink text-white shadow-lg">
+                <div className="border-b border-white/10 px-7 py-4">
+                  <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+                    <Clock size={12} />
+                    Service times
+                  </p>
+                </div>
                 {a.serviceTimes && a.serviceTimes.length > 0 ? (
-                  <ul className="mt-6 space-y-5">
+                  <ul className="divide-y divide-white/8 px-7">
                     {a.serviceTimes.map((st, i) => (
                       <li
                         key={i}
-                        className="flex items-center justify-between gap-4 border-b border-white/10 pb-5 last:border-0 last:pb-0"
+                        className="flex items-center justify-between gap-4 py-5"
                       >
-                        <div className="flex items-center gap-3">
-                          <Clock size={16} className="text-brand-gold" />
-                          <div>
-                            <p className="font-[family-name:var(--font-display)] font-semibold">
-                              {st.label}
-                            </p>
-                            <p className="text-xs text-white/55">{st.day}</p>
-                          </div>
+                        <div>
+                          <p className="font-[family-name:var(--font-display)] text-base font-semibold">
+                            {st.label}
+                          </p>
+                          <p className="mt-0.5 text-xs text-white/55">{st.day}</p>
                         </div>
-                        <span className="font-[family-name:var(--font-display)] text-xl font-semibold text-brand-gold-soft">
+                        <span className="rounded-full bg-white/10 px-4 py-1.5 font-[family-name:var(--font-display)] text-lg font-semibold text-brand-gold">
                           {st.time}
                         </span>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="mt-6 text-sm text-white/70">
+                  <p className="p-7 text-sm text-white/70">
                     Service times will appear once added in Studio.
                   </p>
                 )}
