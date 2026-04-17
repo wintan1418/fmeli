@@ -135,10 +135,9 @@ export function HeroSlider() {
         </div>
 
         {/* Right — rotating imagery in an ancient-scroll frame.
-            Two gold "roller" bars at top and bottom simulate an
-            unrolled parchment from the Book of Revelation. The
-            photo sits on the flat portion of the scroll; the
-            rollers cast inward shadows to suggest depth. */}
+            Parchment-style with curled/folded corners at top-left
+            and bottom-right, like a scroll from Revelation partially
+            unrolled and pinned open. */}
         <div className="relative mx-auto w-full max-w-md lg:max-w-none">
           {/* Ambient glow behind the scroll */}
           <div
@@ -146,75 +145,90 @@ export function HeroSlider() {
             className="pointer-events-none absolute -inset-8 -z-10 rounded-[3rem] bg-gradient-to-br from-(--color-brand-gold)/35 via-(--color-brand-red)/20 to-transparent blur-3xl"
           />
 
-          <div className="relative flex flex-col">
-            {/* ─── Top scroll roller ─── */}
-            <div className="relative z-10 mx-4 flex items-center justify-center">
-              {/* The roller bar: a gold cylinder shape */}
-              <div className="h-7 w-full rounded-[50%/100%] bg-gradient-to-b from-[#c8912a] via-[#e8a82e] to-[#b07e22] shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.3)]" />
-              {/* Roller end-caps — small circles at each end */}
-              <div className="absolute -left-1 top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-gradient-to-br from-[#d4a033] to-[#8a6518] shadow-[0_2px_8px_rgba(0,0,0,0.5)]" />
-              <div className="absolute -right-1 top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-gradient-to-bl from-[#d4a033] to-[#8a6518] shadow-[0_2px_8px_rgba(0,0,0,0.5)]" />
-            </div>
+          <div className="relative">
+            {/* ─── Parchment border frame ─── */}
+            <div className="rounded-2xl bg-gradient-to-br from-[#d4a85c] via-[#c8912a] to-[#a07420] p-[5px] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
+              <div className="relative overflow-hidden rounded-[13px] bg-brand-blue-ink">
+                {/* Warm parchment edge glow */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 z-20 rounded-[13px] shadow-[inset_0_0_40px_rgba(200,145,42,0.12)]"
+                />
 
-            {/* ─── Scroll body — the unrolled parchment ─── */}
-            <div className="relative -mt-2 overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
-              {/* Subtle parchment tint overlay so the edges feel like aged paper */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-[#c8912a]/15 via-transparent to-[#c8912a]/15"
-              />
-              {/* Inner curl shadow from the top roller */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-black/25 to-transparent"
-              />
-              {/* Inner curl shadow from the bottom roller */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 bg-gradient-to-t from-black/25 to-transparent"
-              />
-              {/* Gold border edges (left + right of the scroll) */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-y-0 left-0 z-10 w-[3px] bg-gradient-to-b from-[#c8912a]/60 via-[#e8a82e]/40 to-[#c8912a]/60"
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-y-0 right-0 z-10 w-[3px] bg-gradient-to-b from-[#c8912a]/60 via-[#e8a82e]/40 to-[#c8912a]/60"
-              />
-
-              {/* The actual cross-fading image stack */}
-              <div className="relative aspect-[3/4]">
-                <AnimatePresence mode="sync">
-                  <motion.div
-                    key={image.src}
-                    initial={{ opacity: 0, scale: 1.08 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.02 }}
-                    transition={{ duration: 1.4, ease }}
+                {/* ─── Top-left curl: folded parchment corner ─── */}
+                <div aria-hidden className="absolute left-0 top-0 z-20 h-14 w-14 sm:h-16 sm:w-16">
+                  {/* The fold-back triangle — the "underside" of the parchment */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-br from-[#e8c06a] via-[#d4a85c] to-[#b8923e]"
+                    style={{ clipPath: "polygon(0 0, 100% 0, 0 100%)" }}
+                  />
+                  {/* Shadow cast by the fold onto the image below */}
+                  <div
+                    className="absolute left-1 top-1 h-full w-full bg-black/30 blur-[6px]"
+                    style={{ clipPath: "polygon(0 0, 85% 0, 0 85%)" }}
+                  />
+                  {/* Highlight line along the fold crease */}
+                  <div
                     className="absolute inset-0"
-                  >
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      fill
-                      priority={index === 0}
-                      sizes="(min-width: 1024px) 420px, 90vw"
-                      className="object-cover object-center"
-                    />
-                  </motion.div>
-                </AnimatePresence>
+                    style={{
+                      background: "linear-gradient(135deg, transparent 45%, rgba(255,255,255,0.35) 49%, rgba(255,255,255,0.1) 51%, transparent 55%)",
+                    }}
+                  />
+                </div>
+
+                {/* ─── Bottom-right curl: folded parchment corner ─── */}
+                <div aria-hidden className="absolute bottom-0 right-0 z-20 h-14 w-14 sm:h-16 sm:w-16">
+                  {/* The fold-back triangle */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-tl from-[#e8c06a] via-[#d4a85c] to-[#b8923e]"
+                    style={{ clipPath: "polygon(100% 100%, 0 100%, 100% 0)" }}
+                  />
+                  {/* Shadow cast by the fold */}
+                  <div
+                    className="absolute -right-1 -bottom-1 h-full w-full bg-black/30 blur-[6px]"
+                    style={{ clipPath: "polygon(100% 100%, 15% 100%, 100% 15%)" }}
+                  />
+                  {/* Highlight line along the fold crease */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: "linear-gradient(135deg, transparent 45%, rgba(255,255,255,0.35) 49%, rgba(255,255,255,0.1) 51%, transparent 55%)",
+                    }}
+                  />
+                </div>
+
+                {/* Parchment-aged edge tint */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-br from-[#c8912a]/12 via-transparent to-[#c8912a]/12"
+                />
+
+                {/* The cross-fading image stack */}
+                <div className="relative aspect-[3/4]">
+                  <AnimatePresence mode="sync">
+                    <motion.div
+                      key={image.src}
+                      initial={{ opacity: 0, scale: 1.08 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.02 }}
+                      transition={{ duration: 1.4, ease }}
+                      className="absolute inset-0"
+                    >
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        priority={index === 0}
+                        sizes="(min-width: 1024px) 420px, 90vw"
+                        className="object-cover object-center"
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
 
-            {/* ─── Bottom scroll roller ─── */}
-            <div className="relative z-10 mx-4 -mt-2 flex items-center justify-center">
-              <div className="h-7 w-full rounded-[50%/100%] bg-gradient-to-t from-[#c8912a] via-[#e8a82e] to-[#b07e22] shadow-[0_-4px_16px_rgba(0,0,0,0.4),inset_0_-2px_4px_rgba(255,255,255,0.3)]" />
-              <div className="absolute -left-1 top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-gradient-to-br from-[#d4a033] to-[#8a6518] shadow-[0_2px_8px_rgba(0,0,0,0.5)]" />
-              <div className="absolute -right-1 top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-gradient-to-bl from-[#d4a033] to-[#8a6518] shadow-[0_2px_8px_rgba(0,0,0,0.5)]" />
-            </div>
-
-            {/* Slide pips — below the bottom roller */}
+            {/* Slide pips */}
             <div className="mt-5 flex items-center justify-center gap-2">
               {HERO_IMAGES.map((_, i) => (
                 <span
