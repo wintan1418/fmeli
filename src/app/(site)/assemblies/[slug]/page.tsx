@@ -235,13 +235,15 @@ export default async function AssemblyPage(
 
               {/* About this assembly */}
               {a.about && a.about.length > 0 && (
-                <div className="mt-12 rounded-2xl border border-brand-gold/15 bg-brand-gold/5 p-8">
-                  <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-brand-blue-ink">
-                    <span className="inline-block h-px w-8 bg-brand-gold" />
+                <div className="mt-12 border-t border-ink/8 pt-12">
+                  <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-brand-red">
+                    <span className="inline-block h-px w-10 bg-brand-red" />
                     About this assembly
                   </p>
-                  <div className="prose prose-base mt-5 max-w-none text-ink-soft">
-                    <PortableText value={a.about} />
+                  <div className="mt-6 border-l-2 border-brand-gold/40 pl-6">
+                    <div className="prose prose-lg max-w-none text-ink-soft">
+                      <PortableText value={a.about} />
+                    </div>
                   </div>
                 </div>
               )}
